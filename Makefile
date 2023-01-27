@@ -1,3 +1,5 @@
+##	C compiler (WCC)
+CC=/usr/bin/watcom/binl/wcc
 
 ##	Assembler (NASM)
 AS=nasm
@@ -16,9 +18,11 @@ all: bootl diski run
 bootl:
 	$(AS) $(AF) $(B)/boot16.S -o $(O)/boot16.bin
 
+kernl:
+
 diski:
-	cp $(O)/boot16.bin $(DF)
-	truncate -s 1440k $(DF)
+	dd if=/dev/zero of=$(DF) bs=512 count=2880
+	dd if=$(O)/boot16.bin of=$(DF) conv=notrunc
 
 run:
 	qemu-system-i386 -fda $(DF)
