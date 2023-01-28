@@ -1,4 +1,4 @@
-    [org    0x7c00]
+    [org       0x0]
     [bits       16]
 
     jmp     _kern16
@@ -9,7 +9,8 @@
         mov     si, msgk
         call    puts16
 
-        ret
+        cli
+        hlt
 
     ;   Strings
-    msgk:    db  "===> Pelly Operating System 0.0.2", 0
+    msgk:    db  "===> Pelly Operating System 0.0.3", 0
