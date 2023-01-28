@@ -20,6 +20,3 @@
             pop ax
             pop si
             ret
-
-    ;   Strings
-    msg:    db  "===> Pelly Operating System 0.0.1", 0
