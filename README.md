@@ -27,7 +27,7 @@ _Recommend to install desktop version of Qemu because it does not require to use
 - [ ] Kernel
   - [ ] GDT
   - [ ] IDT
-  - [ ] PS/2 keyboard
+  - [X] PS/2 keyboard (BIOS Int. 16h)
   - [ ] PS/2 mouse
   - [ ] GUI
     - [ ] Basic windows
