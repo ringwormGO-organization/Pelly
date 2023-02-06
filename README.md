@@ -22,8 +22,8 @@ _Recommend to install desktop version of Qemu because it does not require to use
 
 ## TODO
 
-- [ ] Bootloader
-  - [ ] FAT12
+- [X] Bootloader
+  - [X] FAT12
 - [ ] Kernel
   - [ ] GDT
   - [ ] IDT
