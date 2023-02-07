@@ -1,9 +1,3 @@
-##	C compiler (WCC)
-CC=/usr/bin/watcom/binl/wcc
-
-##	Assembler (NASM)
-AS=nasm
-AF=-f bin
 
 ##	Direcotrys
 O=bin
@@ -17,11 +11,11 @@ DF=disk.img
 all: bootl kernl diski run
 
 bootl:
-	$(AS) $(AF) $(B)/boot16.S -o $(O)/boot16.bin
+	$(MAKE) -C boot
 
 kernl:
-	$(AS) $(AF) $(K)/kern16.S -o $(O)/kern16.bin
-
+	$(MAKE) -C kern
+	
 diski:
 	dd if=/dev/zero of=$(DF) bs=512 count=2880
 	mkfs.fat -F 12 -n "PELLY" $(DF)

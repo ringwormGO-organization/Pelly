@@ -3,7 +3,7 @@
 
     jmp     _kern16
 
-    %include "lib/asm/puts16.S"
+    %include "../lib/asm/puts16.S"
 
     _kern16:
         mov     si, msgk
