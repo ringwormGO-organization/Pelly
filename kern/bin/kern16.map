@@ -1,0 +1,87 @@
+Open Watcom Linker Version 2.0 beta Feb  1 2023 01:19:55 (32-bit)
+Copyright (c) 2002-2023 The Open Watcom Contributors. All Rights Reserved.
+Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
+Created on:       23/02/07 12:14:02
+Executable Image: ../bin/kern16.bin
+creating a RAW Binary Image executable
+
+
+                        +------------+
+                        |   Groups   |
+                        +------------+
+
+Group                           Address              Size
+=====                           =======              ====
+
+DGROUP                          000000a4             00000032
+
+
+
+                        +--------------+
+                        |   Segments   |
+                        +--------------+
+
+Segment                Class          Group          Address         Size
+=======                =====          =====          =======         ====
+
+_ENTRY                 CODE           AUTO           00000000        00000013
+_TEXT                  CODE           AUTO           00000013        00000091
+CONST                  DATA           DGROUP         000000a4        00000032
+CONST2                 DATA           DGROUP         000000d6        00000000
+_DATA                  DATA           DGROUP         000000d6        00000000
+
+
+                        +----------------+
+                        |   Memory Map   |
+                        +----------------+
+
+* = unreferenced symbol
++ = symbol only referenced locally
+
+Address        Symbol
+=======        ======
+
+Module: bin//kern16/asm/kern16.obj(kern16.asm)
+00000000       entry
+Module: bin//kern16/asm/x86.obj(x86.asm)
+00000013       _x86_Video_WriteCharTeletype
+Module: bin//kern16/c/kern16.obj(/home/stjepanbm/Other/OS-Dev/Pelly/kern/kern16.c)
+00000026       _kstart_
+Module: bin//kern16/c/stdio.obj(/home/stjepanbm/Other/OS-Dev/Pelly/kern/stdio.c)
+00000046+      putc_
+0000006d       puts_
+
+
+                        +---------------------+
+                        |   Module Segments   |
+                        +---------------------+
+
+! = 32-bit segment
+c = initialized communal data
+
+Module          Segment               Class           Address         Size
+======          =======               =====           =======         ====
+
+kern16.asm      _ENTRY                CODE           00000000         00000013
+x86.asm         _TEXT                 CODE           00000013         00000013
+/home/stjepanbm/Other/OS-Dev/Pelly/kern/kern16.c
+                _TEXT                 CODE           00000026         00000020
+                CONST                 DATA           000000a4         00000032
+                CONST2                DATA           000000d6         00000000
+                _DATA                 DATA           000000d6         00000000
+/home/stjepanbm/Other/OS-Dev/Pelly/kern/stdio.c
+                _TEXT                 CODE           00000046         0000005e
+                CONST                 DATA           000000d6         00000000
+                CONST2                DATA           000000d6         00000000
+                _DATA                 DATA           000000d6         00000000
+Warning! W1014: stack segment not found
+
+
+                        +-----------------------+
+                        |   Linker Statistics   |
+                        +-----------------------+
+
+Stack size:  0200 (512.)
+Memory size:  00d6 (214.)
+Entry point address: 00000000
+Link time: 00:00.00
