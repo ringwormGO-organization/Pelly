@@ -2,6 +2,7 @@
 bits 16
 
 section _TEXT class=CODE
+stack segment STACK 'STACK'
 
 ;
 ; int 10h ah=0Eh
