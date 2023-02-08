@@ -33,3 +33,7 @@ _Recommend to install desktop version of Qemu because it does not require to use
     - [ ] Basic windows
     - [ ] Taskbar
     - [ ] Rounded windows (optional feature)
+
+
+## Credits
+- [Nanobyte](https://www.youtube.com/@nanobyte-dev)
