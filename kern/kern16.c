@@ -8,13 +8,17 @@ void far* g_data = (void far*)0x00500200;
 
 void _cdecl keyboard_asm();
 void _cdecl clear_screen();
+void _cdecl mouse_initialize();
+void _cdecl mouse_enable();
+void _cdecl mouse_disable();
+void _cdecl poll_mouse();
 
 void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
-    printf("===> Pelly Operating System - 0.0.7\r\n");
-    printf("Now with FAT support! %d\r\n", 30);
+    printf("===> Pelly Operating System - 0.0.8\r\n");
+    printf("Now with keyboard and mouse! %d\r\n", 30);
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))
@@ -59,8 +63,18 @@ void _cdecl kstart_(uint16_t bootDrive)
     }
     FAT_Close(fd);
 
+    // Keyboard
     keyboard_asm();
 
+    // Mouse
+    mouse_initialize();
+    mouse_enable();
+
+    while (1)
+    {
+        poll_mouse();
+    }
+    
 end:
     for (;;);
 }
