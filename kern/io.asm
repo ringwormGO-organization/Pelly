@@ -282,6 +282,7 @@ _poll_mouse:
     pop dx
     pop bx
     pop ax
+
     ret
     
 ; Function: print_string
@@ -374,6 +375,7 @@ _mouse_print_byte_hex:
 
     pop cx
     pop ax
+    
     ret
 
 .table: db "0123456789ABCDEF", 0
@@ -383,5 +385,5 @@ mouseX:       dw 0              ; Current mouse X coordinate
 mouseY:       dw 0              ; Current mouse Y coordinate
 curStatus:    db 0              ; Current mouse status
 noMouseMsg:   db "Error setting up & initializing mouse", 0x0d, 0x0a, 0
-tests:        db "Teststringssss", 0x0d, 0x0a, 0
+tests:        db "Teststrings", 0x0d, 0x0a, 0
 delimCommaSpc:db ", ", 0

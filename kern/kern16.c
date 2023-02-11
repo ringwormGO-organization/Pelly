@@ -13,12 +13,18 @@ void _cdecl mouse_enable();
 void _cdecl mouse_disable();
 void _cdecl poll_mouse();
 
+char _cdecl mouseX;
+char _cdecl mouseY;
+
 void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
     printf("===> Pelly Operating System - 0.0.8\r\n");
     printf("Now with keyboard and mouse! %d\r\n", 30);
+
+    // Mouse tests
+    printf("Mouse X: %x | Mouse Y: %x\r\n", mouseX, mouseY);
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))
@@ -73,6 +79,8 @@ void _cdecl kstart_(uint16_t bootDrive)
     while (1)
     {
         poll_mouse();
+        // Mouse tests
+        printf("Mouse X: %x | Mouse Y: %x\r\n", mouseX, mouseY);
     }
     
 end:
