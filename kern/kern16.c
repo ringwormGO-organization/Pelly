@@ -6,9 +6,14 @@
 
 void far* g_data = (void far*)0x00500200;
 
+void _cdecl keyboard_asm();
+void _cdecl clear_screen();
+
 void _cdecl kstart_(uint16_t bootDrive)
 {
-    printf("===> Pelly Operating System - 0.0.6\r\n");
+    clear_screen();
+
+    printf("===> Pelly Operating System - 0.0.7\r\n");
     printf("Now with FAT support! %d\r\n", 30);
 
     DISK disk;
@@ -53,6 +58,8 @@ void _cdecl kstart_(uint16_t bootDrive)
         }
     }
     FAT_Close(fd);
+
+    keyboard_asm();
 
 end:
     for (;;);
