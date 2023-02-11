@@ -15,6 +15,8 @@ entry:
     mov     bp, sp
     sti
 
+    mov     ax, 0xFFFE
+
     xor     dh, dh
     push    dx
     call    _kstart_
