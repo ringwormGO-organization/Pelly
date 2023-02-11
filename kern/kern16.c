@@ -9,7 +9,7 @@ void far* g_data = (void far*)0x00500200;
 void _cdecl kstart_(uint16_t bootDrive)
 {
     printf("===> Pelly Operating System - 0.0.6\r\n");
-    printf("Now with printf and non-finished FAT subdirectory support! %d\r\n", 30);
+    printf("Now with FAT support! %d\r\n", 30);
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))
@@ -40,9 +40,9 @@ void _cdecl kstart_(uint16_t bootDrive)
     FAT_Close(fd);
 
     // read test.txt
-    /*char buffer[100];
+    char buffer[100];
     uint32_t read;
-    fd = FAT_Open(&disk, "mydir/test.txt");
+    fd = FAT_Open(&disk, "test.txt");
     while ((read = FAT_Read(&disk, fd, sizeof(buffer), buffer)))
     {
         for (uint32_t i = 0; i < read; i++)
@@ -51,7 +51,7 @@ void _cdecl kstart_(uint16_t bootDrive)
                 putc('\r');
             putc(buffer[i]);
         }
-    }*/
+    }
     FAT_Close(fd);
 
 end:

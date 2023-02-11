@@ -21,6 +21,7 @@ diski:
 	mkfs.fat -F 12 -n "PELLY" $(DF)
 	dd if=$(O)/boot16.bin of=$(DF) conv=notrunc
 	mcopy -i $(DF) $(O)/kern16.bin "::kern16.bin"
+	mcopy -i $(DF) $(O)/test.txt "::test.txt"
 
 run:
 	qemu-system-i386 -fda $(DF)
