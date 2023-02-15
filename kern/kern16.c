@@ -4,27 +4,22 @@
 #include "disk.h"
 #include "fat.h"
 
+#define KEYB    0
+
 void far* g_data = (void far*)0x00500200;
 
 void _cdecl keyboard_asm();
 void _cdecl clear_screen();
-void _cdecl mouse_initialize();
-void _cdecl mouse_enable();
-void _cdecl mouse_disable();
-void _cdecl poll_mouse();
-
-char _cdecl mouseX;
-char _cdecl mouseY;
+void _cdecl keyb_mouse();
 
 void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
-    printf("===> Pelly Operating System - 0.0.8\r\n");
-    printf("Now with keyboard and mouse! %d\r\n", 30);
+    printf("===> Pelly Operating System - 0.0.9\r\n");
+    printf("Now with keyboard controled mouse! %d\r\n", 30);
 
     // Mouse tests
-    printf("Mouse X: %x | Mouse Y: %x\r\n", mouseX, mouseY);
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))
@@ -70,19 +65,13 @@ void _cdecl kstart_(uint16_t bootDrive)
     FAT_Close(fd);
 
     // Keyboard
-    keyboard_asm();
+    #if KEYB >= 1
+        keyboard_asm();
+    #endif
 
-    // Mouse
-    mouse_initialize();
-    mouse_enable();
+    //  mouse
+    keyb_mouse();
 
-    while (1)
-    {
-        poll_mouse();
-        // Mouse tests
-        printf("Mouse X: %x | Mouse Y: %x\r\n", mouseX, mouseY);
-    }
-    
 end:
     for (;;);
 }
