@@ -64,29 +64,8 @@ _keyboard_asm:
         
         jmp ._keyboard_loop
 
-;
-;   _clear_screen -> clears the screen (80x25 res.), disable blinking
-;                    sets the color of the background & foreground
-;                    https://en.wikipedia.org/wiki/BIOS_color_attributes
-;
-global  _clear_screen
-_clear_screen:
-    
-    mov     ax, 0x03
-    int         0x10
-
-    ;   Stop blinking (for full 16-colors)
-    mov     ax, 1003h
-    mov     bx, 0
-    int         0x10
-
-    mov     ah, 09h
-    mov     cx, 2000d
-    mov     al, 20h
-    mov     bl, 0x1F
-    int         0x10
-
-    ret
+extern _ascii_code
+_ascii_code dw 30
 
 ;   *****************************************   ;
 ;               Mouse cursor code               ;
@@ -161,3 +140,27 @@ _keyb_mouse:
             jmp _mouse
 
         jmp _mouse
+
+;
+;   _clear_screen -> clears the screen (80x25 res.), disable blinking
+;                    sets the color of the background & foreground
+;                    https://en.wikipedia.org/wiki/BIOS_color_attributes
+;
+global  _clear_screen
+_clear_screen:
+    
+    mov     ax, 0x03
+    int         0x10
+
+    ;   Stop blinking (for full 16-colors)
+    mov     ax, 1003h
+    mov     bx, 0
+    int         0x10
+
+    mov     ah, 09h
+    mov     cx, 2000d
+    mov     al, 20h
+    mov     bl, 0x1F
+    int         0x10
+
+    ret
