@@ -65,7 +65,16 @@ _keyboard_asm:
         jmp ._keyboard_loop
 
 extern _ascii_code
-_ascii_code dw 30
+_ascii_code db 0
+
+global _c_keyboard
+_c_keyboard:
+    mov ah, 0x00
+    int 0x16
+
+    mov [_ascii_code], byte al
+
+    ret
 
 ;   *****************************************   ;
 ;               Mouse cursor code               ;

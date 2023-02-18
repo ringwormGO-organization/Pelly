@@ -9,6 +9,7 @@
 void far* g_data = (void far*)0x00500200;
 
 void _cdecl keyboard_asm();
+void _cdecl c_keyboard();
 void _cdecl keyb_mouse();
 void _cdecl clear_screen();
 
@@ -18,10 +19,8 @@ void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
-    printf("===> Pelly Operating System - 0.0.9\r\n");
-    printf("Now with keyboard controled mouse! %d\r\n", 30);
-
-    printf("--- TEST --- Variable 'ascii_code' from assembly is: %d\r\n\r\n", ascii_code);
+    printf("===> Pelly Operating System - 0.1.0\r\n");
+    printf("Now with a keyboard in C!!! %d\r\n", 69);
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))
@@ -66,8 +65,21 @@ void _cdecl kstart_(uint16_t bootDrive)
     }
     FAT_Close(fd);
 
-    keyboard_asm();
-    /* keyb_mouse(); */
+    while (1)
+    {
+        c_keyboard();
+        
+        if (ascii_code == '\n')
+        {
+            printf("\r\n");
+        }
+
+        else
+        {
+            printf("%c", ascii_code);
+        }
+    }
+
 
 end:
     for (;;);
