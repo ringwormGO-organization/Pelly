@@ -1,7 +1,14 @@
 
 #pragma once
-#include "stdint.h"
+#include "../stdint.h"
 #include "disk.h"
+
+#include "../stdio.h"
+#include "../memory/memdefs.h"
+#include "../libc/utility.h"
+#include "../libc/string.h"
+#include "../memory/memory.h"
+#include "../ctype/ctype.h"
 
 #pragma pack(push, 1)
 

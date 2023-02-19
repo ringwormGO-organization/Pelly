@@ -1,7 +1,10 @@
 
 #pragma once
 
-#include "stdint.h"
+#include "../stdint.h"
+
+#include "../x86.h"
+#include "../stdio.h"
 
 typedef struct {
     uint8_t id;

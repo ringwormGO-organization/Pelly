@@ -1,8 +1,8 @@
 
 #include "stdint.h"
 #include "stdio.h"
-#include "disk.h"
-#include "fat.h"
+#include "filesystem/disk.h"
+#include "filesystem/fat.h"
 
 #define KEYB    0
 
@@ -17,8 +17,8 @@ void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
-    printf("===> Pelly Operating System - 0.1.2\r\n");
-    printf("Now with a backspace!!! %d\r\n", 69);
+    printf("===> Pelly Operating System - 0.1.3\r\n");
+    printf("Now with organized files and folders! %d\r\n", 30);
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))

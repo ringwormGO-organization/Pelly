@@ -1,6 +1,8 @@
 
 #pragma once
+
 #include "stdint.h"
+#include "x86.h"
 
 void putc(char c);
 void puts(const char* str);

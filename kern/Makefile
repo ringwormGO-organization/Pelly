@@ -1,15 +1,15 @@
 
-BUILD_DIR?=bin/
-ASM?=nasm
+BUILD_DIR=$(abspath bin)
+ASM=nasm
 ASMFLAGS?=-f obj
 CC16?=/usr/bin/watcom/binl/wcc
 CFLAGS16?=-4 -d3 -s -wx -ms -zl -zq -za99 # -oneatxzh
 LD16?=/usr/bin/watcom/binl/wlink
 
-SOURCES_C=$(wildcard *.c)
-SOURCES_ASM=$(wildcard *.asm)
-OBJECTS_C=$(patsubst %.c, $(BUILD_DIR)/kern16/c/%.obj, $(SOURCES_C))
-OBJECTS_ASM=$(patsubst %.asm, $(BUILD_DIR)/kern16/asm/%.obj, $(SOURCES_ASM))
+SOURCES_C=$(shell find -type f -name "*.c")
+SOURCES_ASM=$(shell find -type f -name "*.asm")
+OBJECTS_C=$(abspath $(addprefix $(BUILD_DIR)/kern16/c/, $(SOURCES_C:.c=.o)))
+OBJECTS_ASM=$(abspath $(addprefix $(BUILD_DIR)/kern16/asm/, $(SOURCES_ASM:.asm=.o)))
 
 .PHONY: all kern16 clean always
 
@@ -20,10 +20,12 @@ kern16: $(BUILD_DIR)/kern16.bin
 $(BUILD_DIR)/kern16.bin: $(OBJECTS_ASM) $(OBJECTS_C)
 	$(LD16) NAME ../bin/kern16.bin FILE \{ $(OBJECTS_ASM) $(OBJECTS_C) \} OPTION MAP=$(BUILD_DIR)/kern16.map @linker.lnk
 
-$(BUILD_DIR)/kern16/c/%.obj: %.c always
+$(BUILD_DIR)/kern16/c/%.o: %.c always
+	@mkdir -p $(@D)
 	$(CC16) $(CFLAGS16) -fo=$@ $<
 
-$(BUILD_DIR)/kern16/asm/%.obj: %.asm always
+$(BUILD_DIR)/kern16/asm/%.o: %.asm always
+	@mkdir -p $(@D)
 	$(ASM) $(ASMFLAGS) -o $@ $<
 
 always:

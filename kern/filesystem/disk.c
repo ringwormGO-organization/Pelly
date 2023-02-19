@@ -1,7 +1,5 @@
 
 #include "disk.h"
-#include "x86.h"
-#include "stdio.h"
 
 int increment = 0;
 
@@ -38,8 +36,7 @@ bool DISK_ReadSectors(DISK* disk, uint32_t lba, uint8_t sectors, void far* dataO
     uint16_t cylinder, sector, head;
     DISK_LBA2CHS(disk, lba, &cylinder, &sector, &head);
 
-    /*int i = 0;
-    for (i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         if (x86_Disk_Read(disk->id, cylinder, sector, head, sectors, dataOut))
         {
@@ -47,18 +44,6 @@ bool DISK_ReadSectors(DISK* disk, uint32_t lba, uint8_t sectors, void far* dataO
         }
 
         x86_Disk_Reset(disk->id);
-    }*/
-
-    while (increment < 3)
-    {
-        if (x86_Disk_Read(disk->id, cylinder, sector, head, sectors, dataOut))
-        {
-            return true;
-        }
-
-        x86_Disk_Reset(disk->id);
-
-        increment++;
     }
 
     return false;
