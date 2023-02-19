@@ -19,8 +19,8 @@ void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
-    printf("===> Pelly Operating System - 0.1.0\r\n");
-    printf("Now with a keyboard in C!!! %d\r\n", 69);
+    printf("===> Pelly Operating System - 0.1.1\r\n");
+    printf("Now with a functional enter key!!! %d\r\n", 69);
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))
@@ -69,7 +69,7 @@ void _cdecl kstart_(uint16_t bootDrive)
     {
         c_keyboard();
         
-        if (ascii_code == '\n')
+        if (ascii_code == (int)-19443) /* don't ask how, when i print ascii_code as int i get this number */
         {
             printf("\r\n");
         }
