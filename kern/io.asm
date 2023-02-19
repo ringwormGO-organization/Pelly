@@ -2,39 +2,26 @@
 bits     16
 section _TEXT class=CODE
 
+extern _ascii_code
+_ascii_code db 0
+
 ;
 ;   _keyboard_asm   -> get user input (int 0x16) cmp. with characters,
-;                      print the character.
+;                      return char to C, if backspace handle here.
 ;
-global  _keyboard_asm
-_keyboard_asm:
+global _c_keyboard
+_c_keyboard:
+    mov ah, 0x00
+    int 0x16
 
-    xor     cl, cl
-    
-    ._keyboard_loop:
-        mov ah, 0x00
-        int     0x16
+    mov [_ascii_code], byte al
 
-        cmp al, 0x08
-        je  .backspace
-        
-        cmp al, 0x0D
-        je  ._keyboard_done
+    cmp al, 0x08
+    je  .backspace
 
-        cmp cl, 0x3F
-        je  ._keyboard_loop
-
-        mov ah, 0x0e
-        int     0x10
-
-        stosb
-        inc cl
-        jmp ._keyboard_loop
+    ret
 
     .backspace:
-        cmp cl, 0
-        je  ._keyboard_loop
-
         dec di
         mov byte [di], 0
         dec cl
@@ -46,109 +33,7 @@ _keyboard_asm:
         mov al, ' '
         int     0x10
 
-        mov al, 0x08
-        int     0x10
-
-        jmp ._keyboard_loop
-        
-    ._keyboard_done:
-        mov al, 0
-        stosb
-
-        mov ah, 0x0e
-        mov al, 0x0D
-        int     0x10
-        
-        mov al, 0x0A
-        int     0x10
-        
-        jmp ._keyboard_loop
-
-extern _ascii_code
-_ascii_code db 0
-
-global _c_keyboard
-_c_keyboard:
-    mov ah, 0x00
-    int 0x16
-
-    mov [_ascii_code], byte al
-
-    ret
-
-;   *****************************************   ;
-;               Mouse cursor code               ;
-;                                               ;
-;   Arrow keys = move                           ;
-;   *****************************************   ;
-global _keyb_mouse
-_keyb_mouse:
-
-    clc
-    cli
-
-    mov     ah, 01h
-    mov     cx, 07h
-    int         10h
-
-    mov     dl, 5d
-    mov     dh, 5d
-
-    jmp     _mouse
-
-    _mouse:
-
-        mov ah, 02h
-        mov dl, bl
-        mov dh, cl
-        int     10h
-
-        mov ah, 00h
-        int     16h
-
-        cmp ah, 0x48
-        je      _up
-
-        cmp ah, 0x50
-        je      _down
-
-        cmp ah, 0x4B
-        je      _left
-
-        cmp ah, 0x4D
-        je      _right
-
-        jmp _mouse
-
-        _up:
-            cmp cl, 0h
-            je  _mouse
-
-            sub cl, 1
-            jmp _mouse
-
-        _down:
-            cmp cl, 24d
-            je  _mouse
-
-            add cl, 1
-            jmp _mouse
-
-        _left:
-            cmp bl, 0h
-            je  _mouse
-
-            sub bl, 1
-            jmp _mouse
-
-        _right:
-            cmp bl, 79d
-            je  _mouse
-
-            add bl, 1
-            jmp _mouse
-
-        jmp _mouse
+        ret
 
 ;
 ;   _clear_screen -> clears the screen (80x25 res.), disable blinking

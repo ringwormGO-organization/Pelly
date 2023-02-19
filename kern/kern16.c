@@ -8,9 +8,7 @@
 
 void far* g_data = (void far*)0x00500200;
 
-void _cdecl keyboard_asm();
 void _cdecl c_keyboard();
-void _cdecl keyb_mouse();
 void _cdecl clear_screen();
 
 int _cdecl ascii_code;
@@ -19,8 +17,8 @@ void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
-    printf("===> Pelly Operating System - 0.1.1\r\n");
-    printf("Now with a functional enter key!!! %d\r\n", 69);
+    printf("===> Pelly Operating System - 0.1.2\r\n");
+    printf("Now with a backspace!!! %d\r\n", 69);
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))
@@ -68,18 +66,18 @@ void _cdecl kstart_(uint16_t bootDrive)
     while (1)
     {
         c_keyboard();
-        
-        if (ascii_code == (int)-19443) /* don't ask how, when i print ascii_code as int i get this number */
-        {
-            printf("\r\n");
-        }
 
-        else
+        switch ((int)ascii_code) /* don't ask how, when i print ascii_code as int i get weird numbers */
         {
-            printf("%c", ascii_code);
+            case -19443: /* enter */
+                printf("\r\n");
+                break;
+            
+            default:
+                printf("%c", ascii_code);
+                break;
         }
     }
-
 
 end:
     for (;;);
