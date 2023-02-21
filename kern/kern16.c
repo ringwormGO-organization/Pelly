@@ -22,7 +22,7 @@ void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
-    printf("===> Pelly Operating System - 0.1.4\r\n");
+    printf("===> Pelly Operating System - 0.1.5\r\n");
     printf("Now with keyboard cursor! %d\r\n", 30);
 
     DISK disk;
@@ -74,22 +74,23 @@ void _cdecl kstart_(uint16_t bootDrive)
 
         switch (ascii_code) /* don't ask how, when i print ascii_code as int i get weird numbers */
         {
-            case -19443:            /* enter */
+            case -19443:                /* enter */
                 printf("\r\n");
                 break;
 
-            case -19456:            /* up cursor */
+            case -19456:                /* up cursor */
+                move_cursor_up();
                 break;
 
-            case -19454:            /* down cursor */
+            case -19454:                /* down cursor */
                 move_cursor_down();
                 break;
 
-            case -19453:            /* left cursor */
+            case -19453:                /* left cursor */
                 move_cursor_left();
                 break;
 
-            case -19452:            /* upper cursor */
+            case -19452:                /* upper cursor */
                 move_cursor_right();
                 break;
             

@@ -105,11 +105,29 @@ _move_cursor_up:
 
 global _move_cursor_down
 _move_cursor_down:
+    dec di
+    mov byte [di], 1
+    dec cl
+
+    mov ah, 0x0e
+    mov al, 0x0a
+    int     0x10
+
     ret
 
 global _move_cursor_left
 _move_cursor_left:
+    dec di
+    mov byte [di], 0
+    dec cl
+
+    mov ah, 0x0e
+    mov al, 0x08
+    int     0x10
+
     ret
+
+; https://www.ascii-codes.com/
 
 global _move_cursor_right
 _move_cursor_right:
