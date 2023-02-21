@@ -7,10 +7,13 @@ _ascii_code db 0
 
 ;
 ;   _keyboard_asm   -> get user input (int 0x16) cmp. with characters,
-;                      return char to C, if backspace handle here.
+;                      return char to C,
+;                           if backspace handle here,
+;                           if cursor keys are pressed, assign special value to them and return new value to C
 ;
 global _c_keyboard
 _c_keyboard:
+
     mov ah, 0x00
     int 0x16
 
@@ -18,6 +21,18 @@ _c_keyboard:
 
     cmp al, 0x08
     je  .backspace
+
+    cmp ah, 0x48
+    je .up_cursor
+
+    cmp ah, 0x50
+    je .down_cursor
+
+    cmp ah, 0x4B
+    je .left_cursor
+
+    cmp ah, 0x4D
+    je .right_cursor
 
     ret
 
@@ -33,6 +48,31 @@ _c_keyboard:
         mov al, ' '
         int     0x10
 
+        ret
+
+    ; we are changing value of 'al' register because otherwise value is same for all pressed cursor keys
+    .up_cursor:
+        mov al, 0
+        mov [_ascii_code], byte al
+
+        ret
+
+    .down_cursor:
+        mov al, 2
+        mov [_ascii_code], byte al
+
+        ret
+
+    .left_cursor:
+        mov al, 3
+        mov [_ascii_code], byte al
+
+        ret
+
+    .right_cursor:
+        mov al, 4
+        mov [_ascii_code], byte al
+        
         ret
 
 ;
@@ -57,4 +97,20 @@ _clear_screen:
     mov     bl, 0x1F
     int         0x10
 
+    ret
+
+global _move_cursor_up
+_move_cursor_up:
+    ret
+
+global _move_cursor_down
+_move_cursor_down:
+    ret
+
+global _move_cursor_left
+_move_cursor_left:
+    ret
+
+global _move_cursor_right
+_move_cursor_right:
     ret
