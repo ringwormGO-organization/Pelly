@@ -127,8 +127,6 @@ _move_cursor_left:
 
     ret
 
-; https://www.ascii-codes.com/
-
 global _move_cursor_right
 _move_cursor_right:
     ret
