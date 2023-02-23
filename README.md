@@ -1,4 +1,6 @@
-# Pelly
+# R.I.P Pelly : 26.1.2023 - 23.2.2023
+
+## Pelly
 
 16 bit operating system
 
