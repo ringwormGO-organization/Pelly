@@ -101,6 +101,12 @@ _clear_screen:
 
 global _move_cursor_up
 _move_cursor_up:
+    mov  dl, 0
+    mov  dh, 0
+    mov  bh, 0
+    mov  ah, 02h
+    int  10h
+
     ret
 
 global _move_cursor_down
@@ -129,4 +135,10 @@ _move_cursor_left:
 
 global _move_cursor_right
 _move_cursor_right:
+    mov  dl, 0
+    mov  dh, 0
+    mov  bh, 0
+    mov  ah, 02h
+    int  10h
+
     ret
