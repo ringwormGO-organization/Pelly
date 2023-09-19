@@ -5,8 +5,11 @@ section _TEXT class=CODE
 extern _ascii_code
 _ascii_code db 0
 
-extern _pos_x
-_pos_x db 0
+extern _row
+_row db 0
+
+extern _column
+_column db 0
 
 ;
 ;   _keyboard_asm   -> get user input (int 0x16) cmp. with characters,
@@ -16,6 +19,12 @@ _pos_x db 0
 ;
 global _c_keyboard
 _c_keyboard:
+
+    mov  ah,  0x03
+    int  0x10
+
+    mov [_row], byte dh
+    mov [_column], byte dl
 
     mov ah, 0x00
     int 0x16
@@ -55,27 +64,46 @@ _c_keyboard:
 
     ; we are changing value of 'al' register because otherwise value is same for all pressed cursor keys
     .up_cursor:
-        mov al, 0
-        mov [_ascii_code], byte al
+        mov  dh, [_row]
+        mov  dl, [_column]
 
+        mov  bh, 0
+        mov  ah, 02h
+
+        int  0x10
         ret
 
     .down_cursor:
-        mov al, 2
-        mov [_ascii_code], byte al
+        dec di
+        mov byte [di], 1
+        dec cl
+
+        mov ah, 0x0e
+        mov al, 0x0a
+        int     0x10
 
         ret
 
     .left_cursor:
-        mov al, 3
-        mov [_ascii_code], byte al
+        dec di
+        mov byte [di], 0
+        dec cl
+
+        mov ah, 0x0e
+        mov al, 0x08
+        int     0x10
 
         ret
 
     .right_cursor:
-        mov al, 4
-        mov [_ascii_code], byte al
-        
+        dec di
+        mov byte [di], 0
+        dec cl
+
+        mov ah, 0x0e
+        mov al, 0x00
+        int     0x10
+
         ret
 
 ;
@@ -100,50 +128,4 @@ _clear_screen:
     mov     bl, 0x1F
     int         0x10
 
-    ret
-
-global _move_cursor_up
-_move_cursor_up:
-    mov  dl, 0
-    mov  dh, 0
-
-    mov  bh, 0
-    mov  ah, 02h
-
-    int  0x10
-    ret
-
-global _move_cursor_down
-_move_cursor_down:
-    dec di
-    mov byte [di], 1
-    dec cl
-
-    mov ah, 0x0e
-    mov al, 0x0a
-    int     0x10
-
-    ret
-
-global _move_cursor_left
-_move_cursor_left:
-    dec di
-    mov byte [di], 0
-    dec cl
-
-    mov ah, 0x0e
-    mov al, 0x08
-    int     0x10
-
-    ret
-
-global _move_cursor_right
-_move_cursor_right:
-    mov  dl, 0
-    mov  dh, 0
-
-    mov  bh, 0
-    mov  ah, 02h
-    
-    int  0x10
     ret
