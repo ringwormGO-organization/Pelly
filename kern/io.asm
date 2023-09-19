@@ -5,6 +5,9 @@ section _TEXT class=CODE
 extern _ascii_code
 _ascii_code db 0
 
+extern _pos_x
+_pos_x db 0
+
 ;
 ;   _keyboard_asm   -> get user input (int 0x16) cmp. with characters,
 ;                      return char to C,
@@ -103,10 +106,11 @@ global _move_cursor_up
 _move_cursor_up:
     mov  dl, 0
     mov  dh, 0
+
     mov  bh, 0
     mov  ah, 02h
-    int  10h
 
+    int  0x10
     ret
 
 global _move_cursor_down
@@ -137,8 +141,9 @@ global _move_cursor_right
 _move_cursor_right:
     mov  dl, 0
     mov  dh, 0
+
     mov  bh, 0
     mov  ah, 02h
-    int  10h
-
+    
+    int  0x10
     ret

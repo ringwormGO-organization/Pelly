@@ -74,23 +74,23 @@ void _cdecl kstart_(uint16_t bootDrive)
 
         switch (ascii_code) /* don't ask how, when i print ascii_code as int i get weird numbers */
         {
-            case -19443:                /* enter */
+            case 13:                    /* enter */
                 printf("\r\n");
                 break;
 
-            case -19456:                /* up cursor */
+            case 0:                     /* up cursor */
                 move_cursor_up();
                 break;
 
-            case -19454:                /* down cursor */
+            case 2:                     /* down cursor */
                 move_cursor_down();
                 break;
 
-            case -19453:                /* left cursor */
+            case 3:                     /* left cursor */
                 move_cursor_left();
                 break;
 
-            case -19452:                /* upper cursor */
+            case 4:                     /* upper cursor */
                 move_cursor_right();
                 break;
             
