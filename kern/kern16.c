@@ -13,11 +13,6 @@ void _cdecl clear_screen();
 
 int _cdecl ascii_code;
 
-void _cdecl move_cursor_up();
-void _cdecl move_cursor_down();
-void _cdecl move_cursor_left();
-void _cdecl move_cursor_right();
-
 void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
@@ -72,26 +67,13 @@ void _cdecl kstart_(uint16_t bootDrive)
     {
         c_keyboard();
 
+        //printf("%d", (int)ascii_code);
+        //continue;
+
         switch (ascii_code) /* don't ask how, when i print ascii_code as int i get weird numbers */
         {
-            case -19443:                /* enter */
+            case 13:                    /* enter */
                 printf("\r\n");
-                break;
-
-            case -19456:                /* up cursor */
-                move_cursor_up();
-                break;
-
-            case -19454:                /* down cursor */
-                move_cursor_down();
-                break;
-
-            case -19453:                /* left cursor */
-                move_cursor_left();
-                break;
-
-            case -19452:                /* upper cursor */
-                move_cursor_right();
                 break;
             
             default:
