@@ -20,6 +20,7 @@ _column db 0
 global _c_keyboard
 _c_keyboard:
 
+    ; TODO: Fix this
     mov  ah,  0x03
     int  0x10
 
@@ -64,6 +65,8 @@ _c_keyboard:
 
     ; we are changing value of 'al' register because otherwise value is same for all pressed cursor keys
     .up_cursor:
+        ; TODO: Decrement value
+
         mov  dh, [_row]
         mov  dl, [_column]
 
@@ -96,6 +99,8 @@ _c_keyboard:
         ret
 
     .right_cursor:
+        ; TODO: Fix memory leak
+
         dec di
         mov byte [di], 0
         dec cl
