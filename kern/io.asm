@@ -12,20 +12,31 @@ extern _column
 _column db 0
 
 ;
-;   _keyboard_asm   -> get user input (int 0x16) cmp. with characters,
-;                      return char to C,
-;                           if backspace handle here,
-;                           if cursor keys are pressed, assign special value to them and return new value to C
+; _init_keyboard -> Do init stuff
+;
+global _init_keyboard
+_init_keyboard:
+    mov ah, 0x01
+    mov cx, 0x10
+    int 0x10
+
+    mov cl, 13
+    mov bl, 40
+
+;
+;   _c_keyboard   ->  get user input (int 0x16) cmp. with characters,
+;                       return char to C,
+;                         if backspace handle here,
+;                         if cursor keys are pressed, assign special value to them and return new value to C
 ;
 global _c_keyboard
 _c_keyboard:
 
-    ; TODO: Fix this
-    mov  ah,  0x03
-    int  0x10
-
-    mov [_row], byte dh
-    mov [_column], byte dl
+    ; Fix this
+    mov ah, 0x02,
+    mov dh, cl,
+    mov dl, bl,
+    int 0x10
 
     mov ah, 0x00
     int 0x16
@@ -63,17 +74,14 @@ _c_keyboard:
 
         ret
 
-    ; we are changing value of 'al' register because otherwise value is same for all pressed cursor keys
     .up_cursor:
-        ; TODO: Decrement value
+        sub cl, 0x01
 
-        mov  dh, [_row]
-        mov  dl, [_column]
+        mov ah, 0x02,
+        mov dh, cl,
+        mov dl, bl,
 
-        mov  bh, 0
-        mov  ah, 02h
-
-        int  0x10
+        int 0x10
         ret
 
     .down_cursor:

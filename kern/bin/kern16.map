@@ -1,7 +1,7 @@
 Open Watcom Linker Version 2.0 beta Feb  1 2023 01:19:55 (32-bit)
 Copyright (c) 2002-2023 The Open Watcom Contributors. All Rights Reserved.
 Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
-Created on:       23/09/19 22:50:55
+Created on:       23/09/20 21:07:20
 Warning! W1027: file /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/bin/kern16/c/kern16.o(/home/vangu/Documents/Programming/ringwormGO/Pelly/kern/kern16.c): redefinition of _ascii_code ignored
 Executable Image: ../bin/kern16.bin
 creating a RAW Binary Image executable
@@ -14,7 +14,7 @@ creating a RAW Binary Image executable
 Group                           Address              Size
 =====                           =======              ====
 
-DGROUP                          00001bb2             000001ae
+DGROUP                          00001b6c             000001ae
 
 
 
@@ -26,11 +26,11 @@ Segment                Class          Group          Address         Size
 =======                =====          =====          =======         ====
 
 _ENTRY                 CODE           AUTO           00000000        00000016
-_TEXT                  CODE           AUTO           00000016        00001b9b
-CONST                  DATA           DGROUP         00001bb2        00000187
-CONST2                 DATA           DGROUP         00001d3a        00000011
-_DATA                  DATA           DGROUP         00001d4c        0000000a
-_BSS                   BSS            DGROUP         00001d56        0000000a
+_TEXT                  CODE           AUTO           00000016        00001b55
+CONST                  DATA           DGROUP         00001b6c        00000187
+CONST2                 DATA           DGROUP         00001cf4        00000011
+_DATA                  DATA           DGROUP         00001d06        0000000a
+_BSS                   BSS            DGROUP         00001d10        0000000a
 
 
                         +----------------+
@@ -47,12 +47,9 @@ Module: /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/bin/kern16/asm/i
 00000016       _ascii_code
 00000017*      _row
 00000018*      _column
-00000019       _c_keyboard
-0000008c       _clear_screen
-000000a5       _move_cursor_up
-000000a6       _move_cursor_down
-000000a7       _move_cursor_left
-000000a8       _move_cursor_right
+00000019       _init_keyboard
+00000024       _c_keyboard
+00000090       _clear_screen
 Module: /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/bin/kern16/asm/kern16.o(kern16.asm)
 00000000       entry
 Module: /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/bin/kern16/asm/x86.o(x86.asm)
@@ -83,27 +80,27 @@ Module: /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/bin/kern16/c/fil
 00000f6a       DISK_Initialize_
 00000fe0+      DISK_LBA2CHS_
 00001093       DISK_ReadSectors_
-00001d50+      _increment
+00001d0a+      _increment
 Module: /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/bin/kern16/c/kern16.o(/home/vangu/Documents/Programming/ringwormGO/Pelly/kern/kern16.c)
 00001130       _kstart_
-00001d52+      _g_data
+00001d0c+      _g_data
 Module: /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/bin/kern16/c/ctype/ctype.o(/home/vangu/Documents/Programming/ringwormGO/Pelly/kern/ctype/ctype.c)
-0000137a+      islower_
-000013b8       toupper_
+00001334+      islower_
+00001372       toupper_
 Module: /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/bin/kern16/c/stdio.o(/home/vangu/Documents/Programming/ringwormGO/Pelly/kern/stdio.c)
-00001400       putc_
-00001427+      puts_
-0000145e+      puts_f_
-0000149b       _printf
-0000171e+      printf_number_
-00001992+      print_buffer_
-00001d3a+      _g_HexChars
+000013ba       putc_
+000013e1+      puts_
+00001418+      puts_f_
+00001455       _printf
+000016d8+      printf_number_
+0000194c+      print_buffer_
+00001cf4+      _g_HexChars
 Module: /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/bin/kern16/c/libc/string.o(/home/vangu/Documents/Programming/ringwormGO/Pelly/kern/libc/string.c)
-00001a0e       strchr_
-00001a69+      strcpy_
-00001add       strlen_
+000019c8       strchr_
+00001a23+      strcpy_
+00001a97       strlen_
 Module: /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/bin/kern16/c/libc/utility.o(/home/vangu/Documents/Programming/ringwormGO/Pelly/kern/libc/utility.c)
-00001b18+      align_
+00001ad2+      align_
 
 
                         +---------------------+
@@ -121,46 +118,46 @@ kern16.asm      _ENTRY                CODE           00000000         00000016
 x86.asm         _TEXT                 CODE           000000a9         00000112
 /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/memory/memory.c
                 _TEXT                 CODE           000001bb         00000154
-                CONST                 DATA           00001bb2         00000000
-                CONST2                DATA           00001d3a         00000000
-                _DATA                 DATA           00001d4c         00000000
+                CONST                 DATA           00001b6c         00000000
+                CONST2                DATA           00001cf4         00000000
+                _DATA                 DATA           00001d06         00000000
 /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/filesystem/fat.c
                 _TEXT                 CODE           0000030f         00000c5b
-                CONST                 DATA           00001bb2         00000107
-                CONST2                DATA           00001d3a         00000000
-                _DATA                 DATA           00001d4c         00000004
-                _BSS                  BSS            00001d56         00000008
+                CONST                 DATA           00001b6c         00000107
+                CONST2                DATA           00001cf4         00000000
+                _DATA                 DATA           00001d06         00000004
+                _BSS                  BSS            00001d10         00000008
 /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/filesystem/disk.c
                 _TEXT                 CODE           00000f6a         000001c6
-                CONST                 DATA           00001cba         00000000
-                CONST2                DATA           00001d3a         00000000
-                _DATA                 DATA           00001d50         00000002
+                CONST                 DATA           00001c74         00000000
+                CONST2                DATA           00001cf4         00000000
+                _DATA                 DATA           00001d0a         00000002
 /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/kern16.c
-                _TEXT                 CODE           00001130         0000024a
-                CONST                 DATA           00001cba         0000007c
-                CONST2                DATA           00001d3a         00000000
-                _DATA                 DATA           00001d52         00000004
-                _BSS                  BSS            00001d5e         00000002
+                _TEXT                 CODE           00001130         00000204
+                CONST                 DATA           00001c74         0000007c
+                CONST2                DATA           00001cf4         00000000
+                _DATA                 DATA           00001d0c         00000004
+                _BSS                  BSS            00001d18         00000002
 /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/ctype/ctype.c
-                _TEXT                 CODE           0000137a         00000086
-                CONST                 DATA           00001d36         00000000
-                CONST2                DATA           00001d3a         00000000
-                _DATA                 DATA           00001d56         00000000
+                _TEXT                 CODE           00001334         00000086
+                CONST                 DATA           00001cf0         00000000
+                CONST2                DATA           00001cf4         00000000
+                _DATA                 DATA           00001d10         00000000
 /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/stdio.c
-                _TEXT                 CODE           00001400         0000060e
-                CONST                 DATA           00001d36         00000003
-                CONST2                DATA           00001d3a         00000011
-                _DATA                 DATA           00001d56         00000000
+                _TEXT                 CODE           000013ba         0000060e
+                CONST                 DATA           00001cf0         00000003
+                CONST2                DATA           00001cf4         00000011
+                _DATA                 DATA           00001d10         00000000
 /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/libc/string.c
-                _TEXT                 CODE           00001a0e         0000010a
-                CONST                 DATA           00001d3a         00000000
-                CONST2                DATA           00001d4c         00000000
-                _DATA                 DATA           00001d56         00000000
+                _TEXT                 CODE           000019c8         0000010a
+                CONST                 DATA           00001cf4         00000000
+                CONST2                DATA           00001d06         00000000
+                _DATA                 DATA           00001d10         00000000
 /home/vangu/Documents/Programming/ringwormGO/Pelly/kern/libc/utility.c
-                _TEXT                 CODE           00001b18         00000099
-                CONST                 DATA           00001d3a         00000000
-                CONST2                DATA           00001d4c         00000000
-                _DATA                 DATA           00001d56         00000000
+                _TEXT                 CODE           00001ad2         00000099
+                CONST                 DATA           00001cf4         00000000
+                CONST2                DATA           00001d06         00000000
+                _DATA                 DATA           00001d10         00000000
 Warning! W1014: stack segment not found
 
 
@@ -169,6 +166,6 @@ Warning! W1014: stack segment not found
                         +-----------------------+
 
 Stack size:  0200 (512.)
-Memory size:  1d60 (7520.)
+Memory size:  1d1a (7450.)
 Entry point address: 00000000
 Link time: 00:00.00
