@@ -2,15 +2,6 @@
 bits     16
 section _TEXT class=CODE
 
-extern _ascii_code
-_ascii_code db 0
-
-extern _row
-_row db 0
-
-extern _column
-_column db 0
-
 ;
 ; _init_keyboard -> Do init stuff
 ;
@@ -34,17 +25,18 @@ _c_keyboard:
 
     ; Fix this
     mov ah, 0x02,
-    mov dh, cl,
-    mov dl, bl,
+    mov dh, cl
+    mov dl, bl
     int 0x10
 
     mov ah, 0x00
     int 0x16
 
-    mov [_ascii_code], byte al
-
     cmp al, 0x08
     je  .backspace
+
+    cmp al, 0x0D
+    je  .enterk
 
     cmp ah, 0x48
     je .up_cursor
@@ -57,6 +49,9 @@ _c_keyboard:
 
     cmp ah, 0x4D
     je .right_cursor
+
+    mov ah, 0x0e
+    int 0x10
 
     ret
 
@@ -74,49 +69,55 @@ _c_keyboard:
 
         ret
 
-    .up_cursor:
-        sub cl, 0x01
+    .enterk:
+        mov ah, 0x0e
+        mov al, 0x0a
+        int 0x10
 
-        mov ah, 0x02,
-        mov dh, cl,
-        mov dl, bl,
+        mov ah, 0x0e
+        mov al, 0x0D
+        int 0x10
+
+        ret
+
+    .up_cursor:
+        dec cl
+
+        mov ah, 0x02
+        mov dh, cl
+        mov dl, bl
 
         int 0x10
         ret
 
     .down_cursor:
-        dec di
-        mov byte [di], 1
-        dec cl
+        add cl, 0x01
 
-        mov ah, 0x0e
-        mov al, 0x0a
-        int     0x10
+        mov ah, 0x02,
+        mov dh, cl
+        mov dl, bl
 
+        int 0x10
         ret
 
     .left_cursor:
-        dec di
-        mov byte [di], 0
-        dec cl
+        dec bl
 
-        mov ah, 0x0e
-        mov al, 0x08
-        int     0x10
+        mov ah, 0x02
+        mov dh, cl
+        mov dl, bl
 
+        int 0x10
         ret
 
     .right_cursor:
-        ; TODO: Fix memory leak
+        add bl, 0x01
 
-        dec di
-        mov byte [di], 0
-        dec cl
+        mov ah, 0x02
+        mov dh, cl
+        mov dl, bl
 
-        mov ah, 0x0e
-        mov al, 0x00
-        int     0x10
-
+        int 0x10
         ret
 
 ;

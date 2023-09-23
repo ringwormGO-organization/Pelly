@@ -4,10 +4,12 @@ O=bin
 B=boot
 K=kern
 
-OF=$(O)/*.bin
-DF=disk.img
+override BF=$(shell find ./ -type f -name '*.bin')
+override DF=disk.img
+override OF= $(shell find ./ -type f -name '*.o')
 
 ##	Makefile target
+.PHONY: all
 all: bootl kernl diski run
 
 bootl:
@@ -31,6 +33,8 @@ diski:
 run:
 	qemu-system-i386 -fda $(DF)
 
+.PHONY: clean
 clean:
-	rm $(OF)
+	rm $(BF)
 	rm $(DF)
+	rm $(OF)

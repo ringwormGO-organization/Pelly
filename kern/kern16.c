@@ -68,20 +68,6 @@ void _cdecl kstart_(uint16_t bootDrive)
     while (1)
     {
         c_keyboard();
-
-        //printf("%d", (int)ascii_code);
-        //continue;
-
-        switch (ascii_code) /* don't ask how, when i print ascii_code as int i get weird numbers */
-        {
-            case 13:                    /* enter */
-                printf("\r\n");
-                break;
-            
-            default:
-                printf("%c", ascii_code);
-                break;
-        }
     }
 
 end:
