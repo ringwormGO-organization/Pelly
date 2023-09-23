@@ -2,17 +2,14 @@
 bits     16
 section _TEXT class=CODE
 
-;
-; _init_keyboard -> Do init stuff
-;
 global _init_keyboard
 _init_keyboard:
     mov ah, 0x01
     mov cx, 0x10
     int 0x10
 
-    mov cl, 13
-    mov bl, 40
+    mov cl, 0
+    mov bl, 0
 
 ;
 ;   _c_keyboard   ->  get user input (int 0x16) cmp. with characters,
@@ -22,13 +19,6 @@ _init_keyboard:
 ;
 global _c_keyboard
 _c_keyboard:
-
-    ; Fix this
-    mov ah, 0x02,
-    mov dh, cl
-    mov dl, bl
-    int 0x10
-
     mov ah, 0x00
     int 0x16
 
@@ -56,16 +46,15 @@ _c_keyboard:
     ret
 
     .backspace:
-        dec di
-        mov byte [di], 0
-        dec cl
-
         mov ah, 0x0e
         mov al, 0x08
         int     0x10
 
         mov al, ' '
         int     0x10
+
+        mov al, 0x08
+        int 0x10
 
         ret
 
@@ -81,43 +70,40 @@ _c_keyboard:
         ret
 
     .up_cursor:
-        dec cl
+        cmp dl, 0x00
+        je  .return
+
+        sub dl, 0x01
 
         mov ah, 0x02
         mov dh, cl
         mov dl, bl
-
         int 0x10
+
         ret
 
     .down_cursor:
-        add cl, 0x01
+        cmp dl, 24
+        je  .return
 
-        mov ah, 0x02,
-        mov dh, cl
-        mov dl, bl
-
-        int 0x10
+        add dl, 0x01
         ret
 
     .left_cursor:
-        dec bl
+        cmp bl, 0x00
+        je  .return
 
-        mov ah, 0x02
-        mov dh, cl
-        mov dl, bl
-
-        int 0x10
+        sub bl, 0x01
         ret
 
     .right_cursor:
+        cmp bl, 79
+        je  .return
+
         add bl, 0x01
+        ret
 
-        mov ah, 0x02
-        mov dh, cl
-        mov dl, bl
-
-        int 0x10
+    .return:
         ret
 
 ;
