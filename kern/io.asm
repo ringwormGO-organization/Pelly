@@ -70,37 +70,47 @@ _c_keyboard:
         ret
 
     .up_cursor:
-        cmp dl, 0x00
+        cmp dh, 0
         je  .return
 
-        sub dl, 0x01
-
         mov ah, 0x02
-        mov dh, cl
-        mov dl, bl
+        mov bh, 0
+        sub dh, 1
         int 0x10
 
         ret
 
     .down_cursor:
-        cmp dl, 24
+        cmp dh, 24
         je  .return
 
-        add dl, 0x01
+        mov ah, 0x02
+        mov bh, 0
+        add dh, 1
+        int 0x10
+        
         ret
 
     .left_cursor:
-        cmp bl, 0x00
+        cmp dl, 0
         je  .return
 
-        sub bl, 0x01
+        mov ah, 0x02
+        mov bh, 0
+        sub dl, 1
+        int 0x10
+
         ret
 
     .right_cursor:
-        cmp bl, 79
+        cmp dl, 79
         je  .return
 
-        add bl, 0x01
+        mov ah, 0x02
+        mov bh, 0
+        add dl, 1
+        int 0x10
+
         ret
 
     .return:
