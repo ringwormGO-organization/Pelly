@@ -39,3 +39,5 @@ _Recommend to install desktop version of Qemu because it does not require to use
 ## Credits
 - [Nanobyte](https://www.youtube.com/@nanobyte-dev)
 - [Moving a cursor with the keyboard in assembly - Code Review](https://codereview.stackexchange.com/questions/156257/moving-a-cursor-with-the-keyboard-in-assembly)
+- [Stanislav's `Interrupt Services DOS/BIOS/EMS/Mouse` list](https://stanislavs.org/helppc/idx_interrupt.html)
+- [ASCII table](https://www.asciitable.com/)

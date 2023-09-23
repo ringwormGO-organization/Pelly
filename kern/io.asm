@@ -5,15 +5,22 @@ section _TEXT class=CODE
 _cursor_row:    db  0
 _cursor_col:    db  0
 
+;
+;   _init_keyboard -> set dh & dl to corresponding starting position
+;
 global _init_keyboard
 _init_keyboard:
+
+    ; Set cursor type to block
     mov ah, 0x01
     mov cx, 0x10
     int 0x10
 
+    ; Set variables to corresponding starting position
     mov [_cursor_row], byte 10
     mov [_cursor_col], byte 15
 
+    ; Move cursor to corresponding starting position
     mov ah, 0x02
     mov bh, 0x00
     mov dh, byte [_cursor_row]
@@ -23,15 +30,18 @@ _init_keyboard:
     ret
 
 ;
-;   _c_keyboard   ->  get user input (int 0x16) cmp. with characters,
-;                       return char to C,
-;                         if backspace handle here,
-;                         if cursor keys are pressed, assign special value to them and return new value to C
+;   _c_keyboard -> get user input (int 0x16) cmp. with characters,
+;                  and handle it
 ;
 global _c_keyboard
 _c_keyboard:
+
+    ; Get user input (int 0x16)
     mov ah, 0x00
     int 0x16
+
+    ; Check if input is backspace, enter or cursor
+    ; If it's not, just print character (int 0x10)
 
     cmp al, 0x08
     je  .backspace
@@ -57,23 +67,28 @@ _c_keyboard:
     ret
 
     .backspace:
+        ; Go left (0x08)
         mov ah, 0x0e
         mov al, 0x08
         int     0x10
 
+        ; Print space (delete character)
         mov al, ' '
         int     0x10
 
+        ; Go left (0x08)
         mov al, 0x08
         int 0x10
 
         ret
 
     .enterk:
+        ; Go to END OF TEXT
         mov ah, 0x0e
         mov al, 0x0a
         int 0x10
 
+        ; Go to CARRIAGE RETURN
         mov ah, 0x0e
         mov al, 0x0D
         int 0x10
@@ -81,9 +96,11 @@ _c_keyboard:
         ret
 
     .up_cursor:
+        ; Check if current row (top) is 0
         cmp dh, 0
         je  .return
 
+        ; Decrement row, aka move row above
         mov ah, 0x02
         mov bh, 0
         sub dh, 1
@@ -92,9 +109,11 @@ _c_keyboard:
         ret
 
     .down_cursor:
+        ; Check if row (top bottom) is 24
         cmp dh, 24
         je  .return
 
+        ; Increment row, aka move row below
         mov ah, 0x02
         mov bh, 0
         add dh, 1
@@ -103,9 +122,11 @@ _c_keyboard:
         ret
 
     .left_cursor:
+        ; Check if current column (top left) is 0
         cmp dl, 0
         je  .return
 
+        ; Decrement columns, aka move left
         mov ah, 0x02
         mov bh, 0
         sub dl, 1
@@ -114,9 +135,11 @@ _c_keyboard:
         ret
 
     .right_cursor:
+        ; Check if current column (top right) is 79
         cmp dl, 79
         je  .return
 
+        ; Increment columns, aka move right
         mov ah, 0x02
         mov bh, 0
         add dl, 1
