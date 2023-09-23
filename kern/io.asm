@@ -2,14 +2,25 @@
 bits     16
 section _TEXT class=CODE
 
+_cursor_row:    db  0
+_cursor_col:    db  0
+
 global _init_keyboard
 _init_keyboard:
     mov ah, 0x01
     mov cx, 0x10
     int 0x10
 
-    mov cl, 0
-    mov bl, 0
+    mov [_cursor_row], byte 10
+    mov [_cursor_col], byte 15
+
+    mov ah, 0x02
+    mov bh, 0x00
+    mov dh, byte [_cursor_row]
+    mov dl, byte [_cursor_col]
+    int 0x10
+
+    ret
 
 ;
 ;   _c_keyboard   ->  get user input (int 0x16) cmp. with characters,
