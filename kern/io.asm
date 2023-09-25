@@ -2,8 +2,11 @@
 bits     16
 section _TEXT class=CODE
 
-_cursor_row:    db  0
-_cursor_col:    db  0
+extern _ascii_code
+_ascii_code:    dw  0
+
+_cursor_row:    dw  0
+_cursor_col:    dw  0
 
 ;
 ;   _init_keyboard -> set dh & dl to corresponding starting position
@@ -30,18 +33,21 @@ _init_keyboard:
     ret
 
 ;
-;   _c_keyboard -> get user input (int 0x16) cmp. with characters,
-;                  and handle it
+;   _asm_keyboard -> get user input (int 0x16),
+;                    send ASCII code to C,
+;                    and handle there
 ;
-global _c_keyboard
-_c_keyboard:
+global _asm_keyboard
+_asm_keyboard:
 
     ; Get user input (int 0x16)
     mov ah, 0x00
     int 0x16
 
+    mov [_ascii_code], byte al
+
     ; Check if input is backspace, enter or cursor
-    ; If it's not, just print character (int 0x10)
+    ; Handle backspace & enter here, if cursor assign special numbers, else just return already assigned ASCII code
 
     cmp al, 0x08
     je  .backspace
@@ -60,9 +66,6 @@ _c_keyboard:
 
     cmp ah, 0x4D
     je .right_cursor
-
-    mov ah, 0x0e
-    int 0x10
 
     ret
 
@@ -95,57 +98,100 @@ _c_keyboard:
 
         ret
 
-    .up_cursor:
-        ; Check if current row (top) is 0
-        cmp dh, 0
-        je  .return
+    ; Assign special values to cursor keys
+    ; 0 - up
+    ; 1 - down
+    ; 2 - left
+    ; 3 - right
 
-        ; Decrement row, aka move row above
-        mov ah, 0x02
-        mov bh, 0
-        sub dh, 1
-        int 0x10
+    .up_cursor:
+        mov al, 0
+        mov [_ascii_code], byte al
 
         ret
 
     .down_cursor:
-        ; Check if row (top bottom) is 24
-        cmp dh, 24
-        je  .return
+        mov al, 1
+        mov [_ascii_code], byte al
 
-        ; Increment row, aka move row below
-        mov ah, 0x02
-        mov bh, 0
-        add dh, 1
-        int 0x10
-        
         ret
 
     .left_cursor:
-        ; Check if current column (top left) is 0
-        cmp dl, 0
-        je  .return
-
-        ; Decrement columns, aka move left
-        mov ah, 0x02
-        mov bh, 0
-        sub dl, 1
-        int 0x10
+        mov al, 2
+        mov [_ascii_code], byte al
 
         ret
 
     .right_cursor:
-        ; Check if current column (top right) is 79
-        cmp dl, 79
-        je  .return
-
-        ; Increment columns, aka move right
-        mov ah, 0x02
-        mov bh, 0
-        add dl, 1
-        int 0x10
-
+        mov al, 3
+        mov [_ascii_code], byte al
+        
         ret
+
+global _up_cursor
+_up_cursor:
+    ; Check if current row (top) is 0
+    cmp dh, 0
+    je  .return
+
+    ; Decrement row, aka move row above
+    mov ah, 0x02
+    mov bh, 0
+    sub dh, 1
+    int 0x10
+
+    ret
+
+    .return:
+        ret
+
+global _down_cursor
+_down_cursor:
+    ; Check if row (top bottom) is 24
+    cmp dh, 24
+    je  .return
+
+    ; Increment row, aka move row below
+    mov ah, 0x02
+    mov bh, 0
+    add dh, 1
+    int 0x10
+    
+    ret
+
+    .return:
+        ret
+
+global _left_cursor
+_left_cursor:
+    ; Check if current column (top left) is 0
+    cmp dl, 0
+    je  .return
+
+    ; Decrement columns, aka move left
+    mov ah, 0x02
+    mov bh, 0
+    sub dl, 1
+    int 0x10
+
+    ret
+
+    .return:
+        ret
+
+global _right_cursor
+_right_cursor:
+    ; Check if current column (top right) is 79
+    cmp dl, 79
+    je  .return
+
+    ; Increment columns, aka move right
+    mov ah, 0x02
+    mov bh, 0
+    add dl, 1
+    int 0x10
+
+    ret
 
     .return:
         ret

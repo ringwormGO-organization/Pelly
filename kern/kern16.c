@@ -1,16 +1,13 @@
 
 #include "stdint.h"
 #include "stdio.h"
+#include "io.h"
 #include "filesystem/disk.h"
 #include "filesystem/fat.h"
 
 #define KEYB    0
 
 void far* g_data = (void far*)0x00500200;
-
-void _cdecl init_keyboard();
-void _cdecl c_keyboard();
-void _cdecl clear_screen();
 
 void _cdecl kstart_(uint16_t bootDrive)
 {
@@ -63,10 +60,7 @@ void _cdecl kstart_(uint16_t bootDrive)
     FAT_Close(fd);
 
     init_keyboard();
-    while (1)
-    {
-        c_keyboard();
-    }
+    keyboard_loop();
 
 end:
     for (;;);
