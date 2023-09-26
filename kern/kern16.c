@@ -1,6 +1,7 @@
 
 #include "stdint.h"
 #include "stdio.h"
+#include "io.h"
 #include "filesystem/disk.h"
 #include "filesystem/fat.h"
 
@@ -8,16 +9,14 @@
 
 void far* g_data = (void far*)0x00500200;
 
-void _cdecl init_keyboard();
-void _cdecl c_keyboard();
-void _cdecl clear_screen();
-
 void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
     printf("===> Pelly Operating System - 0.2.0\r\n");
     printf("Now with keyboard cursor! %d\r\n", 30);
+
+    starting_cursor_row += 2;
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))
@@ -44,6 +43,7 @@ void _cdecl kstart_(uint16_t bootDrive)
         for (int i = 0; i < 11; i++)
             putc(entry.Name[i]);
         printf("\r\n");
+        starting_cursor_row += 1;
     }
     FAT_Close(fd);
 
@@ -62,11 +62,10 @@ void _cdecl kstart_(uint16_t bootDrive)
     }
     FAT_Close(fd);
 
-    init_keyboard();
-    while (1)
-    {
-        c_keyboard();
-    }
+    starting_cursor_row += 1;
+
+    init_keyboard(starting_cursor_row, 0);
+    c_keyboard_loop();
 
 end:
     for (;;);

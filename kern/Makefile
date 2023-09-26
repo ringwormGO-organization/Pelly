@@ -9,7 +9,7 @@ LD16?=/usr/bin/watcom/binl/wlink
 SOURCES_C=$(shell find -type f -name "*.c")
 SOURCES_ASM=$(shell find -type f -name "*.asm")
 OBJECTS_C=$(abspath $(addprefix $(BUILD_DIR)/kern16/c/, $(SOURCES_C:.c=.o)))
-OBJECTS_ASM=$(abspath $(addprefix $(BUILD_DIR)/kern16/asm/, $(SOURCES_ASM:.asm=.o)))
+OBJECTS_ASM=$(abspath $(addprefix $(BUILD_DIR)/kern16/asm/, $(SOURCES_ASM:.asm=.asm_o)))
 
 .PHONY: all kern16 clean always
 
@@ -24,7 +24,7 @@ $(BUILD_DIR)/kern16/c/%.o: %.c always
 	@mkdir -p $(@D)
 	$(CC16) $(CFLAGS16) -fo=$@ $<
 
-$(BUILD_DIR)/kern16/asm/%.o: %.asm always
+$(BUILD_DIR)/kern16/asm/%.asm_o: %.asm always
 	@mkdir -p $(@D)
 	$(ASM) $(ASMFLAGS) -o $@ $<
 
