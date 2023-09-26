@@ -34,8 +34,8 @@ _init_keyboard:
 
 ;
 ;   _asm_keyboard_loop -> get user input (int 0x16),
-;                    send ASCII code to C,
-;                    and handle there
+;                         send ASCII code to C,
+;                         and handle there
 ;
 global _asm_keyboard_loop
 _asm_keyboard_loop:
@@ -120,6 +120,9 @@ _asm_keyboard_loop:
         mov [_ascii_code], byte 3
         ret
 
+;
+;   _up_cursor -> move cursor up
+;
 global _up_cursor
 _up_cursor:
     ; Check if current row (top) is 0
@@ -137,6 +140,9 @@ _up_cursor:
     .return:
         ret
 
+;
+;   _down_cursor -> move cursor down
+;
 global _down_cursor
 _down_cursor:
     ; Check if row (top bottom) is 24
@@ -154,6 +160,9 @@ _down_cursor:
     .return:
         ret
 
+;
+;   _left_cursor -> move cursor left
+;
 global _left_cursor
 _left_cursor:
     ; Check if current column (top left) is 0
@@ -171,6 +180,9 @@ _left_cursor:
     .return:
         ret
 
+;
+;   _right_cursor -> move cursor right
+;
 global _right_cursor
 _right_cursor:
     ; Check if current column (top right) is 79
