@@ -33,12 +33,12 @@ _init_keyboard:
     ret
 
 ;
-;   _asm_keyboard -> get user input (int 0x16),
+;   _asm_keyboard_loop -> get user input (int 0x16),
 ;                    send ASCII code to C,
 ;                    and handle there
 ;
-global _asm_keyboard
-_asm_keyboard:
+global _asm_keyboard_loop
+_asm_keyboard_loop:
 
     ; Get user input (int 0x16)
     mov ah, 0x00
@@ -105,27 +105,19 @@ _asm_keyboard:
     ; 3 - right
 
     .up_cursor:
-        mov al, 0
-        mov [_ascii_code], byte al
-
+        mov [_ascii_code], byte 0
         ret
 
     .down_cursor:
-        mov al, 1
-        mov [_ascii_code], byte al
-
+        mov [_ascii_code], byte 1
         ret
 
     .left_cursor:
-        mov al, 2
-        mov [_ascii_code], byte al
-
+        mov [_ascii_code], byte 2
         ret
 
     .right_cursor:
-        mov al, 3
-        mov [_ascii_code], byte al
-        
+        mov [_ascii_code], byte 3
         ret
 
 global _up_cursor

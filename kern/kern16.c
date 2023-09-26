@@ -60,7 +60,7 @@ void _cdecl kstart_(uint16_t bootDrive)
     FAT_Close(fd);
 
     init_keyboard();
-    keyboard_loop();
+    c_keyboard_loop();
 
 end:
     for (;;);
