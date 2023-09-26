@@ -5,14 +5,18 @@ section _TEXT class=CODE
 extern _ascii_code
 _ascii_code:    dw  0
 
-_cursor_row:    dw  0
-_cursor_col:    dw  0
-
 ;
 ;   _init_keyboard -> set dh & dl to corresponding starting position
 ;
 global _init_keyboard
 _init_keyboard:
+
+    ; make new call frame
+    push bp             ; save old call frame
+    mov bp, sp          ; initialize new call frame
+
+    ; save bx
+    push bx
 
     ; Set cursor type to block
     mov ah, 0x01
@@ -20,15 +24,26 @@ _init_keyboard:
     int 0x10
 
     ; Set variables to corresponding starting position
-    mov [_cursor_row], byte 10
-    mov [_cursor_col], byte 15
+
+    ; [bp + 0] - old call frame
+    ; [bp + 2] - return address (small memory model => 2 bytes)
+    ; [bp + 4] - first argument (character)
+    ; [bp + 6] - second argument (page)
+    ; note: bytes are converted to words (you can't push a single byte on the stack)
+    mov dh, [bp + 4]
+    mov dl, [bp + 6]
 
     ; Move cursor to corresponding starting position
     mov ah, 0x02
     mov bh, 0x00
-    mov dh, byte [_cursor_row]
-    mov dl, byte [_cursor_col]
     int 0x10
+
+    ; restore bx
+    pop bx
+
+    ; restore old call frame
+    mov sp, bp
+    pop bp
 
     ret
 
@@ -78,10 +93,6 @@ _asm_keyboard_loop:
         ; Print space (delete character)
         mov al, ' '
         int     0x10
-
-        ; Go left (0x08)
-        mov al, 0x08
-        int 0x10
 
         ret
 

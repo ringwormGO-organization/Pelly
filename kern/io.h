@@ -4,7 +4,7 @@
 #include "stdint.h"
 #include "stdio.h"
 
-void _cdecl init_keyboard();
+void _cdecl init_keyboard(uint16_t row, uint16_t column);
 void _cdecl asm_keyboard_loop();
 void _cdecl clear_screen();
 
