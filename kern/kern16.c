@@ -9,11 +9,13 @@
 
 void far* g_data = (void far*)0x00500200;
 
+void _cdecl disk_test_write();
+
 void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
-    printf("===> Pelly Operating System - 0.2.0\r\n");
+    printf("===> Pelly Operating System - 0.2.1\r\n");
     printf("Now with keyboard cursor! %d\r\n", 30);
 
     starting_cursor_row += 2;
@@ -24,6 +26,9 @@ void _cdecl kstart_(uint16_t bootDrive)
         printf("Disk init error\r\n");
         goto end;
     }
+
+    x86_Disk_Write(0, 64, 0, 1, 0, 0x7c00, 0x0000);
+//    disk_test_write();
 
     DISK_ReadSectors(&disk, 19, 1, g_data);
 
@@ -50,7 +55,7 @@ void _cdecl kstart_(uint16_t bootDrive)
     // read test.txt
     char buffer[100];
     uint32_t read;
-    fd = FAT_Open(&disk, "test.txt");
+    fd = FAT_Open(&disk, "doc/test.txt");
     while ((read = FAT_Read(&disk, fd, sizeof(buffer), buffer)))
     {
         for (uint32_t i = 0; i < read; i++)
@@ -61,6 +66,8 @@ void _cdecl kstart_(uint16_t bootDrive)
         }
     }
     FAT_Close(fd);
+
+    void far * data_to_write = "test";   //  address where?
 
     starting_cursor_row += 1;
 

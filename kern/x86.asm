@@ -210,6 +210,86 @@ _x86_Disk_Read:
     pop bp
     ret
 
+;
+; bool _cdecl _x86_Disk_Write(uint8_t       drive,      (dl)
+;                             uint8_t       sectors,    (al) (to write to)
+;                             uint16_t      cylinder    (ch),
+;                             uint8_t       sector      (cl) (data loc.)
+;                             uint16_t      head        (dh),
+;                             void far *    offset      (es),
+;                             void far *    data        (bx))
+;
+global _x86_Disk_Write
+_x86_Disk_Write:
+
+    ; make new call frame
+    push bp             ; save old call frame
+    mov bp, sp          ; initialize new call frame
+
+    ; save modified regs
+    push bx
+    push es
+
+    ; Setup args
+
+    ; [bp + 0] - old call frame
+    ; [bp + 2] - return address (small memory model => 2 bytes)
+    ; [bp + 4] - first argument
+    ; [bp + 6] - second argument
+
+    mov dl, [bp + 4]
+    mov al, [bp + 6]
+    mov ch, [bp + 8]
+    mov cl, [bp + 10]
+    mov dh, [bp + 12]
+
+    mov bx, [bp + 16]
+    mov es, bx
+
+    xor bx, bx
+    mov bx, [bp + 14]
+
+    ; call int13h
+    mov ah, 03h
+    stc
+    int 13h
+
+    ; set return value
+    mov ax, 1
+    sbb ax, 0           ; 1 on success, 0 on fail   
+
+    ; restore regs
+    pop es
+    pop bx
+
+    ; restore old call frame
+    mov sp, bp
+    pop bp
+    ret
+
+global  _disk_test_write
+_disk_test_write:
+    mov     ah,     0x03
+    mov     al,     64
+    mov     ch,     0x0000
+    inc     cl
+    mov     dh,     0x0000
+    mov     dl,     0x0000
+    
+    mov     bx,     0x0000
+    mov     es,     bx
+    xor     bx,     bx
+    mov     bx,     0x7c00
+    
+    int     0x13
+
+    cmp     cl,     64
+    je      .done_dtw
+
+    jmp     _disk_test_write
+
+    .done_dtw:
+        ret          
 
 ;
 ; bool _cdecl x86_Disk_GetDriveParams(uint8_t drive,

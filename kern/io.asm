@@ -27,9 +27,9 @@ _init_keyboard:
 
     ; [bp + 0] - old call frame
     ; [bp + 2] - return address (small memory model => 2 bytes)
-    ; [bp + 4] - first argument (character)
-    ; [bp + 6] - second argument (page)
-    ; note: bytes are converted to words (you can't push a single byte on the stack)
+    ; [bp + 4] - first argument (row)
+    ; [bp + 6] - second argument (column)
+    
     mov dh, [bp + 4]
     mov dl, [bp + 6]
 
