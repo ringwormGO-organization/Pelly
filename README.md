@@ -26,8 +26,6 @@ _Recommend to install desktop version of Qemu because it does not require to use
 - [X] Bootloader
   - [X] FAT12
 - [ ] Kernel
-  - [ ] GDT
-  - [ ] IDT
   - [X] PS/2 keyboard (BIOS Int. 16h)
   - [ ] PS/2 mouse
   - [ ] GUI
