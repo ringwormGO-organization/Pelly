@@ -48,3 +48,21 @@ bool DISK_ReadSectors(DISK* disk, uint32_t lba, uint8_t sectors, void far* dataO
 
     return false;
 }
+
+bool DISK_WriteSectors(DISK* disk, uint32_t lba, uint8_t sectors, void far* offset, void far* dataOut)
+{
+    uint16_t cylinder, sector, head;
+    DISK_LBA2CHS(disk, lba, &cylinder, &sector, &head);
+
+    for (int i = 0; i < 3; i++)
+    {
+        if (x86_Disk_Write(disk->id, sectors, cylinder, sector, head, offset, dataOut))
+        {
+            return true;
+        }
+
+        x86_Disk_Reset(disk->id);
+    }
+
+    return false;
+}
