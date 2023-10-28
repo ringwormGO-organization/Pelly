@@ -27,10 +27,12 @@ void _cdecl kstart_(uint16_t bootDrive)
         goto end;
     }
 
-    x86_Disk_Write(0, 64, 0, 1, 0, 0x7c00, 0x0000);
-//    disk_test_write();
+    // x86_Disk_Write(0, 64, 0, 1, 0, 0x7c00, 0x0000);
+    // disk_test_write();
 
-    DISK_ReadSectors(&disk, 19, 1, g_data);
+    // DISK_WriteSectors(0, 19, 1, 0x7c00, 0x0000);
+
+    DISK_ReadSectors(&disk, 19, 1, 0x7c00);
 
     if (!FAT_Initialize(&disk))
     {
@@ -66,8 +68,6 @@ void _cdecl kstart_(uint16_t bootDrive)
         }
     }
     FAT_Close(fd);
-
-    void far * data_to_write = "test";   //  address where?
 
     starting_cursor_row += 1;
 
