@@ -251,3 +251,16 @@ void print_buffer(const char* msg, const void far* buffer, uint16_t count)
     }
     puts("\r\n");
 }
+
+size_t strlen(const char* str)
+{
+    size_t i = 0;
+
+    while (*str)
+    {
+        i++;
+        *str++;
+    }
+
+    return i;
+}

@@ -6,6 +6,40 @@ extern _ascii_code
 _ascii_code:    dw  0
 
 ;
+;   _move_cursor -> set dh & dl to corresponding position
+;
+global _move_cursor
+_move_cursor:
+    ; make new call frame
+    push bp             ; save old call frame
+    mov bp, sp          ; initialize new call frame
+
+    ; save bx
+    push bx
+
+    ; [bp + 0] - old call frame
+    ; [bp + 2] - return address (small memory model => 2 bytes)
+    ; [bp + 4] - first argument (row)
+    ; [bp + 6] - second argument (column)
+    
+    mov dh, [bp + 4]
+    mov dl, [bp + 6]
+
+    ; Move cursor to corresponding starting position
+    mov ah, 0x02
+    mov bh, 0x00
+    int 0x10
+
+    ; restore bx
+    pop bx
+
+    ; restore old call frame
+    mov sp, bp
+    pop bp
+
+    ret
+
+;
 ;   _init_keyboard -> set dh & dl to corresponding starting position
 ;
 global _init_keyboard

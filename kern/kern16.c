@@ -4,6 +4,7 @@
 #include "io.h"
 #include "filesystem/disk.h"
 #include "filesystem/fat.h"
+#include "gui/gui.h"
 
 #define KEYB    0
 
@@ -71,8 +72,8 @@ void _cdecl kstart_(uint16_t bootDrive)
 
     starting_cursor_row += 1;
 
-    init_keyboard(starting_cursor_row, 0);
-    c_keyboard_loop();
+    init_keyboard(0, 0);
+    start_gui();
 
 end:
     for (;;);

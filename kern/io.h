@@ -6,6 +6,8 @@
 
 int starting_cursor_row = 0;
 
+void _cdecl move_cursor(uint16_t row, uint16_t column);
+
 void _cdecl init_keyboard(uint16_t row, uint16_t column);
 void _cdecl asm_keyboard_loop();
 void _cdecl clear_screen();
