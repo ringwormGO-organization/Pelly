@@ -24,8 +24,20 @@
 typedef enum error_T
 {
     NO_ERROR,
-    TITLE_BOUNDARY_EXCEEDED
+    TITLE_BOUNDARY_EXCEEDED,
+    X_BOUNDARY_EXCEEDED,
+    Y_BOUNDARY_EXCEEDED,
 } Error;
+
+/* ------------------------------------ */
+
+typedef struct cursor_T
+{
+    Error error;
+
+    uint16_t x;
+    uint16_t y;
+} Cursor;
 
 typedef struct window_T
 {
@@ -42,6 +54,9 @@ typedef struct window_T
 
     char *title;
 } Window;
+
+Cursor init_cursor(uint16_t x, uint16_t y);
+Cursor move_cursor(uint16_t x, uint16_t y);
 
 Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, uint16_t background_color, uint16_t foreground_color, char* title, bool debug);
 void draw_window(Window window);

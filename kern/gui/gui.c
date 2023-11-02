@@ -1,5 +1,57 @@
 #include "gui.h"
 
+Cursor init_cursor(uint16_t x, uint16_t y)
+{
+    Cursor new;
+
+    /* Perform checks */
+    if (x > 79)
+    {
+        new.error = X_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    if (y > 24)
+    {
+        new.error = Y_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    new.error = NO_ERROR;
+
+    new.x = x;
+    new.y = y;
+
+    init_keyboard(new.x, new.y);
+    return new;
+}
+
+Cursor move_cursor(uint16_t x, uint16_t y)
+{
+    Cursor new;
+
+    /* Perform checks */
+    if (x > 79)
+    {
+        new.error = X_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    if (y > 24)
+    {
+        new.error = Y_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    new.error = NO_ERROR;
+
+    new.x = x;
+    new.y = y;
+
+    move_keyboard(new.x, new.y);
+    return new;
+}
+
 Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, uint16_t background_color, uint16_t foreground_color, char* title, bool debug)
 {
     Window new;
@@ -37,25 +89,15 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, uint1
 }
 
 void draw_window(Window window)
-{    
-
-    /**
-     * TO ANYONE READING THIS IN THE FUTURE:
-     *      something is backwards
-     *      minus acts as a plus
-     *      while plus acts like a minus
-     * 
-     *       x = row
-     *       y = column
-    */
+{
 
     /* ******************************** */
     /*          Top border              */
     /* ******************************** */
+
+    global_cursor = move_cursor(window.x, window.y);
     
-    move_cursor(window.x, window.y);
-    
-    for (uint16_t i = window.x; i <= window.len_x; i--)
+    for (uint16_t i = 0; i < window.len_x; i++)
     {
         printf("%c", 0xC4);
     }
@@ -64,9 +106,9 @@ void draw_window(Window window)
     /*          Right border            */
     /* ******************************** */
 
-    for (uint16_t i = (window.y + 1); i <= window.len_y; i--)
+    for (uint16_t i = 0; i < window.len_y; i++)
     {
-        move_cursor(window.y + i, window.x + (window.len_x - 1));
+        move_cursor(window.x + window.len_x, window.y + i);
         printf("%c", 0xB3);
     }
 
@@ -74,9 +116,23 @@ void draw_window(Window window)
     /*          Bottom border           */
     /* ******************************** */
 
-    for (uint16_t i = window.x; i <= window.len_x; i--)
+    global_cursor = move_cursor(window.x, window.y + window.len_y);
+
+    for (uint16_t i = 0; i < window.len_x + 1; i++)
     {
-        
+        printf("%c", 0xC4);
+    }
+
+    /* ******************************** */
+    /*          Left border             */
+    /* ******************************** */
+
+    global_cursor = move_cursor(window.x, window.y);
+
+    for (uint16_t i = 0; i < window.len_y; i++)
+    {
+        global_cursor = move_cursor(window.x, window.y + i);
+        printf("%c", 0xB3);
     }
 }
 
