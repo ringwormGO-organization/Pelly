@@ -3,6 +3,12 @@
 
 #include "stdint.h"
 #include "x86.h"
+#include "io.h"
+#include "gui/gui.h"
+
+struct cursor_T;
+
+struct cursor_T global_cursor;
 
 void putc(char c);
 void puts(const char* str);

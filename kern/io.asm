@@ -8,8 +8,8 @@ _ascii_code:    dw  0
 ;
 ;   _move_cursor -> set dh & dl to corresponding position
 ;
-global _move_cursor
-_move_cursor:
+global _move_keyboard
+_move_keyboard:
     ; make new call frame
     push bp             ; save old call frame
     mov bp, sp          ; initialize new call frame
@@ -17,13 +17,15 @@ _move_cursor:
     ; save bx
     push bx
 
+    ; Set variables to corresponding position
+
     ; [bp + 0] - old call frame
     ; [bp + 2] - return address (small memory model => 2 bytes)
     ; [bp + 4] - first argument (row)
     ; [bp + 6] - second argument (column)
     
-    mov dh, [bp + 4]
-    mov dl, [bp + 6]
+    mov dl, [bp + 4]
+    mov dh, [bp + 6]
 
     ; Move cursor to corresponding starting position
     mov ah, 0x02
@@ -58,14 +60,14 @@ _init_keyboard:
     int 0x10
 
     ; Set variables to corresponding starting position
-
+    
     ; [bp + 0] - old call frame
     ; [bp + 2] - return address (small memory model => 2 bytes)
     ; [bp + 4] - first argument (row)
     ; [bp + 6] - second argument (column)
-    
-    mov dh, [bp + 4]
-    mov dl, [bp + 6]
+
+    mov dl, [bp + 4]
+    mov dh, [bp + 6]
 
     ; Move cursor to corresponding starting position
     mov ah, 0x02

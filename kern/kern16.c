@@ -6,10 +6,7 @@
 #include "filesystem/fat.h"
 #include "gui/gui.h"
 
-#define KEYB    0
-
 void far* g_data = (void far*)0x00500200;
-
 void _cdecl disk_test_write();
 
 void _cdecl kstart_(uint16_t bootDrive)
@@ -18,8 +15,6 @@ void _cdecl kstart_(uint16_t bootDrive)
 
     printf("===> Pelly Operating System - 0.2.1\r\n");
     printf("Now with keyboard cursor! %d\r\n", 30);
-
-    starting_cursor_row += 2;
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))
@@ -51,7 +46,6 @@ void _cdecl kstart_(uint16_t bootDrive)
         for (int i = 0; i < 11; i++)
             putc(entry.Name[i]);
         printf("\r\n");
-        starting_cursor_row += 1;
     }
     FAT_Close(fd);
 
@@ -70,9 +64,7 @@ void _cdecl kstart_(uint16_t bootDrive)
     }
     FAT_Close(fd);
 
-    starting_cursor_row += 1;
-
-    init_keyboard(0, 0);
+    global_cursor = init_cursor(0, 0);
     start_gui();
 
 end:
