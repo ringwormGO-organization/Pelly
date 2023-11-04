@@ -58,9 +58,33 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, uint1
     new.error = NO_ERROR;
 
     /* Perform checks */
-    if (strlen(title) > 70)
+    if (strlen(title) > 70 || strlen(title) > (len_x - 2))
     {
         new.error = TITLE_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    if (x > 79)
+    {
+        new.error = X_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    if (y > 79)
+    {
+        new.error = Y_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    if (len_x >= (79 - x))
+    {
+        new.error = LEN_X_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    if (len_y >= (79 - x))
+    {
+        new.error = LEN_Y_BOUNDARY_EXCEEDED;
         return new;
     }
 
@@ -134,13 +158,36 @@ void draw_window(Window window)
         global_cursor = move_cursor(window.x, window.y + i);
         printf("%c", 0xB3);
     }
+
+    /* ------------------------------------------------------------------------ */
+
+    /* ******************************** */
+    /*          Title space             */
+    /* ******************************** */
+
+    global_cursor = move_cursor(window.x + 1, window.y + 2);
+    
+    for (uint16_t i = 0; i < window.len_x - 1; i++)
+    {
+        printf("%c", 0xC4);
+    }
+
+    /* ******************************** */
+    /*          Title                   */
+    /* ******************************** */
+
+    global_cursor = move_cursor(window.x + 1, window.y + 1);
+    printf("%s", window.title);
 }
+
+// 0x0a - \n
+// 0x0d - \r
 
 void start_gui()
 {
     clear_screen();
 
-    Window test_window = init_window(10, 10, 12, 12, WHITE, BLACK, "test window", false);
+    Window test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
 
     if (test_window.error != NO_ERROR)
     {

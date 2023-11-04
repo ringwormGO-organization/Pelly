@@ -3,6 +3,18 @@
 
 void putc(char c)
 {
+    // TODO
+
+    /*if ((int)c == 13)
+    {
+        global_cursor = move_cursor(global_cursor.x, global_cursor.y + 1);
+    }
+
+    else
+    {
+        global_cursor = move_cursor(global_cursor.x + 1, global_cursor.y);
+    }*/
+
     x86_Video_WriteCharTeletype(c, 0);
 }
 

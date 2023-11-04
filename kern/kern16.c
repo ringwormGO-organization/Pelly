@@ -13,6 +13,9 @@ void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
+    global_cursor.x = 0;
+    global_cursor.y = 0;
+
     printf("===> Pelly Operating System - 0.2.1\r\n");
     printf("Now with keyboard cursor! %d\r\n", 30);
 

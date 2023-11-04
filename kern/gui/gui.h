@@ -27,6 +27,8 @@ typedef enum error_T
     TITLE_BOUNDARY_EXCEEDED,
     X_BOUNDARY_EXCEEDED,
     Y_BOUNDARY_EXCEEDED,
+    LEN_X_BOUNDARY_EXCEEDED,
+    LEN_Y_BOUNDARY_EXCEEDED,
 } Error;
 
 /* ------------------------------------ */
