@@ -1,0 +1,2 @@
+gui/gui_elements/button.c(6): Warning! W107: Missing return value for function 'init_button'
+gui/gui_elements/button.c(8): Warning! W303: Parameter 'button' has been defined, but not referenced

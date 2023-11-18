@@ -4,6 +4,11 @@
 #include "../stdio.h"
 #include "../stdint.h"
 
+#include "cursor.h"
+#include "error.h"
+
+#include "gui_elements/button.h"
+
 #define BLACK   0
 #define BLUE    1
 #define GREEN   2
@@ -21,29 +26,17 @@
 #define YELLOW  14
 #define WHITE   15
 
-typedef enum error_T
-{
-    NO_ERROR,
-    TITLE_BOUNDARY_EXCEEDED,
-    X_BOUNDARY_EXCEEDED,
-    Y_BOUNDARY_EXCEEDED,
-    LEN_X_BOUNDARY_EXCEEDED,
-    LEN_Y_BOUNDARY_EXCEEDED,
-} Error;
-
 /* ------------------------------------ */
 
-typedef struct cursor_T
+typedef struct elements_T
 {
-    Error error;
-
-    uint16_t x;
-    uint16_t y;
-} Cursor;
+    struct button_T button[16];
+} Elements;
 
 typedef struct window_T
 {
     Error error;
+    Elements elements;
 
     uint16_t x;
     uint16_t y;
@@ -60,7 +53,9 @@ typedef struct window_T
 Cursor init_cursor(uint16_t x, uint16_t y);
 Cursor move_cursor(uint16_t x, uint16_t y);
 
-Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, uint16_t background_color, uint16_t foreground_color, char* title, bool debug);
+Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+                    uint16_t background_color, uint16_t foreground_color, char* title, 
+                    Elements elements, bool debug);
 void draw_window(Window window);
 
 void start_gui();
