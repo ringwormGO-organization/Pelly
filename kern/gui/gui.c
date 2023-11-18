@@ -1,58 +1,8 @@
 #include "gui.h"
 
-Cursor init_cursor(uint16_t x, uint16_t y)
-{
-    Cursor new;
-
-    /* Perform checks */
-    if (x > 79)
-    {
-        new.error = X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (y > 24)
-    {
-        new.error = Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    new.error = NO_ERROR;
-
-    new.x = x;
-    new.y = y;
-
-    init_keyboard(new.x, new.y);
-    return new;
-}
-
-Cursor move_cursor(uint16_t x, uint16_t y)
-{
-    Cursor new;
-
-    /* Perform checks */
-    if (x > 79)
-    {
-        new.error = X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (y > 24)
-    {
-        new.error = Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    new.error = NO_ERROR;
-
-    new.x = x;
-    new.y = y;
-
-    move_keyboard(new.x, new.y);
-    return new;
-}
-
-Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, uint16_t background_color, uint16_t foreground_color, char* title, bool debug)
+Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+                    uint16_t background_color, uint16_t foreground_color, char* title, 
+                    Elements elements, bool debug)
 {
     Window new;
     new.error = NO_ERROR;
@@ -187,7 +137,12 @@ void start_gui()
 {
     clear_screen();
 
-    Window test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
+    Button test_button = init_button();
+
+    Elements test_elements;
+    test_elements.button[0] = test_button;
+
+    Window test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", test_elements, false);
 
     if (test_window.error != NO_ERROR)
     {

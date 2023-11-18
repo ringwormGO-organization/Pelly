@@ -4,7 +4,7 @@
 #include "stdint.h"
 #include "x86.h"
 #include "io.h"
-#include "gui/gui.h"
+#include "gui/cursor.h"
 
 struct cursor_T;
 
