@@ -3,6 +3,8 @@ bits     16
 section _TEXT class=CODE
 
 extern _ascii_code
+extern _cursor_x
+extern _cursor_y
 _ascii_code:    dw  0
 
 ;
@@ -134,14 +136,16 @@ _asm_keyboard_loop:
 
     .enterk:
         ; Go to END OF TEXT
-        mov ah, 0x0e
-        mov al, 0x0a
-        int 0x10
+        ;mov ah, 0x0e
+        ;mov al, 0x0a
+        ;int 0x10
 
         ; Go to CARRIAGE RETURN
-        mov ah, 0x0e
-        mov al, 0x0D
-        int 0x10
+        ;mov ah, 0x0e
+        ;mov al, 0x0D
+        ;int 0x10
+        
+        mov [_ascii_code], byte 4
 
         ret
 
@@ -246,6 +250,18 @@ _right_cursor:
 
     .return:
         ret
+
+
+global  _get_cursor_position
+_get_cursor_position:
+    mov ah, 0x03
+    mov bh, 0
+    int 0x10
+
+    mov [_cursor_x], dh
+    mov [_cursor_y], dl
+
+    ret
 
 ;
 ;   _clear_screen -> clears the screen (80x25 res.), disable blinking
