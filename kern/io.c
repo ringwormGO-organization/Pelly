@@ -1,6 +1,8 @@
 
 #include "io.h"
 
+#include "gui/gui.h"
+
 int _cdecl ascii_code;
 
 void c_keyboard_loop(int x, int y, Window window) {

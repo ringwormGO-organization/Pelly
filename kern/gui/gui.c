@@ -69,7 +69,7 @@ void draw_window(Window window)
     /*          Top border              */
     /* ******************************** */
 
-    global_cursor = move_cursor(window.x, window.y);
+    move_cursor(window.x, window.y);
     
     for (uint16_t i = 0; i < window.len_x; i++)
     {
@@ -97,7 +97,7 @@ void draw_window(Window window)
     /*          Bottom border           */
     /* ******************************** */
 
-    global_cursor = move_cursor(window.x, window.y + window.len_y);
+    move_cursor(window.x, window.y + window.len_y);
 
     for (uint16_t i = 0; i < window.len_x + 1; i++)
     {
@@ -108,11 +108,11 @@ void draw_window(Window window)
     /*          Left border             */
     /* ******************************** */
 
-    global_cursor = move_cursor(window.x, window.y);
+    move_cursor(window.x, window.y);
 
     for (uint16_t i = 0; i < window.len_y; i++)
     {
-        global_cursor = move_cursor(window.x, window.y + i);
+        move_cursor(window.x, window.y + i);
         printf("%c", 0xB3);
     }
 
@@ -122,7 +122,7 @@ void draw_window(Window window)
     /*          Title space             */
     /* ******************************** */
 
-    global_cursor = move_cursor(window.x + 1, window.y + 2);
+    move_cursor(window.x + 1, window.y + 2);
     
     for (uint16_t i = 0; i < window.len_x - 1; i++)
     {
@@ -133,7 +133,7 @@ void draw_window(Window window)
     /*          Title                   */
     /* ******************************** */
 
-    global_cursor = move_cursor(window.x + 1, window.y + 1);
+    move_cursor(window.x + 1, window.y + 1);
     printf("%s", window.title);
 
 }
@@ -145,7 +145,7 @@ void clear_window(Window window)
     /*          Top border              */
     /* ******************************** */
 
-    global_cursor = move_cursor(window.x, window.y);
+    move_cursor(window.x, window.y);
     
     for (uint16_t i = 0; i < window.len_x; i++)
     {
@@ -173,7 +173,7 @@ void clear_window(Window window)
     /*          Bottom border           */
     /* ******************************** */
 
-    global_cursor = move_cursor(window.x, window.y + window.len_y);
+    move_cursor(window.x, window.y + window.len_y);
 
     for (uint16_t i = 0; i < window.len_x + 1; i++)
     {
@@ -184,11 +184,11 @@ void clear_window(Window window)
     /*          Left border             */
     /* ******************************** */
 
-    global_cursor = move_cursor(window.x, window.y);
+    move_cursor(window.x, window.y);
 
     for (uint16_t i = 0; i < window.len_y; i++)
     {
-        global_cursor = move_cursor(window.x, window.y + i);
+        move_cursor(window.x, window.y + i);
         printf("%c", 0x20);
     }
 
@@ -198,7 +198,7 @@ void clear_window(Window window)
     /*          Title space             */
     /* ******************************** */
 
-    global_cursor = move_cursor(window.x + 1, window.y + 2);
+    move_cursor(window.x + 1, window.y + 2);
     
     for (uint16_t i = 0; i < window.len_x - 1; i++)
     {
@@ -209,7 +209,8 @@ void clear_window(Window window)
     /*          Title                   */
     /* ******************************** */
 
-    global_cursor = move_cursor(window.x + 1, window.y + 1);
+    move_cursor(window.x + 1, window.y + 1);
+
     for (uint16_t i = 0; i < strlen(window.title); i++)
     {
         printf("%c", 0x20);
@@ -223,6 +224,7 @@ void clear_window(Window window)
 void start_gui()
 {
     clear_screen();
+    move_cursor(0, 0);
 
     Button test_button = init_button();
 

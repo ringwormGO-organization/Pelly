@@ -13,3 +13,11 @@ typedef struct cursor_T
     uint16_t x;
     uint16_t y;
 } Cursor;
+
+/**
+ * Move "any" cursor
+ * @param x
+ * @param y
+ * @return `Cursor`
+*/
+Cursor cursor_move_cursor(uint16_t x, uint16_t y);

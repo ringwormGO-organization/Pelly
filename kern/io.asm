@@ -44,48 +44,6 @@ _move_keyboard:
     ret
 
 ;
-;   _init_keyboard -> set dh & dl to corresponding starting position
-;
-global _init_keyboard
-_init_keyboard:
-
-    ; make new call frame
-    push bp             ; save old call frame
-    mov bp, sp          ; initialize new call frame
-
-    ; save bx
-    push bx
-
-    ; Set cursor type to block
-    mov ah, 0x01
-    mov cx, 0x10
-    int 0x10
-
-    ; Set variables to corresponding starting position
-    
-    ; [bp + 0] - old call frame
-    ; [bp + 2] - return address (small memory model => 2 bytes)
-    ; [bp + 4] - first argument (row)
-    ; [bp + 6] - second argument (column)
-
-    mov dl, [bp + 4]
-    mov dh, [bp + 6]
-
-    ; Move cursor to corresponding starting position
-    mov ah, 0x02
-    mov bh, 0x00
-    int 0x10
-
-    ; restore bx
-    pop bx
-
-    ; restore old call frame
-    mov sp, bp
-    pop bp
-
-    ret
-
-;
 ;   _asm_keyboard_loop -> get user input (int 0x16),
 ;                         send ASCII code to C,
 ;                         and handle there
@@ -252,6 +210,9 @@ _right_cursor:
         ret
 
 
+;
+;   _get_cursor_position -> get cursor postions
+;
 global  _get_cursor_position
 _get_cursor_position:
     mov ah, 0x03

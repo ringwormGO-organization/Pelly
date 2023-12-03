@@ -1,3 +1,0 @@
-io.c(32): Warning! W131: No prototype found for function 'clear_window'
-io.c(32): Warning! W308: The function 'clear_window' without prototyped parameters called
-io.c(32): Note! I2002: 'clear_window' defined in: io.c(32)

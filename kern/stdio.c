@@ -1,6 +1,11 @@
 
 #include "stdio.h"
 
+void move_cursor(uint16_t x, uint16_t y)
+{
+    global_cursor = cursor_move_cursor(x, y);
+};
+
 void putc(char c)
 {
     // TODO

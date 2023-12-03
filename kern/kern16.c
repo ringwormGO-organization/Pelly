@@ -67,7 +67,6 @@ void _cdecl kstart_(uint16_t bootDrive)
     }
     FAT_Close(fd);
 
-    global_cursor = init_cursor(0, 0);
     start_gui();
 
 end:

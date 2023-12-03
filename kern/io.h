@@ -9,7 +9,6 @@ void _cdecl move_keyboard(uint16_t row, uint16_t column);
 int _cdecl cursor_x;
 int _cdecl cursor_y;
 
-void _cdecl init_keyboard(uint16_t row, uint16_t column);
 void _cdecl asm_keyboard_loop();
 void _cdecl clear_screen();
 

@@ -50,12 +50,10 @@ typedef struct window_T
     char *title;
 } Window;
 
-Cursor init_cursor(uint16_t x, uint16_t y);
-Cursor move_cursor(uint16_t x, uint16_t y);
-
 Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, 
                     Elements elements, bool debug);
 void draw_window(Window window);
+void clear_window(Window window);
 
 void start_gui();
