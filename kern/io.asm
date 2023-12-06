@@ -58,7 +58,7 @@ _asm_keyboard_loop:
     mov [_ascii_code], byte al
 
     ; Check if input is backspace, enter or cursor
-    ; Handle backspace & enter here, if cursor assign special numbers, else just return already assigned ASCII code
+    ; Handle backspace here, if cursor or enter key return special code 
 
     cmp al, 0x08
     je  .backspace
@@ -93,18 +93,7 @@ _asm_keyboard_loop:
         ret
 
     .enterk:
-        ; Go to END OF TEXT
-        ;mov ah, 0x0e
-        ;mov al, 0x0a
-        ;int 0x10
-
-        ; Go to CARRIAGE RETURN
-        ;mov ah, 0x0e
-        ;mov al, 0x0D
-        ;int 0x10
-        
         mov [_ascii_code], byte 4
-
         ret
 
     ; Assign special values to cursor keys
@@ -129,6 +118,21 @@ _asm_keyboard_loop:
         mov [_ascii_code], byte 3
         ret
 
+;
+;   _enterk -> enter key
+;
+global _enterk
+_enterk:
+    ; Go to END OF TEXT
+    mov ah, 0x0e
+    mov al, 0x0a
+    int 0x10
+
+    ; Go to CARRIAGE RETURN
+    mov ah, 0x0e
+    mov al, 0x0D
+    int 0x10
+    
 ;
 ;   _up_cursor -> move cursor up
 ;
@@ -209,7 +213,6 @@ _right_cursor:
     .return:
         ret
 
-
 ;
 ;   _get_cursor_position -> get cursor postions
 ;
@@ -219,8 +222,8 @@ _get_cursor_position:
     mov bh, 0
     int 0x10
 
-    mov [_cursor_x], dh
-    mov [_cursor_y], dl
+    mov [_cursor_x], dl
+    mov [_cursor_y], dh
 
     ret
 

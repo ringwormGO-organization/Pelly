@@ -243,6 +243,6 @@ void start_gui()
         draw_window(test_window);
     }
 
+    move_cursor(0, 0);
     c_keyboard_loop(test_window.x, test_window.y+1, test_window);
-
 }
