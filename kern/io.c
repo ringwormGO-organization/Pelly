@@ -52,30 +52,35 @@ void c_keyboard_loop(int x, int y, Window window)
                 move_cursor(cursor_x, cursor_y);
 
                 break;
-            
-            case 4:
-                get_cursor_position();
-
-                if (cursor_x == x && cursor_y == y) 
-                {
-                    clear_window(window);
-                }
-
-                else 
-                {
-                    enterk();
-
-                    /* Update global cursor */
-                    move_cursor(0, global_cursor.y + 1);
-                }
-
-                break;
 
             default:
                 printf("%c", ascii_code);
 
                 /* Update global cursor */
-                move_cursor(global_cursor.x + 1, global_cursor.y);
+                if (ascii_code == 13)
+                {
+                    get_cursor_position();
+
+                    if (global_cursor.x == x && global_cursor.y == y)
+                    {
+                        clear_window(window);
+                    }
+
+                    else
+                    {
+                        move_cursor(0, global_cursor.y + 1);
+                    }
+                }
+
+                else if (ascii_code == 8)
+                {
+                    move_cursor(global_cursor.x - 1, global_cursor.y);
+                }
+
+                else
+                {
+                    move_cursor(global_cursor.x + 1, global_cursor.y);
+                }
 
                 break;
         }

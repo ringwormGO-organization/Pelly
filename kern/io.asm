@@ -93,7 +93,16 @@ _asm_keyboard_loop:
         ret
 
     .enterk:
-        mov [_ascii_code], byte 4
+        ; Go to END OF TEXT
+        mov ah, 0x0e
+        mov al, 0x0a
+        int 0x10
+
+        ; Go to CARRIAGE RETURN
+        mov ah, 0x0e
+        mov al, 0x0D
+        int 0x10
+
         ret
 
     ; Assign special values to cursor keys
@@ -117,21 +126,6 @@ _asm_keyboard_loop:
     .right_cursor:
         mov [_ascii_code], byte 3
         ret
-
-;
-;   _enterk -> enter key
-;
-global _enterk
-_enterk:
-    ; Go to END OF TEXT
-    mov ah, 0x0e
-    mov al, 0x0a
-    int 0x10
-
-    ; Go to CARRIAGE RETURN
-    mov ah, 0x0e
-    mov al, 0x0D
-    int 0x10
     
 ;
 ;   _up_cursor -> move cursor up

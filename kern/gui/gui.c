@@ -393,5 +393,5 @@ void start_gui()
 
 keyboard_loop:
     move_cursor(0, 0);
-    c_keyboard_loop(test_window.x, test_window.y+1, test_window);
+    c_keyboard_loop(test_window.x + 1, test_window.y, test_window);
 }

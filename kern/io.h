@@ -7,7 +7,6 @@
 void _cdecl move_keyboard(uint16_t row, uint16_t column);
 
 void _cdecl asm_keyboard_loop();
-void _cdecl enterk();
 
 void _cdecl up_cursor();
 void _cdecl down_cursor();
