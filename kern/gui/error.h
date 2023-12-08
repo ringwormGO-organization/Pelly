@@ -3,6 +3,7 @@
 typedef enum error_T
 {
     NO_ERROR,
+    EMPTY,
     TITLE_BOUNDARY_EXCEEDED,
     X_BOUNDARY_EXCEEDED,
     Y_BOUNDARY_EXCEEDED,

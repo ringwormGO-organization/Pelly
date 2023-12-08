@@ -26,11 +26,13 @@
 #define YELLOW  14
 #define WHITE   15
 
+#define BUTTON_SIZE 4
+
 /* ------------------------------------ */
 
 typedef struct elements_T
 {
-    struct button_T button[16];
+    struct button_T button[BUTTON_SIZE];
 } Elements;
 
 typedef struct window_T
@@ -50,10 +52,68 @@ typedef struct window_T
     char *title;
 } Window;
 
+
+/**
+ * Initialize a button
+ * @param window window element where button will be drawn
+ * @param x starting position (x)
+ * @param y starting position (y)
+ * @param len_x width of a button
+ * @param len_y height of a button
+ * @param background_color background color of a button
+ * @param foreground_color foreground color of a button
+ * @param title title of a button
+*/
+Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+                    uint16_t background_color, uint16_t foreground_color, char* title);
+
+/**
+ * Draw a button
+ * @param window window where button will be drawn
+ * @param button button which will be drawn
+*/
+void draw_button(Window window, Button button);
+
+/* ------------------------------------ */
+
+/**
+ * Initialize a window
+ * @param window window element where button will be drawn
+ * @param x starting position (x)
+ * @param y starting position (y)
+ * @param len_x width of the a window
+ * @param len_y height of the a window
+ * @param background_color background color of a window
+ * @param foreground_color foreground color of a window
+ * @param title title of a window
+ * @param debug debug mode?
+*/
 Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, char* title, 
-                    Elements elements, bool debug);
+                    uint16_t background_color, uint16_t foreground_color, char* title, bool debug);
+
+/**
+ * Draw a window
+ * @param window window to be drawn
+*/
 void draw_window(Window window);
+
+/**
+ * Draw window elements (buttons, context menus, ...)
+ * @param window window where elements will be drawn
+ * @param elements elements to draw
+ * @param debug debug mode?
+*/
+void draw_window_elements(Window window, Elements elements, bool debug);
+
+/**
+ * Clear a given window
+ * @param window window to be cleaned
+*/
 void clear_window(Window window);
 
+/* ------------------------------------ */
+
+/**
+ * Entry point for GUI
+*/
 void start_gui();

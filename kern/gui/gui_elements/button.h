@@ -22,6 +22,3 @@ typedef struct button_T
 
     char* title;
 } Button;
-
-Button init_button();
-void draw_button(Button button);
