@@ -94,14 +94,14 @@ _asm_keyboard_loop:
 
     .enterk:
         ; Go to END OF TEXT
-        mov ah, 0x0e
-        mov al, 0x0a
-        int 0x10
+        ; mov ah, 0x0e
+        ; mov al, 0x0a
+        ; int 0x10
 
         ; Go to CARRIAGE RETURN
-        mov ah, 0x0e
-        mov al, 0x0D
-        int 0x10
+        ; mov ah, 0x0e
+        ; mov al, 0x0D
+        ; int 0x10
 
         ret
 

@@ -54,7 +54,7 @@ void c_keyboard_loop(int x, int y, Window window)
                 break;
 
             default:
-                printf("%c", ascii_code);
+                // printf("%c", ascii_code);
 
                 /* Update global cursor */
                 if (ascii_code == 13)
@@ -68,7 +68,7 @@ void c_keyboard_loop(int x, int y, Window window)
 
                     else
                     {
-                        move_cursor(0, global_cursor.y + 1);
+                        // move_cursor(0, global_cursor.y + 1);
                     }
                 }
 
@@ -79,7 +79,7 @@ void c_keyboard_loop(int x, int y, Window window)
 
                 else
                 {
-                    move_cursor(global_cursor.x + 1, global_cursor.y);
+                    // move_cursor(global_cursor.x + 1, global_cursor.y);
                 }
 
                 break;
