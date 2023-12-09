@@ -129,7 +129,7 @@ void draw_window(Window window);
  * @param elements elements to draw
  * @param debug debug mode?
 */
-void draw_window_elements(Window window, Elements elements, bool debug);
+void draw_window_elements(Window window, bool debug);
 
 /**
  * Clear a given window
