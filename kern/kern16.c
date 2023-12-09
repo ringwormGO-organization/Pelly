@@ -67,7 +67,9 @@ void _cdecl kstart_(uint16_t bootDrive)
     }
     FAT_Close(fd);
 
-    start_gui();
+    bbfs_get_disk_params();
+
+    //start_gui();
 
 end:
     for (;;);
