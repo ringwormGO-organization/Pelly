@@ -1,113 +1,31 @@
 #include "gui.h"
 
+// NOTE: use `init` function
+// this is just to speed up development process
+
 Button empty_button = {
     .error = EMPTY,
 };
 
-Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, char* title)
-{
-    Button new;
-    new.error = NO_ERROR;
+Button main_button = {
+    .x = 5,
+    .y = 5,
+    .len_x = 7,
+    .len_y = 2,
+    .background_color = BLACK,
+    .foreground_color = YELLOW,
+    .title = "test",
+};
 
-    /* Perform checks */
-    if (strlen(title) > (window.len_x - 2))
-    {
-        new.error = TITLE_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (x > (window.x + window.len_x))
-    {
-        new.error = X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (y > (window.y + window.len_y))
-    {
-        new.error = Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_x > (window.len_x - 2))
-    {
-        new.error = LEN_X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_y >= (window.len_y - 2))
-    {
-        new.error = LEN_Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    new.x = x;
-    new.y = y;
-
-    new.len_x = len_x;
-    new.len_y = len_y;
-    
-    new.background_color = background_color;
-    new.foreground_color = foreground_color;
-    
-    new.title = title;
-
-    return new;
-}
-
-void draw_button(Window window, Button button)
-{
-    /* ******************************** */
-    /*          Top border              */
-    /* ******************************** */
-
-    move_cursor(window.x + button.x, window.y + button.y);
-    
-    for (uint16_t i = 0; i < button.len_x; i++)
-    {
-        printf("%c", 0xC4);
-    }
-
-    /* ******************************** */
-    /*          Right border            */
-    /* ******************************** */
-
-    for (uint16_t i = 1; i < button.len_y; i++)
-    {
-        move_cursor(window.x + (button.x + button.len_x), window.y + (button.y + i));
-        printf("%c", 0xB3);
-    }
-
-    /* ******************************** */
-    /*          Bottom border           */
-    /* ******************************** */
-
-    move_cursor(window.x + button.x, window.y + (button.y + button.len_y));
-
-    for (uint16_t i = 0; i < button.len_x; i++)
-    {
-        printf("%c", 0xC4);
-    }
-
-    /* ******************************** */
-    /*          Left border             */
-    /* ******************************** */
-
-    move_cursor(window.x + button.x, window.y + button.y);
-
-    for (uint16_t i = 1; i < button.len_y; i++)
-    {
-        move_cursor((window.x + button.x) - 1, window.y + (button.y + i));
-        printf("%c", 0xB3);
-    }
-
-    /* ******************************** */
-    /*          Title                   */
-    /* ******************************** */
-
-    move_cursor(window.x + (button.x + 1), window.y + (button.y + 1));
-    printf("%s", button.title);
-}
+Button context_button = {
+    .x = 2,
+    .y = 2,
+    .len_x = 5,
+    .len_y = 2,
+    .background_color = LGRAY,
+    .foreground_color = WHITE,
+    .title = "123",
+};
 
 Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, bool debug)
@@ -272,6 +190,7 @@ void draw_window_elements(Window window, Elements elements, bool debug)
         }
 
         draw_button(window, window.elements.button[i]);
+        move_cursor(0, 0);
 
         if (window.elements.button[i].error != 0)
         {
@@ -389,15 +308,23 @@ void start_gui()
     draw_window(test_window);
     move_cursor(0, 0);
 
-    Button test_button = init_button(test_window, 5, 5, 7, 2, BLACK, YELLOW, "test");
+    Button context_buttons[BUTTON_SIZE];
+    context_buttons[0] = context_button;
+
+    context_buttons[1] = empty_button;
+    context_buttons[2] = empty_button;
+    context_buttons[3] = empty_button;
+
+    ContextMenu context_menu = init_context_menu(test_window, 10, 10, 5, 5, LGRAY, WHITE, context_buttons);
 
     Elements test_elements;
-    test_elements.button[0] = test_button;
+    test_elements.button[0] = main_button;
 
     test_elements.button[1] = empty_button;
     test_elements.button[2] = empty_button;
     test_elements.button[3] = empty_button;
 
+    test_elements.context_menu = context_menu;
     draw_window_elements(test_window, test_elements, false);
 
 keyboard_loop:

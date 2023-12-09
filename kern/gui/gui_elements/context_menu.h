@@ -4,8 +4,11 @@
 #include "../../stdint.h"
 
 #include "../error.h"
+#include "button.h"
 
-typedef struct button_T
+#define BUTTON_SIZE 4
+
+typedef struct context_menu_T
 {
     Error error;
 
@@ -18,5 +21,5 @@ typedef struct button_T
     uint16_t background_color;
     uint16_t foreground_color;
 
-    char* title;
-} Button;
+    struct button_T buttons[BUTTON_SIZE];
+} ContextMenu;
