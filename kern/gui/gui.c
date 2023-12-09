@@ -359,6 +359,15 @@ void clear_window(Window window)
         printf("%c", 0x20);
     }
 
+    move_cursor(window.x, window.y);
+    for (uint16_t i = 0; i < window.len_y; i++)
+    {
+        for (uint16_t j = 0; j < window.len_x; j++)
+            printf("%c", 0x20);
+        
+        move_cursor(window.x, window.y+i);
+    }
+
 }
 
 // 0x0a - \r\n
