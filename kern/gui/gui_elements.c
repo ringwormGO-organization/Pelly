@@ -121,7 +121,49 @@ void draw_button(Window window, Button button)
 ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, Button buttons[BUTTON_SIZE])
 {
+    ContextMenu new;
+    new.error = NO_ERROR;
+
+    /* Perform checks */
+    if (x > (window.x + window.len_x))
+    {
+        new.error = X_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    if (y > (window.y + window.len_y))
+    {
+        new.error = Y_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    if (len_x > (window.len_x - 2))
+    {
+        new.error = LEN_X_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    if (len_y >= (window.len_y - 2))
+    {
+        new.error = LEN_Y_BOUNDARY_EXCEEDED;
+        return new;
+    }
+
+    new.x = x;
+    new.y = y;
+
+    new.len_x = len_x;
+    new.len_y = len_y;
     
+    new.background_color = background_color;
+    new.foreground_color = foreground_color;
+
+    for (int i = 0; i < BUTTON_SIZE; i++)
+    {
+        new.buttons[i] = buttons[i];
+    }
+
+    return new;
 }
 
 /**
@@ -131,5 +173,5 @@ ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t le
 */
 void draw_context_menu(Window window, ContextMenu context_menu)
 {
-
+    
 }

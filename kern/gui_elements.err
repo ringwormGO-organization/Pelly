@@ -1,11 +1,2 @@
-gui/gui_elements.c(122): Warning! W303: Parameter 'foreground_color' has been defined, but not referenced
-gui/gui_elements.c(121): Warning! W303: Parameter 'y' has been defined, but not referenced
-gui/gui_elements.c(121): Warning! W303: Parameter 'x' has been defined, but not referenced
-gui/gui_elements.c(121): Warning! W303: Parameter 'window' has been defined, but not referenced
-gui/gui_elements.c(122): Warning! W303: Parameter 'buttons' has been defined, but not referenced
-gui/gui_elements.c(122): Warning! W303: Parameter 'background_color' has been defined, but not referenced
-gui/gui_elements.c(121): Warning! W303: Parameter 'len_x' has been defined, but not referenced
-gui/gui_elements.c(121): Warning! W303: Parameter 'len_y' has been defined, but not referenced
-gui/gui_elements.c(125): Warning! W107: Missing return value for function 'init_context_menu'
-gui/gui_elements.c(132): Warning! W303: Parameter 'window' has been defined, but not referenced
-gui/gui_elements.c(132): Warning! W303: Parameter 'context_menu' has been defined, but not referenced
+gui/gui_elements.c(174): Warning! W303: Parameter 'window' has been defined, but not referenced
+gui/gui_elements.c(174): Warning! W303: Parameter 'context_menu' has been defined, but not referenced

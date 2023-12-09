@@ -203,6 +203,13 @@ void draw_window_elements(Window window, bool debug)
             continue;
         }
     }
+
+    /* ******************************** */
+    /*          Context menu            */
+    /* ******************************** */
+
+    draw_context_menu(window, window.elements.context_menu);
+    move_cursor(0, 0);
 }
 
 void clear_window(Window window)
