@@ -3,6 +3,7 @@
 
 #include "../stdint.h"
 #include "disk.h"
+#include "../libc/string.h"
 
 #define MAX_BLOCK_NAME 12       /* 12-byte block names */
 #define RAM_BLOCK_SIZE 512      /* maximum size of a RAM block (blck. name not counted)*/
@@ -22,10 +23,10 @@ typedef struct
 } BBFS_v2_block_data;
 
 
-void bbfs_get_disk_params(/*char disk_label[10], 
-                          uint8_t block_size, 
+void bbfs_get_disk_params(char disk_label[10], 
+                          uint8_t block_size,
                           char file_sys[8],
-                          uint16_t device*/);
+                          uint16_t device);
 
 void bbfs_read_block(uint16_t block_address_src, 
                      uint16_t block_address_dest,

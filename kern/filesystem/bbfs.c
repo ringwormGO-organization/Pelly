@@ -10,6 +10,8 @@
  *  For now it is only in RAM because if we try to
  *  write data to the disk FAT12 starts complaining.
  * 
+ *  Also we only support BBFS v2.
+ * 
  *  TODO: tell FAT to stfu and write to disk.
  */
 
@@ -28,17 +30,36 @@
  *      file_sys[8] -   file system id, used to check
  *                      if either BBFS v1 or BBFS v2
  */
-void bbfs_get_disk_params(/*char disk_label[10], 
+void bbfs_get_disk_params(char disk_label[10], 
                           uint8_t block_size,
                           char file_sys[8],
-                          uint16_t device*/)
+                          uint16_t device)
 {
     uint8_t buffer[512];
-    x86_Disk_Read(0, 0, 1, 0, 1, buffer);
-    printf("\r\nBBFS:\r\n   ");
+    x86_Disk_Read(device, 0, 1, 0, 1, buffer);
 
-    for (uint16_t x = 3; x < 512; x++)
-        putc(buffer[x]);
+    printf("\r\nBBFS:");
+
+    for (uint16_t x = 15; x <= 23-1; x++)
+        file_sys[x-15]= buffer[x];
+
+    if (strcmp(file_sys, "BBFS V02") != 0) {
+        printf(" file system not recognized.\r\n");
+        goto _end_bbfs_d_params;
+    }
+
+    for (uint16_t x = 3; x <= 13; x++)
+        disk_label[x-3] = buffer[x];
+    
+    block_size = buffer[14];
+
+    printf("\r\n");
+    printf("    DISK LABEL (10 characters): %s\r\n", disk_label);
+    printf("    BOOTABLE (1 - yes | 0 - no): %d\r\n", block_size);
+    printf("    FILE SYSTEM ID: %s\r\n", file_sys);
+
+_end_bbfs_d_params:
+    printf("BBFS: finished.\r\n");
 }
 
 /**

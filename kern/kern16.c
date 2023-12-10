@@ -4,6 +4,7 @@
 #include "io.h"
 #include "filesystem/disk.h"
 #include "filesystem/fat.h"
+#include "filesystem/bbfs.h"
 #include "gui/gui.h"
 
 void far* g_data = (void far*)0x00500200;
@@ -67,7 +68,12 @@ void _cdecl kstart_(uint16_t bootDrive)
     }
     FAT_Close(fd);
 
-    bbfs_get_disk_params();
+    BBFS_v2_params test_disk;
+
+    bbfs_get_disk_params(test_disk.disk_label, 
+                         test_disk.block_size,
+                         test_disk.file_system_id,
+                         0);
 
     //start_gui();
 
