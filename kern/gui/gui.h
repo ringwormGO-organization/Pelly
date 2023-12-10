@@ -27,18 +27,20 @@
 #define YELLOW  14
 #define WHITE   15
 
-#define BUTTON_SIZE 4
+#define NUMBER_OF_BUTTONS 4
 
 /* ------------------------------------------------------------------------- */
 
 typedef struct elements_T
 {
-    struct button_T button[BUTTON_SIZE];
+    struct button_T button[NUMBER_OF_BUTTONS];
     struct context_menu_T context_menu;
 } Elements;
 
 typedef struct window_T
 {
+    bool debug;
+
     Error error;
     Elements elements;
 
@@ -91,7 +93,7 @@ void draw_button(Window window, Button button);
  * @param buttons context menu elements in form of buttons
 */
 ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, Button buttons[BUTTON_SIZE]);
+                    uint16_t background_color, uint16_t foreground_color, ContextButton buttons[NUMBER_OF_BUTTONS]);
 
 /**
  * Draw a context menu
@@ -129,7 +131,7 @@ void draw_window(Window window);
  * @param elements elements to draw
  * @param debug debug mode?
 */
-void draw_window_elements(Window window, bool debug);
+void draw_window_elements(Window window);
 
 /**
  * Clear a given window

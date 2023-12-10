@@ -17,13 +17,8 @@ Button main_button = {
     .title = "test",
 };
 
-Button context_button = {
-    .x = 2,
-    .y = 2,
-    .len_x = 5,
+ContextButton context_button = {
     .len_y = 2,
-    .background_color = LGRAY,
-    .foreground_color = WHITE,
     .title = "123",
 };
 
@@ -31,6 +26,8 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
                     uint16_t background_color, uint16_t foreground_color, char* title, bool debug)
 {
     Window new;
+
+    new.debug = debug;
     new.error = NO_ERROR;
 
     /* Perform checks */
@@ -77,12 +74,12 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     
     /* Initializing arrays */
 
-    for (int i = 0; i < BUTTON_SIZE; ++i) 
+    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) 
     {
         new.elements.button[i].error = EMPTY;
     }
 
-    if (debug)
+    if (new.debug)
     {
         printf("X = %d : Y = %d | LEN(X) = %d : LEN(Y) = %d | BG = %d : FG = %d | TITLE = %s \r\n",
                 new.x, new.y,
@@ -170,17 +167,17 @@ void draw_window(Window window)
     printf("%s", window.title);
 }
 
-void draw_window_elements(Window window, bool debug)
+void draw_window_elements(Window window)
 {
     /* ******************************** */
     /*          Buttons                 */
     /* ******************************** */
 
-    for (int i = 0; i < BUTTON_SIZE; i++)
+    for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
         if (window.elements.button[i].error == EMPTY)
         {
-            if (debug)
+            if (window.debug)
             {
                 printf("Empty button! Skipping...\r\n");
             }
@@ -320,22 +317,23 @@ void start_gui()
     draw_window(test_window);
     move_cursor(0, 0);
 
-    Button context_buttons[BUTTON_SIZE];
+    ContextButton context_buttons[NUMBER_OF_BUTTONS];
 
-    /* Initializing the array */
-    for (int i = 0; i < BUTTON_SIZE; ++i) 
+    /* Initialize the array */
+    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) 
     {
         context_buttons[i].error = EMPTY;
     }
 
     context_buttons[0] = context_button;
+    context_buttons[1] = context_button;
 
-    ContextMenu context_menu = init_context_menu(test_window, 10, 10, 5, 5, LGRAY, WHITE, context_buttons);
+    ContextMenu context_menu = init_context_menu(test_window, 8, 8, 5, 5, LGRAY, WHITE, context_buttons);
 
     test_window.elements.button[0] = main_button;
     test_window.elements.context_menu = context_menu;
 
-    draw_window_elements(test_window, false);
+    draw_window_elements(test_window);
 
 keyboard_loop:
     move_cursor(0, 0);

@@ -6,7 +6,15 @@
 #include "../error.h"
 #include "button.h"
 
-#define BUTTON_SIZE 4
+#define NUMBER_OF_BUTTONS 4
+
+typedef struct context_button_T
+{
+    Error error;
+
+    uint16_t len_y;
+    char* title;
+} ContextButton;
 
 typedef struct context_menu_T
 {
@@ -21,5 +29,5 @@ typedef struct context_menu_T
     uint16_t background_color;
     uint16_t foreground_color;
 
-    struct button_T buttons[BUTTON_SIZE];
+    struct context_button_T buttons[NUMBER_OF_BUTTONS];
 } ContextMenu;
