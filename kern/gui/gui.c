@@ -327,6 +327,8 @@ void start_gui()
 
     context_buttons[0] = context_button;
     context_buttons[1] = context_button;
+    context_buttons[2] = context_button;
+    context_buttons[3] = context_button;
 
     ContextMenu context_menu = init_context_menu(test_window, 8, 8, 5, 5, LGRAY, WHITE, context_buttons);
 

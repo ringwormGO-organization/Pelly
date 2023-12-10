@@ -228,12 +228,23 @@ void draw_context_menu(Window window, ContextMenu context_menu)
             if (window.debug)
             {
                 printf("Empty button! Skipping...\r\n");
-                continue;
             }
+
+            continue;
         }
 
         else
         {
+            if ((window.y + (context_menu.y + i + (i + 2)) > ((window.y + window.len_y) - 2)))
+            {
+                if (window.debug)
+                {
+                    printf("No space left! Skipping...\r\n");
+                }
+
+                break;
+            }
+
             move_cursor(window.x + context_menu.x, window.y + (context_menu.y + i + (i + 2)));
 
             for (uint16_t i = 0; i < context_menu.len_x; i++)
