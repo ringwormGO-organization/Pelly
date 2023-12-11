@@ -8,6 +8,7 @@
 #include "error.h"
 
 #include "gui_elements/button.h"
+#include "gui_elements/context_menu.h"
 
 #define BLACK   0
 #define BLUE    1
@@ -26,17 +27,20 @@
 #define YELLOW  14
 #define WHITE   15
 
-#define BUTTON_SIZE 4
+#define NUMBER_OF_BUTTONS 4
 
-/* ------------------------------------ */
+/* ------------------------------------------------------------------------- */
 
 typedef struct elements_T
 {
-    struct button_T button[BUTTON_SIZE];
+    struct button_T button[NUMBER_OF_BUTTONS];
+    struct context_menu_T context_menu;
 } Elements;
 
 typedef struct window_T
 {
+    bool debug;
+
     Error error;
     Elements elements;
 
@@ -52,6 +56,7 @@ typedef struct window_T
     char *title;
 } Window;
 
+/* ------------------------------------------------------------------------- */
 
 /**
  * Initialize a button
@@ -74,7 +79,30 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
 */
 void draw_button(Window window, Button button);
 
-/* ------------------------------------ */
+/* ------------------------------------*/
+
+/**
+ * Initialize a context menu
+ * @param window window element where button will be drawn
+ * @param x starting position (x)
+ * @param y starting position (y)
+ * @param len_x width
+ * @param len_y height
+ * @param background_color background color
+ * @param foreground_color foreground color
+ * @param buttons context menu elements in form of buttons
+*/
+ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+                    uint16_t background_color, uint16_t foreground_color, ContextButton buttons[NUMBER_OF_BUTTONS]);
+
+/**
+ * Draw a context menu
+ * @param window window where button will be drawn
+ * @param button button which will be drawn
+*/
+void draw_context_menu(Window window, ContextMenu context_menu);
+
+/* ------------------------------------------------------------------------- */
 
 /**
  * Initialize a window
@@ -103,7 +131,7 @@ void draw_window(Window window);
  * @param elements elements to draw
  * @param debug debug mode?
 */
-void draw_window_elements(Window window, Elements elements, bool debug);
+void draw_window_elements(Window window);
 
 /**
  * Clear a given window
@@ -111,7 +139,7 @@ void draw_window_elements(Window window, Elements elements, bool debug);
 */
 void clear_window(Window window);
 
-/* ------------------------------------ */
+/* ------------------------------------------------------------------------- */
 
 /**
  * Entry point for GUI
