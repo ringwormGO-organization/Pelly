@@ -69,21 +69,18 @@ _end_bbfs_d_params:
 
 /**
  *  bbfs_write_block:
- *      read a 512 byte block from RAM. Could be
+ *      write a 512 byte block from RAM. Could be
  *      written differently, but we need compatibility
  *      with OS/1 v5.4.0
  * 
  *  paremeters:
  * 
- *      block_address_src - source of data to copy
- *                          to the dest.
+ *      block_address_src - source of data to write
  *      
- *      block_address_dest - destination of where 
- *                           to copy the data to
+ *      block_address_dest - destination of where
+ *                           to write the data
  * 
- *      num_bytes - what data to use as a buffer
- *                  (the thing that will actually
- *                  get copied to the dest.)
+ *      num_bytes - number of bytes to write
  *
  */
 void bbfs_write_block(void far* block_address_dest,
