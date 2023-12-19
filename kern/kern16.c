@@ -75,15 +75,25 @@ void _cdecl kstart_(uint16_t bootDrive)
                          test_disk.file_system_id,
                          0);
 
-    char test_buffer[512];
+clear_screen();
 
-    int j = 0;
+    char test_buffer[512];
+    char test_buffer2[512];
+
     for (uint16_t x = 0; x < 512; x++) {
         test_buffer[x] = 'A';
-        j++;
+    }
+
+    for (uint16_t x = 0; x < 123; x++) {
+        test_buffer[x*2] = 'B';
+    }
+
+    for (uint16_t x = 0; x < 512; x++) {
+        putc(test_buffer[x]);
     }
 
     bbfs_write_block(44032, test_buffer, 512);
+    bbfs_read_block(44032, test_buffer2, 512);
 
     //start_gui();
 

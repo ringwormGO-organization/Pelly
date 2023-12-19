@@ -89,6 +89,30 @@ void bbfs_write_block(void far* block_address_dest,
 {
     if (_file_sys_not_recognized == true) {
         printf("BBFS: cannot read RAM blocks. File system not recognized.\r\n");
+        goto bbfs_write_block_end;
+    }
+    else if (num_bytes > RAM_BLOCK_SIZE) {
+        printf("BBFS: block size limit exceeded. %dB out of 512B maximum.\r\n", num_bytes);
+        goto bbfs_write_block_end;
+    }
+
+    printf("BBFS: writing data from 0x%X\r\n", block_address_src);
+    printf("BBFS: writing data to 0x%X\r\n", block_address_dest);
+    printf("BBFS: writing %d bytes\r\n", num_bytes);
+
+    memcpy(block_address_dest, block_address_src, num_bytes);
+
+bbfs_write_block_end:
+    printf("BBFS: finished.\r\n");
+}
+
+void bbfs_read_block(void far* block_address_src,
+                     uint8_t buffer[512],
+                     uint16_t num_bytes)
+{
+
+    if (_file_sys_not_recognized == true) {
+        printf("BBFS: cannot read RAM blocks. File system not recognized.\r\n");
         goto bbfs_read_block_end;
     }
     else if (num_bytes > RAM_BLOCK_SIZE) {
@@ -96,11 +120,10 @@ void bbfs_write_block(void far* block_address_dest,
         goto bbfs_read_block_end;
     }
 
-    printf("BBFS: writing data from 0x%X\r\n", block_address_src);
-    printf("BBFS: writing data to 0x%X\r\n", block_address_dest);
-    printf("BBFS: writing %d bytes\r\n", num_bytes, block_address_dest);
+    printf("BBFS: reading data from 0x%X\r\n", block_address_src);
+    printf("BBFS: writing %d bytes\r\n", num_bytes);
 
-    memcpy(block_address_dest, block_address_src, num_bytes);
+    memcpy(buffer, block_address_src, num_bytes);
 
 bbfs_read_block_end:
     printf("BBFS: finished.\r\n");

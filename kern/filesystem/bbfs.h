@@ -32,3 +32,7 @@ void bbfs_get_disk_params(char disk_label[10],
 void bbfs_write_block(void far* block_address_dest,
                      void far* block_address_src,
                      uint16_t num_bytes);
+
+void bbfs_read_block(void far* block_address_src,
+                     uint8_t buffer[512],
+                     uint16_t num_bytes);
