@@ -1,10 +1,8 @@
 #pragma once
 
-#include "../../io.h"
 #include "../../stdio.h"
 #include "../../stdint.h"
 
-#include "../cursor.h"
 #include "../error.h"
 
 typedef struct button_T
