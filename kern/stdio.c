@@ -156,7 +156,7 @@ void _cdecl printf(const char* fmt, ...)
     }
 }
 
-const char g_HexChars[] = "0123456789abcdef";
+const char g_HexChars[] = "0123456789ABCDEF";
 
 int* printf_number(int* argp, int length, bool sign, int radix)
 {
