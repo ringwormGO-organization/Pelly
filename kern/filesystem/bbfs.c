@@ -49,7 +49,7 @@ void bbfs_get_disk_params(char disk_label[10],
 
     if (strcmp(file_sys, "BBFS V02") != 0) {
         printf(" file system not recognized.\r\n");
-        //_file_sys_not_recognized = true;
+        _file_sys_not_recognized = true;
         goto _end_bbfs_d_params;
     }
 
