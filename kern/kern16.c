@@ -95,7 +95,7 @@ clear_screen();
     bbfs_write_block(44032, test_buffer, 512);
     bbfs_read_block(44032, test_buffer2, 512);
 
-    //start_gui();
+    start_gui();
 
 end:
     for (;;);
