@@ -22,12 +22,13 @@ typedef struct
     char free_space[500];
 } BBFS_v2_block_data;
 
+bool _file_sys_not_recognized;
 
 void bbfs_get_disk_params(char disk_label[10], 
                           uint8_t block_size,
                           char file_sys[8],
                           uint16_t device);
 
-void bbfs_read_block(uint16_t block_address_src, 
-                     uint16_t block_address_dest,
-                     uint16_t device);
+void bbfs_write_block(void far* block_address_dest,
+                     void far* block_address_src,
+                     uint16_t num_bytes);

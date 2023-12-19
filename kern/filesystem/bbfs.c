@@ -12,6 +12,10 @@
  * 
  *  Also we only support BBFS v2.
  * 
+ *  Oh btw: if you ever question why does every
+ *  function end with (function_name)_end label
+ *  it is because I like using goto statements!
+ * 
  *  TODO: tell FAT to stfu and write to disk.
  */
 
@@ -45,6 +49,7 @@ void bbfs_get_disk_params(char disk_label[10],
 
     if (strcmp(file_sys, "BBFS V02") != 0) {
         printf(" file system not recognized.\r\n");
+        //_file_sys_not_recognized = true;
         goto _end_bbfs_d_params;
     }
 
@@ -63,19 +68,43 @@ _end_bbfs_d_params:
 }
 
 /**
- *  bbfs_read_block:
+ *  bbfs_write_block:
  *      read a 512 byte block from RAM. Could be
  *      written differently, but we need compatibility
  *      with OS/1 v5.4.0
  * 
  *  paremeters:
- *      block_address_src - addres from the source
- *                          of the block
  * 
+ *      block_address_src - source of data to copy
+ *                          to the dest.
+ *      
  *      block_address_dest - destination of where 
  *                           to copy the data to
+ * 
+ *      num_bytes - what data to use as a buffer
+ *                  (the thing that will actually
+ *                  get copied to the dest.)
+ *
  */
-void bbfs_read_block(uint16_t block_address_src, 
-                     uint16_t block_address_dest,
-                     uint16_t device)
-{}
+void bbfs_write_block(void far* block_address_dest,
+                     void far* block_address_src,
+                     uint16_t num_bytes)
+{
+    if (_file_sys_not_recognized == true) {
+        printf("BBFS: cannot read RAM blocks. File system not recognized.\r\n");
+        goto bbfs_read_block_end;
+    }
+    else if (num_bytes > RAM_BLOCK_SIZE) {
+        printf("BBFS: block size limit exceeded. %dB out of 512B maximum.\r\n", num_bytes);
+        goto bbfs_read_block_end;
+    }
+
+    printf("BBFS: writing data from 0x%X\r\n", block_address_src);
+    printf("BBFS: writing data to 0x%X\r\n", block_address_dest);
+    printf("BBFS: writing %d bytes\r\n", num_bytes, block_address_dest);
+
+    memcpy(block_address_dest, block_address_src, num_bytes);
+
+bbfs_read_block_end:
+    printf("BBFS: finished.\r\n");
+}
