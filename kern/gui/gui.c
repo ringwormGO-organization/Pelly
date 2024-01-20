@@ -200,13 +200,6 @@ void draw_window_elements(Window window)
             continue;
         }
     }
-
-    /* ******************************** */
-    /*          Context menu            */
-    /* ******************************** */
-
-    draw_context_menu(window, window.elements.context_menu);
-    move_cursor(0, 0);
 }
 
 void clear_window(Window window)
@@ -317,24 +310,7 @@ void start_gui()
     draw_window(test_window);
     move_cursor(0, 0);
 
-    ContextButton context_buttons[NUMBER_OF_BUTTONS];
-
-    /* Initialize the array */
-    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) 
-    {
-        context_buttons[i].error = EMPTY;
-    }
-
-    context_buttons[0] = context_button;
-    context_buttons[1] = context_button;
-    context_buttons[2] = context_button;
-    context_buttons[3] = context_button;
-
-    ContextMenu context_menu = init_context_menu(test_window, 8, 8, 5, 5, LGRAY, WHITE, context_buttons);
-
     test_window.elements.button[0] = main_button;
-    test_window.elements.context_menu = context_menu;
-
     draw_window_elements(test_window);
 
 keyboard_loop:
