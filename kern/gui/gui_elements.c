@@ -6,37 +6,6 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
     Button new;
     new.error = NO_ERROR;
 
-    /* Perform checks */
-    if (strlen(title) > (window.len_x - 2))
-    {
-        new.error = TITLE_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (x > (window.x + window.len_x))
-    {
-        new.error = X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (y > (window.y + window.len_y))
-    {
-        new.error = Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_x > (window.len_x - 2))
-    {
-        new.error = LEN_X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_y >= (window.len_y - 2))
-    {
-        new.error = LEN_Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
     new.x = x;
     new.y = y;
 
@@ -124,31 +93,6 @@ ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t le
     ContextMenu new;
     new.error = NO_ERROR;
 
-    /* Perform checks */
-    if (x > (window.x + window.len_x))
-    {
-        new.error = X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (y > (window.y + window.len_y))
-    {
-        new.error = Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_x >= (window.len_x - 2))
-    {
-        new.error = LEN_X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_y >= (window.len_y - 2))
-    {
-        new.error = LEN_Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
     new.x = x;
     new.y = y;
 
@@ -173,7 +117,7 @@ ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t le
 */
 void draw_context_menu(Window window, ContextMenu context_menu)
 {
-        /* ******************************** */
+    /* ******************************** */
     /*          Top border              */
     /* ******************************** */
 

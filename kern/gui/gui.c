@@ -30,37 +30,6 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     new.debug = debug;
     new.error = NO_ERROR;
 
-    /* Perform checks */
-    if (strlen(title) > 70 || strlen(title) > (len_x - 2))
-    {
-        new.error = TITLE_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (x > 79)
-    {
-        new.error = X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (y > 24)
-    {
-        new.error = Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_x >= (79 - x))
-    {
-        new.error = LEN_X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_y >= (24 - y))
-    {
-        new.error = LEN_Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
     new.x = x;
     new.y = y;
 
@@ -175,6 +144,9 @@ void draw_window_elements(Window window)
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
+        // TODO
+        // perform checks
+
         if (window.elements.button[i].error == EMPTY)
         {
             if (window.debug)
@@ -301,11 +273,8 @@ void start_gui()
 
     Window test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
 
-    if (test_window.error != NO_ERROR)
-    {
-        printf("Error code: %d\r\n", test_window.error);
-        goto keyboard_loop;
-    }
+    // TODO
+    // perform checks
 
     draw_window(test_window);
     move_cursor(0, 0);
