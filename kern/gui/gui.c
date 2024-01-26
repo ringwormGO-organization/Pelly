@@ -61,6 +61,12 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     return new;
 }
 
+void check_window(Window window)
+{
+    // TODO
+    // perform checks
+}
+
 void draw_window(Window window)
 {
 
@@ -273,8 +279,12 @@ void start_gui()
 
     Window test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
 
-    // TODO
-    // perform checks
+    check_window(test_window);
+    if (test_window.error != NO_ERROR)
+    {
+        printf("Error code: %d\r\n", test_window.error);
+        goto keyboard_loop;
+    }
 
     draw_window(test_window);
     move_cursor(0, 0);

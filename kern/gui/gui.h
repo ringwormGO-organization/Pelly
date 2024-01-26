@@ -119,6 +119,8 @@ void draw_context_menu(Window window, ContextMenu context_menu);
 Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, bool debug);
 
+void check_window(Window window);
+
 /**
  * Draw a window
  * @param window window to be drawn
