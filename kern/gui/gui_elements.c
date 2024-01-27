@@ -20,6 +20,11 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
     return new;
 }
 
+void check_button(Window window, Button button)
+{
+
+}
+
 void draw_button(Window window, Button button)
 {
     /* ******************************** */
@@ -75,18 +80,9 @@ void draw_button(Window window, Button button)
 }
 
 /* ------------------------------------ */
+/* ------------------------------------ */
+/* ------------------------------------ */
 
-/**
- * Initialize a context menu
- * @param window window element where button will be drawn
- * @param x starting position (x)
- * @param y starting position (y)
- * @param len_x width
- * @param len_y height
- * @param background_color background color
- * @param foreground_color foreground color
- * @param buttons context menu elements in form of buttons
-*/
 ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, ContextButton buttons[NUMBER_OF_BUTTONS])
 {
@@ -110,13 +106,14 @@ ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t le
     return new;
 }
 
-/**
- * Draw a context menu
- * @param window window where button will be drawn
- * @param button button which will be drawn
-*/
+void check_context_menu(Window window, ContextMenu context_menu)
+{
+
+}
+
 void draw_context_menu(Window window, ContextMenu context_menu)
 {
+    
     /* ******************************** */
     /*          Top border              */
     /* ******************************** */

@@ -69,13 +69,12 @@ void _cdecl kstart_(uint16_t bootDrive)
     FAT_Close(fd);
 
     BBFS_v2_params test_disk;
-
     bbfs_get_disk_params(test_disk.disk_label, 
                          test_disk.block_size,
                          test_disk.file_system_id,
                          0);
 
-clear_screen();
+    /* clear_screen();
 
     char test_buffer[512];
     char test_buffer2[512];
@@ -93,7 +92,7 @@ clear_screen();
     }
 
     bbfs_write_block(44032, test_buffer, 512);
-    bbfs_read_block(44032, test_buffer2, 512);
+    bbfs_read_block(44032, test_buffer2, 512); */
 
     start_gui();
 

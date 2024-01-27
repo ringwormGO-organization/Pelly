@@ -73,6 +73,13 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
                     uint16_t background_color, uint16_t foreground_color, char* title);
 
 /**
+ * Check if button can be drawn
+ * @param window window where checks will be performed
+ * @param button button to be checked
+*/
+void check_button(Window window, Button button);
+
+/**
  * Draw a button
  * @param window window where button will be drawn
  * @param button button which will be drawn
@@ -94,6 +101,13 @@ void draw_button(Window window, Button button);
 */
 ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, ContextButton buttons[NUMBER_OF_BUTTONS]);
+
+/**
+ * Check if context menu can be drawn
+ * @param window window where checks will be performed
+ * @param context_menu context menu to be checked
+*/
+void check_context_menu(Window window, ContextMenu context_menu);
 
 /**
  * Draw a context menu
@@ -119,6 +133,10 @@ void draw_context_menu(Window window, ContextMenu context_menu);
 Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, bool debug);
 
+/**
+ * Check if window can be drawn
+ * @param window window to be checked
+*/
 void check_window(Window window);
 
 /**

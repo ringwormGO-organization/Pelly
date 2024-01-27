@@ -17,6 +17,10 @@ Button main_button = {
     .title = "test",
 };
 
+ContextMenu empty_context_menu = {
+    .error = EMPTY,
+};
+
 ContextButton context_button = {
     .len_y = 2,
     .title = "123",
@@ -63,8 +67,7 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
 
 void check_window(Window window)
 {
-    // TODO
-    // perform checks
+
 }
 
 void draw_window(Window window)
@@ -171,11 +174,31 @@ void draw_window_elements(Window window)
 
         draw_button(window, window.elements.button[i]);
         move_cursor(0, 0);
+    }
 
-        if (window.elements.button[i].error != 0)
+    /* ******************************** */
+    /*          Context menu            */
+    /* ******************************** */
+
+    if (window.elements.context_menu.error != EMPTY) /* not empty */
+    {
+        if (window.elements.context_menu.error == 0) /* no error */
         {
-            printf("Error code during drawing process of a button %d: %d\r\n", i, window.elements.button[i].error);
-            continue;
+            draw_context_menu(window, window.elements.context_menu);
+            move_cursor(0, 0);
+        }
+
+        else
+        {
+            printf("Error code during initialization of a context menu\r\n");
+        }
+    }
+
+    else
+    {
+        if (window.debug)
+        {
+            printf("Empty context menu! Skipping...\r\n");
         }
     }
 }
