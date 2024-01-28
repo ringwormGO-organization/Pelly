@@ -67,7 +67,30 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
 
 void check_window(Window window)
 {
+    if (strlen(window.title) > 70 || strlen(window.title) > (window.len_x - 2))
+    {
+        window.error = TITLE_BOUNDARY_EXCEEDED;
+    }
 
+    if (window.x > 79)
+    {
+        window.error = X_BOUNDARY_EXCEEDED;
+    }
+
+    if (window.y > 24)
+    {
+        window.error = Y_BOUNDARY_EXCEEDED;
+    }
+
+    if (window.len_x >= (79 - window.x))
+    {
+        window.error = LEN_X_BOUNDARY_EXCEEDED;
+    }
+
+    if (window.len_y >= (24 - window.y))
+    {
+        window.error = LEN_Y_BOUNDARY_EXCEEDED;
+    }
 }
 
 void draw_window(Window window)
