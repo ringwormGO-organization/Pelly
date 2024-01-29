@@ -1,4 +1,4 @@
 gui/gui_elements.c(3): Warning! W303: Parameter 'window' has been defined, but not referenced
 gui/gui_elements.c(117): Warning! W303: Parameter 'window' has been defined, but not referenced
-gui/gui_elements.c(140): Warning! W303: Parameter 'window' has been defined, but not referenced
-gui/gui_elements.c(140): Warning! W303: Parameter 'context_menu' has been defined, but not referenced
+gui/gui_elements.c(175): Warning! W303: Parameter 'context_button' has been defined, but not referenced
+gui/gui_elements.c(175): Warning! W303: Parameter 'context_menu' has been defined, but not referenced

@@ -1,2 +1,2 @@
-gui/gui.c(344): Warning! W308: The function 'c_keyboard_loop' without prototyped parameters called
-gui/gui.c(344): Note! I2002: 'c_keyboard_loop' defined in: gui/../io.h(19)
+gui/gui.c(355): Warning! W308: The function 'c_keyboard_loop' without prototyped parameters called
+gui/gui.c(355): Note! I2002: 'c_keyboard_loop' defined in: gui/../io.h(19)

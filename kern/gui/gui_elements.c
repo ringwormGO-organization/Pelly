@@ -137,9 +137,34 @@ ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t le
     return new;
 }
 
-void check_context_menu(Window window, ContextMenu context_menu)
+void check_context_menu(Window window, ContextMenu* context_menu)
 {
+    uint16_t max_x = context_menu->x + context_menu->len_x;
+    uint16_t max_y = context_menu->y + context_menu->len_y;
 
+    if (context_menu->x < window.x || context_menu->x > max_x)
+    {
+        context_menu->error = X_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (context_menu->y < window.y || context_menu->y > max_y)
+    {
+        context_menu->error = Y_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (max_x >= (window.x + window.len_x))
+    {
+        context_menu->error = LEN_X_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (max_y >= (window.y + window.len_y))
+    {
+        context_menu->error = LEN_Y_BOUNDARY_EXCEEDED;
+        return;
+    }
 }
 
 void draw_context_menu(Window window, ContextMenu context_menu)

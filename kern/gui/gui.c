@@ -17,8 +17,14 @@ Button main_button = {
     .title = "test",
 };
 
-ContextMenu empty_context_menu = {
-    .error = EMPTY,
+ContextMenu context_menu = {
+    .error = NO_ERROR,
+    .x = 9,
+    .y = 9,
+    .len_x = 5,
+    .len_y = 5,
+    .background_color = RED,
+    .foreground_color = WHITE,
 };
 
 ContextButton context_button = {
@@ -194,8 +200,6 @@ void draw_window_elements(Window window)
             continue;
         }
 
-        printf("\n%d\n", window.elements.button[i].error);
-
         draw_button(window, window.elements.button[i]);
         move_cursor(0, 0);
     }
@@ -337,6 +341,13 @@ void start_gui()
     move_cursor(0, 0);
 
     test_window.elements.button[0] = main_button;
+
+    context_menu.buttons[0] = context_button;
+    context_menu.buttons[1].error = EMPTY;
+    context_menu.buttons[2].error = EMPTY;
+    context_menu.buttons[3].error = EMPTY;
+
+    test_window.elements.context_menu = context_menu;
     draw_window_elements(test_window);
 
 keyboard_loop:

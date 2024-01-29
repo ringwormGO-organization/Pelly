@@ -107,7 +107,7 @@ ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t le
  * @param window window where checks will be performed
  * @param context_menu context menu to be checked
 */
-void check_context_menu(Window window, ContextMenu context_menu);
+void check_context_menu(Window window, ContextMenu* context_menu);
 
 /**
  * Draw a context menu
