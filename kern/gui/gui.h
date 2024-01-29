@@ -77,7 +77,7 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
  * @param window window where checks will be performed
  * @param button button to be checked
 */
-void check_button(Window window, Button button);
+void check_button(Window window, Button* button);
 
 /**
  * Draw a button

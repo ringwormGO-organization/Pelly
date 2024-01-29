@@ -20,9 +20,40 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
     return new;
 }
 
-void check_button(Window window, Button button)
+void check_button(Window window, Button* button)
 {
+    uint16_t max_x = button->x + button->len_x;
+    uint16_t max_y = button->y + button->len_y;
 
+    if (strlen(button->title) > ((max_x - button->x) - 2))
+    {
+        button->error = TITLE_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (button->x < window.x || button->x > max_x)
+    {
+        button->error = X_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (button->y < window.y || button->y > max_y)
+    {
+        button->error = Y_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (max_x >= (window.x + window.len_x))
+    {
+        button->error = LEN_X_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (max_y >= (window.y + window.len_y))
+    {
+        button->error = LEN_Y_BOUNDARY_EXCEEDED;
+        return;
+    }
 }
 
 void draw_button(Window window, Button button)

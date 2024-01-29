@@ -176,9 +176,6 @@ void draw_window_elements(Window window)
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
-        // TODO
-        // perform checks
-
         if (window.elements.button[i].error == EMPTY)
         {
             if (window.debug)
@@ -189,11 +186,15 @@ void draw_window_elements(Window window)
             continue;
         }
 
+        check_button(window, &window.elements.button[i]);
+
         if (window.elements.button[i].error != 0)
         {
-            printf("Error code during initialization of a button %d: %d\r\n", i, window.elements.button[i].error);
+            printf("Error code %d in button %d: \r\n", window.elements.button[i].error, i);
             continue;
         }
+
+        printf("\n%d\n", window.elements.button[i].error);
 
         draw_button(window, window.elements.button[i]);
         move_cursor(0, 0);
