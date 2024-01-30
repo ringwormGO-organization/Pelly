@@ -6,37 +6,6 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
     Button new;
     new.error = NO_ERROR;
 
-    /* Perform checks */
-    if (strlen(title) > (window.len_x - 2))
-    {
-        new.error = TITLE_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (x > (window.x + window.len_x))
-    {
-        new.error = X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (y > (window.y + window.len_y))
-    {
-        new.error = Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_x > (window.len_x - 2))
-    {
-        new.error = LEN_X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_y >= (window.len_y - 2))
-    {
-        new.error = LEN_Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
     new.x = x;
     new.y = y;
 
@@ -49,6 +18,42 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
     new.title = title;
 
     return new;
+}
+
+void check_button(Window window, Button* button)
+{
+    uint16_t max_x = button->x + button->len_x;
+    uint16_t max_y = button->y + button->len_y;
+
+    if (strlen(button->title) > ((max_x - button->x) - 2))
+    {
+        button->error = TITLE_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (button->x < window.x || button->x > max_x)
+    {
+        button->error = X_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (button->y < window.y || button->y > max_y)
+    {
+        button->error = Y_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (max_x >= (window.x + window.len_x))
+    {
+        button->error = LEN_X_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (max_y >= (window.y + window.len_y))
+    {
+        button->error = LEN_Y_BOUNDARY_EXCEEDED;
+        return;
+    }
 }
 
 void draw_button(Window window, Button button)
@@ -106,48 +111,14 @@ void draw_button(Window window, Button button)
 }
 
 /* ------------------------------------ */
+/* ------------------------------------ */
+/* ------------------------------------ */
 
-/**
- * Initialize a context menu
- * @param window window element where button will be drawn
- * @param x starting position (x)
- * @param y starting position (y)
- * @param len_x width
- * @param len_y height
- * @param background_color background color
- * @param foreground_color foreground color
- * @param buttons context menu elements in form of buttons
-*/
 ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, ContextButton buttons[NUMBER_OF_BUTTONS])
 {
     ContextMenu new;
     new.error = NO_ERROR;
-
-    /* Perform checks */
-    if (x > (window.x + window.len_x))
-    {
-        new.error = X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (y > (window.y + window.len_y))
-    {
-        new.error = Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_x >= (window.len_x - 2))
-    {
-        new.error = LEN_X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_y >= (window.len_y - 2))
-    {
-        new.error = LEN_Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
 
     new.x = x;
     new.y = y;
@@ -166,14 +137,40 @@ ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t le
     return new;
 }
 
-/**
- * Draw a context menu
- * @param window window where button will be drawn
- * @param button button which will be drawn
-*/
+void check_context_menu(Window window, ContextMenu* context_menu)
+{
+    uint16_t max_x = context_menu->x + context_menu->len_x;
+    uint16_t max_y = context_menu->y + context_menu->len_y;
+
+    if (context_menu->x < window.x || context_menu->x > max_x)
+    {
+        context_menu->error = X_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (context_menu->y < window.y || context_menu->y > max_y)
+    {
+        context_menu->error = Y_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (max_x >= (window.x + window.len_x))
+    {
+        context_menu->error = LEN_X_BOUNDARY_EXCEEDED;
+        return;
+    }
+
+    if (max_y >= (window.y + window.len_y))
+    {
+        context_menu->error = LEN_Y_BOUNDARY_EXCEEDED;
+        return;
+    }
+}
+
 void draw_context_menu(Window window, ContextMenu context_menu)
 {
-        /* ******************************** */
+    
+    /* ******************************** */
     /*          Top border              */
     /* ******************************** */
 

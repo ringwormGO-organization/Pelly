@@ -17,6 +17,16 @@ Button main_button = {
     .title = "test",
 };
 
+ContextMenu context_menu = {
+    .error = NO_ERROR,
+    .x = 9,
+    .y = 9,
+    .len_x = 5,
+    .len_y = 5,
+    .background_color = RED,
+    .foreground_color = WHITE,
+};
+
 ContextButton context_button = {
     .len_y = 2,
     .title = "123",
@@ -29,37 +39,6 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
 
     new.debug = debug;
     new.error = NO_ERROR;
-
-    /* Perform checks */
-    if (strlen(title) > 70 || strlen(title) > (len_x - 2))
-    {
-        new.error = TITLE_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (x > 79)
-    {
-        new.error = X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (y > 24)
-    {
-        new.error = Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_x >= (79 - x))
-    {
-        new.error = LEN_X_BOUNDARY_EXCEEDED;
-        return new;
-    }
-
-    if (len_y >= (24 - y))
-    {
-        new.error = LEN_Y_BOUNDARY_EXCEEDED;
-        return new;
-    }
 
     new.x = x;
     new.y = y;
@@ -90,6 +69,34 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     }
 
     return new;
+}
+
+void check_window(Window window)
+{
+    if (strlen(window.title) > 70 || strlen(window.title) > (window.len_x - 2))
+    {
+        window.error = TITLE_BOUNDARY_EXCEEDED;
+    }
+
+    if (window.x > 79)
+    {
+        window.error = X_BOUNDARY_EXCEEDED;
+    }
+
+    if (window.y > 24)
+    {
+        window.error = Y_BOUNDARY_EXCEEDED;
+    }
+
+    if (window.len_x >= (79 - window.x))
+    {
+        window.error = LEN_X_BOUNDARY_EXCEEDED;
+    }
+
+    if (window.len_y >= (24 - window.y))
+    {
+        window.error = LEN_Y_BOUNDARY_EXCEEDED;
+    }
 }
 
 void draw_window(Window window)
@@ -185,28 +192,43 @@ void draw_window_elements(Window window)
             continue;
         }
 
+        check_button(window, &window.elements.button[i]);
+
         if (window.elements.button[i].error != 0)
         {
-            printf("Error code during initialization of a button %d: %d\r\n", i, window.elements.button[i].error);
+            printf("Error code %d in button %d: \r\n", window.elements.button[i].error, i);
             continue;
         }
 
         draw_button(window, window.elements.button[i]);
         move_cursor(0, 0);
-
-        if (window.elements.button[i].error != 0)
-        {
-            printf("Error code during drawing process of a button %d: %d\r\n", i, window.elements.button[i].error);
-            continue;
-        }
     }
 
     /* ******************************** */
     /*          Context menu            */
     /* ******************************** */
 
-    draw_context_menu(window, window.elements.context_menu);
-    move_cursor(0, 0);
+    if (window.elements.context_menu.error != EMPTY) /* not empty */
+    {
+        if (window.elements.context_menu.error == 0) /* no error */
+        {
+            draw_context_menu(window, window.elements.context_menu);
+            move_cursor(0, 0);
+        }
+
+        else
+        {
+            printf("Error code during initialization of a context menu\r\n");
+        }
+    }
+
+    else
+    {
+        if (window.debug)
+        {
+            printf("Empty context menu! Skipping...\r\n");
+        }
+    }
 }
 
 void clear_window(Window window)
@@ -308,6 +330,7 @@ void start_gui()
 
     Window test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
 
+    check_window(test_window);
     if (test_window.error != NO_ERROR)
     {
         printf("Error code: %d\r\n", test_window.error);
@@ -317,24 +340,14 @@ void start_gui()
     draw_window(test_window);
     move_cursor(0, 0);
 
-    ContextButton context_buttons[NUMBER_OF_BUTTONS];
-
-    /* Initialize the array */
-    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) 
-    {
-        context_buttons[i].error = EMPTY;
-    }
-
-    context_buttons[0] = context_button;
-    context_buttons[1] = context_button;
-    context_buttons[2] = context_button;
-    context_buttons[3] = context_button;
-
-    ContextMenu context_menu = init_context_menu(test_window, 8, 8, 5, 5, LGRAY, WHITE, context_buttons);
-
     test_window.elements.button[0] = main_button;
-    test_window.elements.context_menu = context_menu;
 
+    context_menu.buttons[0] = context_button;
+    context_menu.buttons[1].error = EMPTY;
+    context_menu.buttons[2].error = EMPTY;
+    context_menu.buttons[3].error = EMPTY;
+
+    test_window.elements.context_menu = context_menu;
     draw_window_elements(test_window);
 
 keyboard_loop:
