@@ -8,6 +8,30 @@ int _cdecl cursor_y;
 
 int _cdecl ascii_code;
 
+/**
+ * Check if enter key has been pressed on button
+ * # Return table
+ * -1 - enter is not pressed on button
+ * 0 and rest - button on which button was pressed
+*/
+int keyboard_event(Window window)
+{
+    for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
+    {
+        if (global_cursor.x > window.x + window.elements.button[i].x && global_cursor.x <
+            window.x + window.elements.button[i].x + window.elements.button[i].len_x)
+        {
+            if (global_cursor.y > window.y + window.elements.button[i].y && global_cursor.y <
+            window.y + window.elements.button[i].y + window.elements.button[i].len_y)
+            {
+                return i;
+            }
+        }
+    }
+
+    return -1;
+}
+
 void c_keyboard_loop(int x, int y, Window window) 
 {
     while (1)
@@ -64,6 +88,11 @@ void c_keyboard_loop(int x, int y, Window window)
                     if (global_cursor.x == x && global_cursor.y == y)
                     {
                         clear_window(window);
+                    }
+
+                    else if (keyboard_event(window) > -1)
+                    {
+                        /* execute function */
                     }
 
                     else
