@@ -1,3 +1,10 @@
+/**
+ * @author Andrej Bartulin, Stjepan Bilić Matišić
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main C file for GUI
+*/
+
 #include "gui.h"
 
 // NOTE: use `init` function
@@ -71,29 +78,29 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     return new;
 }
 
-void check_window(Window window)
+void check_window(Screen screen, Window window)
 {
     if (strlen(window.title) > 70 || strlen(window.title) > (window.len_x - 2))
     {
         window.error = TITLE_BOUNDARY_EXCEEDED;
     }
 
-    if (window.x > 79)
+    if (window.x > screen.len_x - 1)
     {
         window.error = X_BOUNDARY_EXCEEDED;
     }
 
-    if (window.y > 24)
+    if (window.y > screen.len_y - 1)
     {
         window.error = Y_BOUNDARY_EXCEEDED;
     }
 
-    if (window.len_x >= (79 - window.x))
+    if (window.len_x >= ((screen.len_x - 1) - window.x))
     {
         window.error = LEN_X_BOUNDARY_EXCEEDED;
     }
 
-    if (window.len_y >= (24 - window.y))
+    if (window.len_y >= ((screen.len_y - 1) - window.y))
     {
         window.error = LEN_Y_BOUNDARY_EXCEEDED;
     }
@@ -328,9 +335,18 @@ void start_gui()
     clear_screen();
     move_cursor(0, 0);
 
+    /* ------------ */
+
+    Screen screen;
+
+    screen.len_x = 80;
+    screen.len_y = 25;
+
+    /* ------------ */
+
     Window test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
 
-    check_window(test_window);
+    check_window(screen, test_window);
     if (test_window.error != NO_ERROR)
     {
         printf("Error code: %d\r\n", test_window.error);
@@ -348,9 +364,11 @@ void start_gui()
     context_menu.buttons[3].error = EMPTY;
 
     test_window.elements.context_menu = context_menu;
+    screen.windows[0] = test_window;
+
     draw_window_elements(test_window);
 
 keyboard_loop:
     move_cursor(0, 0);
-    c_keyboard_loop(test_window.x + 1, test_window.y, test_window);
+    c_keyboard_loop(screen);
 }

@@ -1,3 +1,9 @@
+/**
+ * @author Andrej Bartulin, Stjepan Bilić Matišić
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main header file for IO
+*/
 
 #pragma once
 

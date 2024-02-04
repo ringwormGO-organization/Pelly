@@ -1,3 +1,9 @@
+;
+; @author Andrej Bartulin, Stjepan Bilić Matišić
+; PROJECT: Pelly
+; LICENSE: MIT
+; DESCRIPTION: Main assembly file for GUI
+;
 
 bits     16
 section _TEXT class=CODE

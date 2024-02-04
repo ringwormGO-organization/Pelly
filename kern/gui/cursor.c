@@ -1,3 +1,10 @@
+/**
+ * @author Andrej Bartulin, Stjepan Bilić Matišić
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main C file for cursor
+*/
+
 #include "cursor.h"
 
 Cursor cursor_move_cursor(uint16_t x, uint16_t y)

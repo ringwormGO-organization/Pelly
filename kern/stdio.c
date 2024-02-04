@@ -1,3 +1,9 @@
+/**
+ * @author Andrej Bartulin, Stjepan Bilić Matišić, nanobyte
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main C file for standard input and output
+*/
 
 #include "stdio.h"
 

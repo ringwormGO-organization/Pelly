@@ -1,3 +1,9 @@
+/**
+ * @author Andrej Bartulin, Stjepan Bilić Matišić
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main C file for IO
+*/
 
 #include "io.h"
 
@@ -10,37 +16,54 @@ int _cdecl ascii_code;
 
 /**
  * Check if enter key has been pressed on button
- * # Return table
- * -1 - enter is not pressed on button
- * 0 and rest - button on which button was pressed
+ * @param screen screen containing all windows containing all buttons
 */
-int keyboard_event(Window window)
+int keyboard_event(Screen screen)
 {
-    for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
+    for (int i = 0; i < NUMBER_OF_WINDOWS; i++)
     {
-        if (global_cursor.x > window.x + window.elements.button[i].x && global_cursor.x <
-            window.x + window.elements.button[i].x + window.elements.button[i].len_x)
+        for (int j = 0; j < NUMBER_OF_BUTTONS; j++)
         {
-            if (global_cursor.y > window.y + window.elements.button[i].y && global_cursor.y <
-            window.y + window.elements.button[i].y + window.elements.button[i].len_y)
+            if (global_cursor.x > screen.windows[i].x + 
+                screen.windows[i].elements.button[j].x 
+                && 
+                global_cursor.x < screen.windows[i].x + 
+                screen.windows[i].elements.button[j].x + 
+                screen.windows[i].elements.button[j].len_x)
             {
-                return i;
+                if (global_cursor.y > screen.windows[i].y + 
+                screen.windows[i].elements.button[j].y 
+                && 
+                global_cursor.y < screen.windows[i].y + 
+                screen.windows[i].elements.button[j].y + 
+                screen.windows[i].elements.button[j].len_y)
+                {
+                    /* execute a function */
+                }
             }
         }
     }
 
+
     return -1;
 }
 
-void c_keyboard_loop(int x, int y, Window window) 
+/**
+ * Main keyboard loop
+ * @param screen screen for checking events
+*/
+void c_keyboard_loop(Screen screen) 
 {
     while (1)
     {
+        /* Get pressed key from assembly */
         asm_keyboard_loop();
         
+        /* Check ASCII code*/
         switch (ascii_code)
         {
             case 0:
+                /* Move real, assembly cursor */
                 up_cursor();
 
                 /* Update global cursor */
@@ -50,6 +73,7 @@ void c_keyboard_loop(int x, int y, Window window)
                 break;
 
             case 1:
+                /* Move real, assembly cursor */
                 down_cursor();
 
                 /* Update global cursor */
@@ -59,6 +83,7 @@ void c_keyboard_loop(int x, int y, Window window)
                 break;
 
             case 2:
+                /* Move real, assembly cursor */
                 left_cursor();
 
                 /* Update global cursor */
@@ -69,6 +94,7 @@ void c_keyboard_loop(int x, int y, Window window)
                 break;
 
             case 3:
+                /* Move real, assembly cursor */
                 right_cursor();
 
                 /* Update global cursor */
@@ -78,36 +104,27 @@ void c_keyboard_loop(int x, int y, Window window)
                 break;
 
             default:
+                /* Print character (disabled) */
                 // printf("%c", ascii_code);
 
-                /* Update global cursor */
+                /* Enter key*/
                 if (ascii_code == 13)
                 {
-                    get_cursor_position();
+                    keyboard_event(screen);
 
-                    if (global_cursor.x == x && global_cursor.y == y)
-                    {
-                        clear_window(window);
-                    }
-
-                    else if (keyboard_event(window) > -1)
-                    {
-                        /* execute function */
-                    }
-
-                    else
-                    {
-                        // move_cursor(0, global_cursor.y + 1);
-                    }
+                    /* Update global cursor (disabled because we are not printing a character) */
+                    // move_cursor(0, global_cursor.y + 1);
                 }
 
                 else if (ascii_code == 8)
                 {
+                    /* Update global cursor */
                     move_cursor(global_cursor.x - 1, global_cursor.y);
                 }
 
                 else
                 {
+                    /* Update global cursor (disabled because we are not printing a character) */
                     // move_cursor(global_cursor.x + 1, global_cursor.y);
                 }
 

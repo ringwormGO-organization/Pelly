@@ -1,3 +1,10 @@
+/**
+ * @author Andrej Bartulin, Stjepan Bilić Matišić
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Header file containing error enum
+*/
+
 #pragma once
 
 typedef enum error_T

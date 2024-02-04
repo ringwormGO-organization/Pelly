@@ -1,3 +1,10 @@
+/**
+ * @author Andrej Bartulin, Stjepan Bilić Matišić
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main C file for GUI elements
+*/
+
 #include "gui.h"
 
 Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 

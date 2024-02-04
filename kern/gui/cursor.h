@@ -1,3 +1,10 @@
+/**
+ * @author Andrej Bartulin, Stjepan Bilić Matišić
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main header file for cursor
+*/
+
 #pragma once
 
 #include "../io.h"

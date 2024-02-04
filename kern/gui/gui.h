@@ -1,3 +1,10 @@
+/**
+ * @author Andrej Bartulin, Stjepan Bilić Matišić
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main header file for GUI
+*/
+
 #pragma once
 
 #include "../io.h"
@@ -28,6 +35,7 @@
 #define WHITE   15
 
 #define NUMBER_OF_BUTTONS 4
+#define NUMBER_OF_WINDOWS 4
 
 /* ------------------------------------------------------------------------- */
 
@@ -55,6 +63,14 @@ typedef struct window_T
 
     char *title;
 } Window;
+
+typedef struct screen_T
+{
+    uint16_t len_x;
+    uint16_t len_y;
+
+    Window windows[4];
+} Screen;
 
 /* ------------------------------------------------------------------------- */
 
@@ -137,7 +153,7 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
  * Check if window can be drawn
  * @param window window to be checked
 */
-void check_window(Window window);
+void check_window(Screen screen, Window window);
 
 /**
  * Draw a window

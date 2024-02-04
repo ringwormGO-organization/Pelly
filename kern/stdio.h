@@ -1,3 +1,9 @@
+/**
+ * @author Andrej Bartulin, Stjepan Bilić Matišić, nanobyte
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main header file for standard input and output
+*/
 
 #pragma once
 
@@ -9,10 +15,14 @@
 #include "gui/error.h"
 
 struct cursor_T;
+
+/**
+ * Virtual cursor
+*/
 struct cursor_T global_cursor;
 
 /**
- * Move global cursor
+ * Move virtual and real cursor
  * @param x
  * @param y
 */
