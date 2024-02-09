@@ -153,7 +153,7 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
  * Check if window can be drawn
  * @param window window to be checked
 */
-void check_window(Screen screen, Window window);
+void check_window(Screen* screen, int id);
 
 /**
  * Draw a window

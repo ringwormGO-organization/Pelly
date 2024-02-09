@@ -45,7 +45,7 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     Window new;
 
     new.debug = debug;
-    new.error = NO_ERROR;
+    new.error = NO_CHECK;
 
     new.x = x;
     new.y = y;
@@ -78,37 +78,95 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     return new;
 }
 
-void check_window(Screen screen, Window window)
+void check_window(Screen* screen, int id)
 {
+    Window window = screen->windows[id];
+
+    if (window.error == EMPTY)
+    {
+        return;
+    }
+
     if (strlen(window.title) > 70 || strlen(window.title) > (window.len_x - 2))
     {
-        window.error = TITLE_BOUNDARY_EXCEEDED;
+        screen->windows[id].error = TITLE_BOUNDARY_EXCEEDED;
     }
 
-    if (window.x > screen.len_x - 1)
+    if (window.x > screen->len_x - 1)
     {
-        window.error = X_BOUNDARY_EXCEEDED;
+        screen->windows[id].error = X_BOUNDARY_EXCEEDED;
     }
 
-    if (window.y > screen.len_y - 1)
+    if (window.y > screen->len_y - 1)
     {
-        window.error = Y_BOUNDARY_EXCEEDED;
+        screen->windows[id].error = Y_BOUNDARY_EXCEEDED;
     }
 
-    if (window.len_x >= ((screen.len_x - 1) - window.x))
+    if (window.len_x >= ((screen->len_x - 1) - window.x))
     {
-        window.error = LEN_X_BOUNDARY_EXCEEDED;
+        screen->windows[id].error = LEN_X_BOUNDARY_EXCEEDED;
     }
 
-    if (window.len_y >= ((screen.len_y - 1) - window.y))
+    if (window.len_y >= ((screen->len_y - 1) - window.y))
     {
-        window.error = LEN_Y_BOUNDARY_EXCEEDED;
+        screen->windows[id].error = LEN_Y_BOUNDARY_EXCEEDED;
+    }
+
+    /* Check if window interferes with other windows */
+    for (int i = id; i >= 0; i--)
+    {
+        if (id == 0)
+        {
+            /* Window passed checks above */
+            if (window.error == NO_CHECK)
+            {
+                screen->windows[id].error = NO_ERROR;
+                break;
+            }
+
+            /* Return window with error above */
+            break;
+        }
+
+        /* Window already has an error, we don't need to go deeper */
+        if (screen->windows[id].error != NO_CHECK)
+        {
+            break;
+        }
+
+        int previous_window = i - 1;
+
+        if (screen->windows[previous_window].error == NO_ERROR)
+        {
+            if (window.x +  window.len_x < 
+                            screen->windows[previous_window].x ||
+                window.x >  screen->windows[previous_window].x + 
+                            screen->windows[previous_window].len_x)
+            {
+                if (window.y +  window.len_y < 
+                                screen->windows[previous_window].y ||
+                    window.y >  screen->windows[previous_window].y + 
+                                screen->windows[previous_window].len_y)
+                {
+                    screen->windows[id].error = NO_ERROR;
+                }
+
+                else
+                {
+                    screen->windows[id].error = Y_IN_WINDOW;
+                }
+            }
+
+            else
+            {
+                screen->windows[id].error = X_IN_WINDOW;
+            }
+        }
     }
 }
 
 void draw_window(Window window)
 {
-
     /* ******************************** */
     /*          Top border              */
     /* ******************************** */
@@ -345,16 +403,31 @@ void start_gui()
     /* ------------ */
 
     Window test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
+    Window invalid_window = init_window(17, 17, 2, 2, LGRAY, LGRAY, "", false);
 
-    check_window(screen, test_window);
-    if (test_window.error != NO_ERROR)
+    screen.windows[0] = test_window;
+    screen.windows[1] = invalid_window;
+    screen.windows[2].error = EMPTY;
+    screen.windows[3].error = EMPTY;
+
+    for (int i = 0; i < NUMBER_OF_WINDOWS; i++)
     {
-        printf("Error code: %d\r\n", test_window.error);
-        goto keyboard_loop;
-    }
+        check_window(&screen, i);
 
-    draw_window(test_window);
-    move_cursor(0, 0);
+        if (screen.windows[i].error == NO_ERROR)
+        {
+            draw_window(screen.windows[i]);
+        }
+
+        else
+        {
+            if (screen.windows[i].error != EMPTY)
+            {
+                move_cursor(0, i);
+                printf("Error code %d of button %d\r\n", screen.windows[i].error, i);
+            }
+        }
+    }
 
     test_window.elements.button[0] = main_button;
 
