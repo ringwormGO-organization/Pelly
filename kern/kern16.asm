@@ -4,7 +4,7 @@ bits 16
 section _ENTRY class=CODE
 
 extern _kstart_
-extern _load_interrupt
+extern _set_ivt
 global entry
 
 entry:
@@ -18,7 +18,7 @@ entry:
 
     mov     ax, 0xFFFE
 
-    call    _load_interrupt
+    call    _set_ivt
 
     int     0x69
 
