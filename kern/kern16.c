@@ -5,6 +5,7 @@
 #include "filesystem/disk.h"
 #include "filesystem/fat.h"
 #include "filesystem/bbfs.h"
+#include "memory/e820.h"
 #include "gui/gui.h"
 
 void far* g_data = (void far*)0x00500200;
@@ -94,7 +95,13 @@ void _cdecl kstart_(uint16_t bootDrive)
     bbfs_write_block(44032, test_buffer, 512);
     bbfs_read_block(44032, test_buffer2, 512); */
 
-    start_gui();
+    get_low_memory();
+    get_used_memory();
+
+    printf("Free lower memory: %d\r\n", low_memory);
+    printf("Used memory: %d\r\n", used_memory);
+
+    //start_gui();
 
 end:
     for (;;);
