@@ -1,5 +1,3 @@
-gui/gui.c(408): Warning! W202: Symbol 'one' has been defined, but not referenced
-gui/gui.c(409): Warning! W202: Symbol 'two' has been defined, but not referenced
-gui/gui.c(450): Warning! W118: Label 'keyboard_loop' has been defined but not referenced
-gui/gui.c(449): Warning! W308: The function 'c_keyboard_loop' without prototyped parameters called
-gui/gui.c(449): Note! I2002: 'c_keyboard_loop' defined in: gui/../io.h(25)
+gui/gui.c(447): Warning! W118: Label 'keyboard_loop' has been defined but not referenced
+gui/gui.c(446): Warning! W308: The function 'c_keyboard_loop' without prototyped parameters called
+gui/gui.c(446): Note! I2002: 'c_keyboard_loop' defined in: gui/../io.h(25)
