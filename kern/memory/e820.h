@@ -5,7 +5,7 @@
 
 int _cdecl low_memory;
 int _cdecl used_memory;
-int _cdecl entry_count;
+uint16_t _cdecl entry_count;
 
 int _cdecl segment;
 int _cdecl offset;
@@ -13,7 +13,7 @@ int _cdecl offset;
 void _cdecl get_low_memory();
 void _cdecl get_used_memory();
 
-void _cdecl do_e820();
+void _cdecl e820(void far* data);
 
 typedef struct {
     uint64_t Begin, Length;

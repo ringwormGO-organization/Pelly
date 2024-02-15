@@ -38,11 +38,11 @@ void get_memory_map()
 MemoryMapEntry* memMapArr = 0; 
 void detect_memory()
 {
-    void* address = (segment * 16) + 0x8004;
-    memMapArr= (MemoryMapEntry*)(address);
+    E820MemoryBlock array[100];
+    e820(&array);
 
-    for (uint8_t i = 0;i < entry_count; i++) 
+    for (uint16_t i = 0; i < entry_count; i++) 
     {
-        printf("E820: %x\r\n", memMapArr[i].length);            
+        printf("%d\r\n", array->Length);
     }
 }

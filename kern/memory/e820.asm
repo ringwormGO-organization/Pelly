@@ -71,13 +71,36 @@ _get_used_memory:
         int 0x10
         ret
 
+global _e820
+_e820:
+	; make new call frame
+    push bp             ; save old call frame
+    mov bp, sp          ; initialize new call frame
+
+	mov di, [bp + 4]
+    mov ax, [bp + 6]
+
+	mov es, ax
+
+	pusha
+	call _do_e820
+
+	mov [_entry_count], bp
+
+	popa
+
+	; restore old call frame
+    mov sp, bp
+    pop bp
+
+	ret
+
 ; use the INT 0x15, eax= 0xE820 BIOS function to get a memory map
 ; note: initially di is 0, be sure to set it to a value so that the BIOS code will not be overwritten. 
 ;       The consequence of overwriting the BIOS code will lead to problems like getting stuck in `int 0x15`
 ; inputs: es:di -> destination buffer for 24 byte entries
 ; outputs: bp = entry count, trashes all registers except esi
 mmap_ent equ 0x8000             ; the number of entries will be stored at 0x8000
-global _do_e820
 _do_e820:
 	mov di, 0x8004          ; Set di to 0x8004. Otherwise this code will get stuck in `int 0x15` after some entries are fetched 
 	xor ebx, ebx		; ebx must be 0 to start

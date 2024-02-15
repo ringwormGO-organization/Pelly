@@ -1,3 +1,1 @@
-memory/e820.c(41): Warning! W102: Type mismatch (warning)
-memory/e820.c(41): Note! I2003: source conversion type is 'unsigned int'
-memory/e820.c(41): Note! I2004: target conversion type is 'void *'
+memory/e820.c(42): Warning! W115: &array may not produce intended result

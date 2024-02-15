@@ -102,11 +102,9 @@ void _cdecl kstart_(uint16_t bootDrive)
     printf("Used memory: %d\r\n", used_memory);
 
     // get_memory_map();
+    // detect_memory();
 
-    do_e820();
     detect_memory();
-
-    printf("%d || %x | %x\r\n", entry_count, segment, offset);
 
     //start_gui();
 
