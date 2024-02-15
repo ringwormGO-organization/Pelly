@@ -101,8 +101,12 @@ void _cdecl kstart_(uint16_t bootDrive)
     printf("Free lower memory: %d\r\n", low_memory);
     printf("Used memory: %d\r\n", used_memory);
 
+    // get_memory_map();
+
     do_e820();
-    printf("bp: %d\r\n", used_memory);
+    detect_memory();
+
+    printf("%d || %x | %x\r\n", entry_count, segment, offset);
 
     //start_gui();
 
