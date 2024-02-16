@@ -31,7 +31,7 @@ diski:
 	mcopy -i $(DF) $(O)/test.txt "::doc/test.txt"
 
 run:
-	qemu-system-i386 -m 1M -fda $(DF)
+	qemu-system-i386 -fda $(DF)
 
 .PHONY: clean
 clean:

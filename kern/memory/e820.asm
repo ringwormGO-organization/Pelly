@@ -8,6 +8,12 @@ _used_memory: dw 0
 extern _entry_count
 _entry_count: dw 0
 
+extern _segment
+_segment: dw 0
+
+extern _offset
+_offset: dw 0
+
 ;
 ;   _get_low_memory -> get lower memory using int 0x12
 ;
@@ -99,6 +105,8 @@ _do_e820:
 	cmp eax, edx		; on success, eax must have been reset to "SMAP"
 	jne short .failed
 	test ebx, ebx		; ebx = 0 implies list is only 1 entry long (worthless)
+	mov [_offset], di
+	mov [_segment], es
 	je short .failed
 	jmp short .jmpin
 .e820lp:

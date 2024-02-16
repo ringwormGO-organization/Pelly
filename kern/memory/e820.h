@@ -7,6 +7,9 @@ int _cdecl low_memory;
 int _cdecl used_memory;
 uint16_t _cdecl entry_count;
 
+uint16_t _cdecl offset;
+uint16_t _cdecl segment;
+
 void _cdecl get_low_memory();
 void _cdecl get_used_memory();
 
