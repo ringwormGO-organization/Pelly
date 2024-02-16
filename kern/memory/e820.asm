@@ -3,33 +3,14 @@ extern _low_memory
 _low_memory: dw 0
 
 extern _used_memory
-_used_memory: dw 20
+_used_memory: dw 0
 
 extern _entry_count
 _entry_count: dw 0
 
-extern _segment
-_segment: dw 0
-
-extern _offset
-_offset: dw 0
-
-; Convert linear address to segment:offset address
-; Args:
-;    1 - linear address
-;    2 - (out) target segment (e.g. es)
-;    3 - target 32-bit register to use (e.g. eax)
-;    4 - target lower 16-bit half of #3 (e.g. ax)
-%macro LinearToSegOffset 4
-
-    mov %3, %1      ; linear address to eax
-    shr %3, 4
-    mov %2, %4
-    mov %3, %1      ; linear address to eax
-    and %3, 0xf
-
-%endmacro
-
+;
+;   _get_low_memory -> get lower memory using int 0x12
+;
 global _get_low_memory
 _get_low_memory:
     ; Clear carry flag
@@ -42,20 +23,19 @@ _get_low_memory:
     jc .error
  
     ; AX = amount of continuous memory in KB starting from 0.
-
     mov [_low_memory], byte ax
+	
     ret
 
     .error:
         ret
 
 ;
-;
+;   _get_used_memory -> get used upper memory using int 0x15
+;   TODO: needs verification
 ;
 global _get_used_memory
 _get_used_memory:
-    ; Needs verification
-
     clc
 
     mov ah, 0x8A
@@ -71,6 +51,10 @@ _get_used_memory:
         int 0x10
         ret
 
+;
+;   _e820 -> call _do_e820 function from assembly to not get random garbage
+;   Thanks to Nanobyte for help
+;
 global _e820
 _e820:
 	; make new call frame
@@ -109,8 +93,6 @@ _do_e820:
 	mov eax, 0xe820
 	mov [es:di + 20], dword 1	; force a valid ACPI 3.X entry
 	mov ecx, 24		; ask for 24 bytes
-	mov [_segment], es
-	mov [_offset], di
 	int 0x15
 	jc short .failed	; carry set on first call means "unsupported function"
 	mov edx, 0x0534D4150	; Some BIOSes apparently trash this register?
@@ -144,59 +126,9 @@ _do_e820:
 .e820f:
 	mov [mmap_ent], bp	; store the entry count
 	mov [_entry_count], bp
-
-	; mov [_segment], es
-	; mov [_offset], di
-
+	
 	clc			; there is "jc" on end of list to this point, so the carry must be cleared
 	ret
 .failed:
 	stc			; "function unsupported" error exit
 	ret
-;
-;   __E820GetNextBlock -> Get E820 memory map
-;   void _cdecl E820GetNextBlock(E820MemoryBlock* block, uint32_t* continuationId);
-;
-E820Signature   equ 0x534D4150
-
-global _E820GetNextBlock
-_E820GetNextBlock:
-	clc
-
-    ; make new call frame
-    push bp             ; save old call frame
-    mov bp, sp          ; initialize new call frame
-
-    ; setup params
-    LinearToSegOffset [bp + 8], es, edi, di     ; es:di pointer to structure
-    
-    LinearToSegOffset [bp + 12], ds, esi, si    ; ebx - pointer to continuationId
-    mov ebx, ds:[si]
-
-    mov eax, 0xE820                             ; eax - function
-    mov edx, E820Signature                      ; edx - signature
-    mov ecx, 24                                 ; ecx - size of structure
-
-    ; call interrupt
-    int 0x15
-
-	jc .Error
-
-    ; test results
-    cmp eax, E820Signature
-    jne .Error
-
-    .IfSuccedeed:
-        mov eax, ecx            ; return size
-        mov ds:[si], ebx        ; fill continuation parameter
-        jmp .EndIf
-
-    .Error:
-        mov eax, -1
-
-    .EndIf:
-
-    ; restore old call frame
-    mov sp, bp
-    pop bp
-    ret
