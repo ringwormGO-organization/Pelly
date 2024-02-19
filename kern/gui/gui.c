@@ -424,7 +424,7 @@ void start_gui()
             if (screen.windows[i].error != EMPTY)
             {
                 move_cursor(0, i);
-                printf("Error code %d of button %d\r\n", screen.windows[i].error, i);
+                printf("Error code %d of window %d\r\n", screen.windows[i].error, i);
             }
         }
     }
