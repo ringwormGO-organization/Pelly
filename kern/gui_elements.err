@@ -1,2 +1,2 @@
 gui/gui_elements.c(10): Warning! W303: Parameter 'window' has been defined, but not referenced
-gui/gui_elements.c(124): Warning! W303: Parameter 'window' has been defined, but not referenced
+gui/gui_elements.c(178): Warning! W303: Parameter 'window' has been defined, but not referenced

@@ -11,7 +11,7 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
                     uint16_t background_color, uint16_t foreground_color, char* title)
 {
     Button new;
-    new.error = NO_ERROR;
+    new.error = NO_CHECK;
 
     new.x = x;
     new.y = y;
@@ -27,39 +27,93 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
     return new;
 }
 
-void check_button(Window window, Button* button)
+void check_button(Window* window, int id)
 {
-    uint16_t max_x = button->x + button->len_x;
-    uint16_t max_y = button->y + button->len_y;
+    Button button = window->elements.button[id];
 
-    if (strlen(button->title) > ((max_x - button->x) - 2))
+    uint16_t max_x = button.x + button.len_x;
+    uint16_t max_y = button.y + button.len_y;
+
+    if (strlen(button.title) > max_x - 2)
     {
-        button->error = TITLE_BOUNDARY_EXCEEDED;
+        window->elements.button[id].error = TITLE_BOUNDARY_EXCEEDED;
         return;
     }
 
-    if (button->x < window.x || button->x > max_x)
+    if (button.x > (window->x + window->len_x) - 1)
     {
-        button->error = X_BOUNDARY_EXCEEDED;
+        window->elements.button[id].error = X_BOUNDARY_EXCEEDED;
         return;
     }
 
-    if (button->y < window.y || button->y > max_y)
+    if (button.y > (window->x + window->len_x) - 1)
     {
-        button->error = Y_BOUNDARY_EXCEEDED;
+        window->elements.button[id].error = Y_BOUNDARY_EXCEEDED;
         return;
     }
 
-    if (max_x >= (window.x + window.len_x))
+    if (max_x >= (window->x + window->len_x) - 1)
     {
-        button->error = LEN_X_BOUNDARY_EXCEEDED;
+        window->elements.button[id].error = LEN_X_BOUNDARY_EXCEEDED;
         return;
     }
 
-    if (max_y >= (window.y + window.len_y))
+    if (max_y >= (window->y + window->len_y) - 1)
     {
-        button->error = LEN_Y_BOUNDARY_EXCEEDED;
+        window->elements.button[id].error = LEN_Y_BOUNDARY_EXCEEDED;
         return;
+    }
+
+    /* Check if button interferes with other buttons */
+    for (int i = id; i >= 0; i--)
+    {
+        if (id == 0)
+        {
+            /* Button passed checks above */
+            if (button.error == NO_CHECK)
+            {
+                window->elements.button[id].error = NO_ERROR;
+                break;
+            }
+
+            /* Return button with error above */
+            break;
+        }
+
+        /* Button already has an error, we don't need to go deeper */
+        if (window->elements.button[id].error != NO_CHECK)
+        {
+            break;
+        }
+
+        int previous_button = i - 1;
+
+        if (window->elements.button[previous_button].error == NO_ERROR)
+        {
+            if (button.x +  button.len_x < 
+                            window->elements.button[previous_button].x ||
+                button.x >  window->elements.button[previous_button].x + 
+                            window->elements.button[previous_button].len_x)
+            {
+                if (button.y +  button.len_y < 
+                                window->elements.button[previous_button].y ||
+                    button.y >  window->elements.button[previous_button].y + 
+                                window->elements.button[previous_button].len_y)
+                {
+                    window->elements.button[id].error = NO_ERROR;
+                }
+
+                else
+                {
+                    window->elements.button[id].error = Y_IN_WINDOW;
+                }
+            }
+
+            else
+            {
+                window->elements.button[id].error = X_IN_WINDOW;
+            }
+        }
     }
 }
 
