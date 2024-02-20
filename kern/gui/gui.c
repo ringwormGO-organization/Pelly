@@ -16,9 +16,21 @@ Button empty_button = {
 
 Button main_button = {
     .error = NO_CHECK,
+    .error = NO_CHECK,
     .x = 5,
     .y = 5,
     .len_x = 7,
+    .len_y = 2,
+    .background_color = BLACK,
+    .foreground_color = YELLOW,
+    .title = "test",
+};
+
+Button invalid_button = {
+    .error = NO_CHECK,
+    .x = 6,
+    .y = 6,
+    .len_x = 2,
     .len_y = 2,
     .background_color = BLACK,
     .foreground_color = YELLOW,
@@ -255,6 +267,7 @@ void draw_window(Window window)
 }
 
 void draw_window_elements(Window window, int window_id)
+void draw_window_elements(Window window, int window_id)
 {
     /* ******************************** */
     /*          Buttons                 */
@@ -273,9 +286,11 @@ void draw_window_elements(Window window, int window_id)
         }
 
         check_button(&window, i);
+        check_button(&window, i);
 
         if (window.elements.button[i].error != 0)
         {
+            printf("Error code %d of button %d, window %d\r\n", window.elements.button[i].error, i, window_id);
             printf("Error code %d of button %d, window %d\r\n", window.elements.button[i].error, i, window_id);
             continue;
         }
@@ -283,19 +298,6 @@ void draw_window_elements(Window window, int window_id)
         draw_button(window, window.elements.button[i]);
         move_cursor(0, 0);
     }
-
-    check_context_menu(window, &window.elements.context_menu);
-
-    if (window.elements.context_menu.error == NO_ERROR)
-    {
-        draw_context_menu(window, window.elements.context_menu);
-    }
-
-    else
-    {
-        printf("Error code %d of context menu, window %d\r\n", window.elements.context_menu.error, window_id);
-    }
-
 }
 
 void clear_window(Window window)
@@ -435,16 +437,6 @@ void start_gui()
     screen.windows[0].elements.button[1] = invalid_button;
     screen.windows[0].elements.button[2].error = EMPTY;
     screen.windows[0].elements.button[3].error = EMPTY;
-
-    ContextButton context_buttons[NUMBER_OF_BUTTONS];
-    context_buttons[0] = context_button;
-    context_buttons[1] = empty_context_button;
-    context_buttons[2] = empty_context_button;
-    context_buttons[3] = empty_context_button;
-
-    ContextMenu context_menu = init_context_menu(9, 9, 5, 5, LGRAY, LGRAY, context_buttons);
-
-    screen.windows[0].elements.context_menu = context_menu;
 
     for (int i = 0; i < NUMBER_OF_WINDOWS; i++)
     {
