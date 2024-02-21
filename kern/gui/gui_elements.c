@@ -179,7 +179,7 @@ ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t le
                     uint16_t background_color, uint16_t foreground_color, ContextButton buttons[NUMBER_OF_BUTTONS])
 {
     ContextMenu new;
-    new.error = NO_ERROR;
+    new.error = NO_CHECK;
 
     new.x = x;
     new.y = y;
@@ -226,6 +226,8 @@ void check_context_menu(Window window, ContextMenu* context_menu)
         context_menu->error = LEN_Y_BOUNDARY_EXCEEDED;
         return;
     }
+
+    context_menu->error = NO_ERROR;
 }
 
 void draw_context_menu(Window window, ContextMenu context_menu)

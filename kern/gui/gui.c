@@ -280,6 +280,19 @@ void draw_window_elements(Window window, int window_id)
         draw_button(window, window.elements.button[i]);
         move_cursor(0, 0);
     }
+
+    check_context_menu(window, &window.elements.context_menu);
+
+    if (window.elements.context_menu.error == NO_ERROR)
+    {
+        draw_context_menu(window, window.elements.context_menu);
+    }
+
+    else
+    {
+        printf("Error code %d of context menu, window %d\r\n", window.elements.context_menu.error, window_id);
+    }
+
 }
 
 void clear_window(Window window)
