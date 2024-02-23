@@ -175,8 +175,8 @@ void draw_button(Window window, Button button)
 /* ------------------------------------ */
 /* ------------------------------------ */
 
-ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, ContextButton buttons[NUMBER_OF_BUTTONS])
+ContextMenu init_context_menu(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+                    uint16_t background_color, uint16_t foreground_color, ContextButton context_buttons[NUMBER_OF_BUTTONS])
 {
     ContextMenu new;
     new.error = NO_CHECK;
@@ -192,7 +192,7 @@ ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t le
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
-        new.buttons[i] = buttons[i];
+        new.context_buttons[i].content = context_buttons[i].content;
     }
 
     return new;
@@ -283,37 +283,30 @@ void draw_context_menu(Window window, ContextMenu context_menu)
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
-        if (context_menu.buttons[i].error == EMPTY)
+        if (context_menu.context_buttons[i].content == "n/a")
         {
             if (window.debug)
             {
                 printf("Empty button! Skipping...\r\n");
             }
-
-            continue;
         }
 
         else
         {
-            if ((window.y + (context_menu.y + i + (i + 2)) > ((window.y + window.len_y) - 2)))
+            if (window.y + context_menu.y + ((i + 1) * 3) > window.y + context_menu.y + context_menu.len_y)
             {
-                if (window.debug)
-                {
-                    printf("No space left! Skipping...\r\n");
-                }
-
                 break;
             }
 
-            move_cursor(window.x + context_menu.x, window.y + (context_menu.y + i + (i + 2)));
+            move_cursor(window.x + context_menu.x, window.y + context_menu.y + ((i + 1) * 3));
 
             for (uint16_t i = 0; i < context_menu.len_x; i++)
             {
                 printf("%c", 0xC4);
             }
 
-            move_cursor(window.x + context_menu.x, window.y + (context_menu.y + i + (i + 1)));
-            printf("%s", context_menu.buttons[i].title);
+            move_cursor(window.x + context_menu.x, window.y + context_menu.y + ((i + 1) * 2));
+            printf("%s", context_menu.context_buttons[i].content);
         }
     }
 }
