@@ -1,4 +1,8 @@
-kern16.c(36): Warning! W101: Parameter 4: Non-portable pointer conversion
-kern16.c(36): Note! I2003: source conversion type is 'int'
-kern16.c(36): Note! I2004: target conversion type is 'void __far *'
-kern16.c(36): Note! I2002: 'DISK_ReadSectors' defined in: filesystem/disk.h(17)
+kern16.c(37): Warning! W101: Parameter 4: Non-portable pointer conversion
+kern16.c(37): Note! I2003: source conversion type is 'int'
+kern16.c(37): Note! I2004: target conversion type is 'void __far *'
+kern16.c(37): Note! I2002: 'DISK_ReadSectors' defined in: filesystem/disk.h(17)
+memory/allocator.h(17): Warning! W202: Symbol 'bitmap_size' has been defined, but not referenced
+memory/allocator.h(16): Warning! W202: Symbol 'bitmap_pages' has been defined, but not referenced
+memory/allocator.h(15): Warning! W202: Symbol 'bitmap' has been defined, but not referenced
+memory/allocator.h(14): Warning! W202: Symbol 'free_memory' has been defined, but not referenced

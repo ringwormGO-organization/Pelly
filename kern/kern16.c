@@ -6,6 +6,7 @@
 #include "filesystem/fat.h"
 #include "filesystem/bbfs.h"
 #include "memory/e820.h"
+#include "memory/allocator.h"
 #include "gui/gui.h"
 
 void far* g_data = (void far*)0x00500200;
@@ -102,6 +103,7 @@ void _cdecl kstart_(uint16_t bootDrive)
     printf("Used memory: %d\r\n", used_memory);
 
     detect_memory();
+    init_pmm();
 
     //start_gui();
 

@@ -1,0 +1,10 @@
+memory/allocator.c(18): Warning! W102: Type mismatch (warning)
+memory/allocator.c(18): Note! I2003: source conversion type is 'unsigned int'
+memory/allocator.c(18): Note! I2004: target conversion type is 'void *'
+memory/allocator.c(46): Warning! W102: Type mismatch (warning)
+memory/allocator.c(46): Note! I2003: source conversion type is 'unsigned __int64'
+memory/allocator.c(46): Note! I2004: target conversion type is 'unsigned char *'
+memory/allocator.c(47): Warning! W131: No prototype found for function 'memset'
+memory/allocator.c(83): Warning! W200: 'last_allocated_index' has been referenced but never assigned a value
+memory/allocator.c(47): Warning! W308: The function 'memset' without prototyped parameters called
+memory/allocator.c(47): Note! I2002: 'memset' defined in: memory/allocator.c(47)
