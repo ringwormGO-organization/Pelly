@@ -451,6 +451,16 @@ void start_gui()
     screen.windows[0].elements.button[2].error = EMPTY;
     screen.windows[0].elements.button[3].error = EMPTY;
 
+    ContextButton context_buttons[NUMBER_OF_BUTTONS];
+    context_buttons[0] = context_button;
+    context_buttons[1] = empty_context_button;
+    context_buttons[2] = empty_context_button;
+    context_buttons[3] = empty_context_button;
+
+    ContextMenu context_menu = init_context_menu(9, 9, 5, 5, LGRAY, LGRAY, context_buttons);
+
+    screen.windows[0].elements.context_menu = context_menu;
+
     for (int i = 0; i < NUMBER_OF_WINDOWS; i++)
     {
         if (screen.windows[i].error == NO_ERROR)
