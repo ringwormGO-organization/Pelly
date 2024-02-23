@@ -17,10 +17,7 @@
 
 typedef struct context_button_T
 {
-    Error error;
-
-    uint16_t len_y;
-    char* title;
+    char* content;
 } ContextButton;
 
 typedef struct context_menu_T
@@ -36,5 +33,5 @@ typedef struct context_menu_T
     uint16_t background_color;
     uint16_t foreground_color;
 
-    struct context_button_T buttons[NUMBER_OF_BUTTONS];
+    struct context_button_T context_buttons[NUMBER_OF_BUTTONS];
 } ContextMenu;

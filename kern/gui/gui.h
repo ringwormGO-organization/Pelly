@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../io.h"
+#include "../memory/memory.h"
 #include "../stdio.h"
 #include "../stdint.h"
 
@@ -115,8 +116,8 @@ void draw_button(Window window, Button button);
  * @param foreground_color foreground color
  * @param buttons context menu elements in form of buttons
 */
-ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, ContextButton buttons[NUMBER_OF_BUTTONS]);
+ContextMenu init_context_menu(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+                    uint16_t background_color, uint16_t foreground_color, ContextButton context_buttons[NUMBER_OF_BUTTONS]);
 
 /**
  * Check if context menu can be drawn
