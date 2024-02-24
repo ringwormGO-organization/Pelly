@@ -105,6 +105,8 @@ void _cdecl kstart_(uint16_t bootDrive)
     detect_memory();
     init_pmm();
 
+    putc('a');
+
     //start_gui();
 
 end:

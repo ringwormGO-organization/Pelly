@@ -1,19 +1,56 @@
 #include "allocator.h"
 
+uint64_t div_round_up(uint64_t x, uint64_t y)
+{
+    uint64_t number = x + (y - 1);
+    int radix = y;
+    uint32_t rem;
+
+    x86_div64_32(number, radix, &number, &rem);
+    return number;
+}
+
+uint64_t align_up(uint64_t x, uint64_t y)
+{
+    return div_round_up(x, y) * y;
+}
+
+uint64_t align_down(uint64_t x, uint64_t y)
+{
+    uint64_t number = x;
+    int radix = y;
+    uint32_t rem;
+
+    x86_div64_32(number, radix, &number, &rem);
+    return number * y;
+}
+
 void bitmap_set(uint8_t* bitmap, uint64_t bit) {
-    bitmap[bit / 8] |= 1 << (bit % 8);
+    uint32_t rem;
+    int radix = 8;
+
+    x86_div64_32(bit, radix, &bit, &rem);
+    bitmap[bit] |= 1 << (rem);
 }
 
 void bitmap_clear(uint8_t* bitmap, uint64_t bit) {
-    bitmap[bit / 8] &= ~(1 << (bit % 8));
+    uint32_t rem;
+    int radix = 8;
+
+    x86_div64_32(bit, radix, &bit, &rem);
+    bitmap[bit] &= ~(1 << (rem));
 }
 
 uint8_t bitmap_get(uint8_t* bitmap, uint64_t bit) {
-    return bitmap[bit / 8] & (1 << (bit % 8));
+    uint32_t rem;
+    int radix = 8;
+
+    x86_div64_32(bit, radix, &bit, &rem);
+    return bitmap[bit] & (1 << (rem));
 }
 
 E820MemoryBlock* memory_map = 0;
-void init_pmm() 
+void init_pmm()
 {
     void* address = (segment * 16) + offset;
     memory_map = (E820MemoryBlock*)(address);
@@ -33,8 +70,26 @@ void init_pmm()
         }
     }
 
-    bitmap_pages = higher_address / PAGE_SIZE;
-    bitmap_size = ALIGN_UP(bitmap_pages / 8, PAGE_SIZE);
+    uint64_t number = 0;
+    int radix = 1;
+    uint32_t rem;
+
+    /* ------------ */
+
+    number = higher_address;
+    radix = PAGE_SIZE;
+
+    x86_div64_32(number, radix, &number, &rem);
+    bitmap_pages = number;
+
+    /* ------------ */
+
+    number = bitmap_pages;
+    radix = 8;
+
+    x86_div64_32(number, radix, &number, &rem);
+    bitmap_size = align_up(number, PAGE_SIZE);
+
     update_memory();
 
     for (uint16_t entry = 0; entry < entry_count; entry++) 
@@ -60,7 +115,11 @@ void init_pmm()
         {
             for (uint64_t i = 0; i < memory_map[entry].Length; i += PAGE_SIZE) 
             {
-                bitmap_clear(bitmap, (memory_map[entry].Base + i) / PAGE_SIZE);
+                number = memory_map[entry].Base + i;
+                radix = PAGE_SIZE;
+
+                x86_div64_32(number, radix, &number, &rem);
+                bitmap_clear(bitmap, number);
             }
         }
     }
@@ -161,12 +220,23 @@ void* pmm_request_pages(size_t numPages)
 
 void pmm_free(void *ptr) 
 {
-    uint64_t bit_idx = ((uint64_t)ptr / PAGE_SIZE);
+    uint64_t number = (uint64_t)ptr;
+    int radix = PAGE_SIZE;
+    uint32_t rem;
+
+    x86_div64_32(number, radix, &number, &rem);
+    uint64_t bit_idx = number;
+
     bitmap_clear(bitmap, bit_idx);
 }
 
 void pmm_free_pages(void *ptr, size_t numPages) {
-    uint64_t start_bit_idx = ((uint64_t)ptr / PAGE_SIZE);
+    uint64_t number = (uint64_t)ptr;
+    int radix = PAGE_SIZE;
+    uint32_t rem;
+
+    x86_div64_32(number, radix, &number, &rem);
+    uint64_t start_bit_idx = number;
 
     // Mark the pages as free in the bitmap
     for (size_t i = 0; i < numPages; ++i) 

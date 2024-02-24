@@ -7,9 +7,9 @@
 
 #define PAGE_SIZE 4096
 
-#define DIV_ROUND_UP(x, y) (x + (y - 1)) / y
-#define ALIGN_UP(x, y) DIV_ROUND_UP(x, y) * y
-#define ALIGN_DOWN(x, y) (x / y) * y
+uint64_t div_round_up(uint64_t x, uint64_t y);
+uint64_t align_up(uint64_t x, uint64_t y);
+uint64_t align_down(uint64_t x, uint64_t y);
 
 static uint64_t free_memory;
 static uint8_t *bitmap;
