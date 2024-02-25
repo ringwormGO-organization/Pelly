@@ -237,17 +237,21 @@ _x86_Disk_Write:
     ; [bp + 4] - first argument
     ; [bp + 6] - second argument
 
-    mov dl, [bp + 4]
-    mov al, [bp + 6]
-    mov ch, [bp + 8]
-    mov cl, [bp + 10]
-    mov dh, [bp + 12]
+    mov al, [bp + 6]        ;   how many sectors?
+    mov ch, [bp + 8]        ;   track / cylined
+    mov cl, [bp + 10]       ;   what sector?
+    mov dh, [bp + 12]       ;   head
+    mov dl, [bp + 4]        ;   disk drive
 
-    mov bx, [bp + 16]
+    ;   offset : segment
+    ;   0000:0000
+    ;    es : bx
+
+    mov bx, [bp + 14]
     mov es, bx
 
     xor bx, bx
-    mov bx, [bp + 14]
+    mov bx, [bp + 16]
 
     ; call int13h
     mov ah, 03h
@@ -267,29 +271,27 @@ _x86_Disk_Write:
     pop bp
     ret
 
+buffer_t: times 512 db 0
+
 global  _disk_test_write
 _disk_test_write:
     mov     ah,     0x03
-    mov     al,     64
-    mov     ch,     0x0000
-    inc     cl
-    mov     dh,     0x0000
-    mov     dl,     0x0000
+    mov     al,     1
+    mov     ch,     0x00
+    mov     cl,     0x01
+    mov     dh,     0x00
+    mov     dl,     0x00
     
     mov     bx,     0x0000
     mov     es,     bx
+
     xor     bx,     bx
-    mov     bx,     0x7c00
+    lea     bx,     [buffer_t]
     
     int     0x13
 
-    cmp     cl,     64
-    je      .done_dtw
-
-    jmp     _disk_test_write
-
     .done_dtw:
-        ret          
+        ret      
 
 ;
 ; bool _cdecl x86_Disk_GetDriveParams(uint8_t drive,

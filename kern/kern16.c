@@ -10,6 +10,9 @@
 void far* g_data = (void far*)0x00500200;
 void _cdecl disk_test_write();
 
+#define GET_SEGMENT(address) ((unsigned short)(((unsigned long)(address)) >> 16))
+#define GET_OFFSET(address) ((unsigned short)((unsigned long)(address) & 0xFFFF))
+
 void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
@@ -94,7 +97,20 @@ void _cdecl kstart_(uint16_t bootDrive)
     bbfs_write_block(44032, test_buffer, 512);
     bbfs_read_block(44032, test_buffer2, 512); */
 
-    start_gui();
+
+    char buffer_b[512];
+
+    for (int x = 0; x < 512; x++) {
+        buffer_b[x] = 'a';
+        putc(buffer_b[x]);
+    }
+
+    putc('b');
+    x86_Disk_Write(1, 1, 0, 1, 0, buffer_b);
+
+    //disk_test_write();
+
+//    start_gui();
 
 end:
     for (;;);

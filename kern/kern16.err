@@ -1,4 +1,4 @@
-kern16.c(35): Warning! W101: Parameter 4: Non-portable pointer conversion
-kern16.c(35): Note! I2003: source conversion type is 'int'
-kern16.c(35): Note! I2004: target conversion type is 'void __far *'
-kern16.c(35): Note! I2002: 'DISK_ReadSectors' defined in: filesystem/disk.h(17)
+kern16.c(38): Warning! W101: Parameter 4: Non-portable pointer conversion
+kern16.c(38): Note! I2003: source conversion type is 'int'
+kern16.c(38): Note! I2004: target conversion type is 'void __far *'
+kern16.c(38): Note! I2002: 'DISK_ReadSectors' defined in: filesystem/disk.h(17)
