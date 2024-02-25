@@ -11,7 +11,7 @@ override OF= $(shell find ./ -type f -name '*.o')
 
 ##	Makefile target
 .PHONY: all
-all: bootl kernl disk1 disk2 run_diskB
+all: bootl kernl disk1 disk2 run
 
 bootl:
 	$(MAKE) -C boot
@@ -35,9 +35,6 @@ disk2:
 	dd if=/dev/zero of=$(DF2) bs=512 count=2880
 
 run:
-	qemu-system-i386 -fda $(DF)
-
-run_diskB:
 	qemu-system-i386 -fda $(DF) -fdb $(DF2)
 
 .PHONY: clean

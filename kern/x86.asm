@@ -216,8 +216,7 @@ _x86_Disk_Read:
 ;                             uint16_t      cylinder    (ch),
 ;                             uint8_t       sector      (cl) (data loc.)
 ;                             uint16_t      head        (dh),
-;                             void far *    offset      (es),
-;                             void far *    data        (bx))
+;                             void far *    data        (bx (segment), es(offset)))
 ;
 global _x86_Disk_Write
 _x86_Disk_Write:
@@ -237,21 +236,23 @@ _x86_Disk_Write:
     ; [bp + 4] - first argument
     ; [bp + 6] - second argument
 
+    mov dl, [bp + 4]        ;   disk drive
     mov al, [bp + 6]        ;   how many sectors?
     mov ch, [bp + 8]        ;   track / cylined
     mov cl, [bp + 10]       ;   what sector?
     mov dh, [bp + 12]       ;   head
-    mov dl, [bp + 4]        ;   disk drive
 
-    ;   offset : segment
+    ;   segment : offset
     ;   0000:0000
-    ;    es : bx
+    ;    bx : es
 
-    mov bx, [bp + 14]
+    ; offset
+    mov bx, [bp + 16]
     mov es, bx
 
+    ; segment
     xor bx, bx
-    mov bx, [bp + 16]
+    mov bx, [bp + 14]
 
     ; call int13h
     mov ah, 03h
@@ -269,29 +270,8 @@ _x86_Disk_Write:
     ; restore old call frame
     mov sp, bp
     pop bp
-    ret
 
-buffer_t: times 512 db 0
-
-global  _disk_test_write
-_disk_test_write:
-    mov     ah,     0x03
-    mov     al,     1
-    mov     ch,     0x00
-    mov     cl,     0x01
-    mov     dh,     0x00
-    mov     dl,     0x00
-    
-    mov     bx,     0x0000
-    mov     es,     bx
-
-    xor     bx,     bx
-    lea     bx,     [buffer_t]
-    
-    int     0x13
-
-    .done_dtw:
-        ret      
+    ret  
 
 ;
 ; bool _cdecl x86_Disk_GetDriveParams(uint8_t drive,
