@@ -49,7 +49,7 @@ bool DISK_ReadSectors(DISK* disk, uint32_t lba, uint8_t sectors, void far* dataO
     return false;
 }
 
-bool DISK_WriteSectors(DISK* disk, uint32_t lba, uint8_t sectors, void far* offset, void far* dataOut)
+/*bool DISK_WriteSectors(DISK* disk, uint32_t lba, uint8_t sectors, void far* offset, void far* dataOut)
 {
     uint16_t cylinder, sector, head;
     DISK_LBA2CHS(disk, lba, &cylinder, &sector, &head);
@@ -65,4 +65,4 @@ bool DISK_WriteSectors(DISK* disk, uint32_t lba, uint8_t sectors, void far* offs
     }
 
     return false;
-}
+}*/
