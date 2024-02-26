@@ -12,7 +12,10 @@ uint64_t div_round_up(uint64_t x, uint64_t y)
 
 uint64_t align_up(uint64_t x, uint64_t y)
 {
-    return div_round_up(x, y) * y;
+    uint64_t result;
+    x86_mul64_64(div_round_up(x, y), y, &result);
+
+    return result;
 }
 
 uint64_t align_down(uint64_t x, uint64_t y)
@@ -22,7 +25,11 @@ uint64_t align_down(uint64_t x, uint64_t y)
     uint32_t rem;
 
     x86_div64_32(number, radix, &number, &rem);
-    return number * y;
+
+    uint64_t result;
+    x86_mul64_64(number, y, &result);
+
+    return result;
 }
 
 void bitmap_set(uint8_t* bitmap, uint64_t bit) {
@@ -147,7 +154,10 @@ void* pmm_request_page() {
 
         if (last_bit_val == 0)
         {
-            return (void *)(last_allocated_index * PAGE_SIZE);
+            uint64_t result;
+            x86_mul64_64(last_allocated_index, PAGE_SIZE, &result);
+
+            return (void *)(result);
         }
 
         else
@@ -203,7 +213,11 @@ void* pmm_request_pages(size_t numPages)
                 }
 
                 // Return a pointer to the first page
-                return (void *)(last_allocated_index * PAGE_SIZE);
+
+                uint64_t result;
+                x86_mul64_64(last_allocated_index, PAGE_SIZE, &result);
+
+                return (void *)(result);
             }
         }
 

@@ -12,6 +12,11 @@
 void far* g_data = (void far*)0x00500200;
 void _cdecl disk_test_write();
 
+uint64_t first_factor = 1234567890123456;
+uint64_t second_factor = 9876543210987654;
+
+uint64_t result = 2;
+
 void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();

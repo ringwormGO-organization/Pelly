@@ -97,6 +97,28 @@ _x86_div64_32:
     ret
 
 ;
+; void _cdecl x86_mul64_64(uint64_t first_factor, uint64_t second_factor, uint64_t* result);
+;
+global _x86_mul64_64
+_x86_mul64_64:
+
+    ; make new call frame
+    push bp             ; save old call frame
+    mov bp, sp          ; initialize new call frame
+
+    push bx
+
+    
+
+    pop bx
+
+    ; restore old call frame
+    mov sp, bp
+    pop bp
+
+    ret
+
+;
 ; int 10h ah=0Eh
 ; args: character, page
 ;
