@@ -1,1 +1,2 @@
 stdio.c(273): Warning! W302: Expression is only useful for its side effects
+stdio.c(311): Warning! W202: Symbol 'm_digits' has been defined, but not referenced

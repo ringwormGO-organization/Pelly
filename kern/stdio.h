@@ -36,3 +36,6 @@ void _cdecl printf(const char* fmt, ...);
 void print_buffer(const char* msg, const void far* buffer, uint16_t count);
 
 size_t strlen(const char* str);
+
+void separate_bases(uint64_t number, uint16_t parts[4]);
+void x86_mul64_64(uint64_t first_factor, uint64_t second_factor, uint64_t* result);
