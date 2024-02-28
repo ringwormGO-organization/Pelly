@@ -1,3 +1,10 @@
+/**
+ * @author Kevin Alavik (https://github.com/KevinAlavik)
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main header file for cursor
+*/
+
 #include "allocator.h"
 
 uint64_t div_round_up(uint64_t x, uint64_t y)

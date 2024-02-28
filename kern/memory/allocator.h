@@ -1,3 +1,10 @@
+/**
+ * @author Kevin Alavik (https://github.com/KevinAlavik)
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main header file for cursor
+*/
+
 #pragma once
 
 #include "../stdint.h"

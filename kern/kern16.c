@@ -7,13 +7,11 @@
 #include "filesystem/bbfs.h"
 #include "memory/e820.h"
 #include "memory/allocator.h"
+#include "memory/heap.h"
 #include "gui/gui.h"
 
 void far* g_data = (void far*)0x00500200;
 void _cdecl disk_test_write();
-
-uint64_t number1 = 6;
-uint64_t number2 = 5;
 
 uint64_t result = 2;
 
@@ -110,8 +108,7 @@ void _cdecl kstart_(uint16_t bootDrive)
     detect_memory();
     init_pmm();
 
-    // x86_mul64_64(number1, number2, &result);
-    // printf("Result: %lld\r\n", result);
+    int* test = malloc(sizeof(int));
 
     putc('a');
 

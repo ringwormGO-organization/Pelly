@@ -41,3 +41,4 @@ _Recommend to install desktop version of Qemu because it does not require to use
 - [ASCII table](https://www.asciitable.com/)
 - [Detecting Memory (x86)](https://wiki.osdev.org/Detecting_Memory_(x86))
 - [INT 15h, AX=E820h - Query System Address Map](http://uruk.org/orig-grub/mem64mb.html)
+- [Paradox](https://github.com/KevinAlavik/Paradox)
