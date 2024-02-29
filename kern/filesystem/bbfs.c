@@ -128,3 +128,21 @@ void bbfs_read_block(void far* block_address_src,
 bbfs_read_block_end:
     printf("BBFS: finished.\r\n");
 }
+
+/**
+ * just a bare bones function for 
+ * readining a file. Only for BBFS v3
+*/
+void bbfs_v3_read_file()
+{
+    printf("WIP");
+}
+
+/**
+ * just a bare bones function for 
+ * writing a file. Only for BBFS v3
+*/
+void bbfs_v3_write_file()
+{
+    printf("WIP");
+}
