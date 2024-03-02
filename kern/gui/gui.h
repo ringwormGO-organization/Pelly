@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../io.h"
+#include "../memory/memory.h"
 #include "../stdio.h"
 #include "../stdint.h"
 
@@ -91,9 +92,9 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
 /**
  * Check if button can be drawn
  * @param window window where checks will be performed
- * @param button button to be checked
+ * @param id button's position in window's elements list 
 */
-void check_button(Window window, Button* button);
+void check_button(Window* window, int id);
 
 /**
  * Draw a button
@@ -115,8 +116,8 @@ void draw_button(Window window, Button button);
  * @param foreground_color foreground color
  * @param buttons context menu elements in form of buttons
 */
-ContextMenu init_context_menu(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, ContextButton buttons[NUMBER_OF_BUTTONS]);
+ContextMenu init_context_menu(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+                    uint16_t background_color, uint16_t foreground_color, ContextButton context_buttons[NUMBER_OF_BUTTONS]);
 
 /**
  * Check if context menu can be drawn
@@ -152,6 +153,7 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
 /**
  * Check if window can be drawn
  * @param window window to be checked
+ * @param id window's position in `Screen` type
 */
 void check_window(Screen* screen, int id);
 
@@ -164,10 +166,9 @@ void draw_window(Window window);
 /**
  * Draw window elements (buttons, context menus, ...)
  * @param window window where elements will be drawn
- * @param elements elements to draw
- * @param debug debug mode?
+ * @param window_id window's id in `Screen` type
 */
-void draw_window_elements(Window window);
+void draw_window_elements(Window window, int window_id);
 
 /**
  * Clear a given window

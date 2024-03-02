@@ -117,7 +117,15 @@ void _cdecl kstart_(uint16_t bootDrive)
 
     free(test);
 
-    //start_gui();
+    char buffer_b[512];
+
+    for (int x = 0; x < 512; x++) {
+        buffer_b[x] = 'a';
+    }
+
+    x86_Disk_Write(1, 1, 0, 1, 0, buffer_b);
+
+    // start_gui();
 
 end:
     for (;;);

@@ -238,8 +238,7 @@ _x86_Disk_Read:
 ;                             uint16_t      cylinder    (ch),
 ;                             uint8_t       sector      (cl) (data loc.)
 ;                             uint16_t      head        (dh),
-;                             void far *    offset      (es),
-;                             void far *    data        (bx))
+;                             void far *    data        (bx (segment), es(offset)))
 ;
 global _x86_Disk_Write
 _x86_Disk_Write:
@@ -259,15 +258,21 @@ _x86_Disk_Write:
     ; [bp + 4] - first argument
     ; [bp + 6] - second argument
 
-    mov dl, [bp + 4]
-    mov al, [bp + 6]
-    mov ch, [bp + 8]
-    mov cl, [bp + 10]
-    mov dh, [bp + 12]
+    mov dl, [bp + 4]        ;   disk drive
+    mov al, [bp + 6]        ;   how many sectors?
+    mov ch, [bp + 8]        ;   track / cylined
+    mov cl, [bp + 10]       ;   what sector?
+    mov dh, [bp + 12]       ;   head
 
+    ;   segment : offset
+    ;   0000:0000
+    ;    bx : es
+
+    ; offset
     mov bx, [bp + 16]
     mov es, bx
 
+    ; segment
     xor bx, bx
     mov bx, [bp + 14]
 
@@ -287,6 +292,7 @@ _x86_Disk_Write:
     ; restore old call frame
     mov sp, bp
     pop bp
+
     ret
 
 global  _disk_test_write

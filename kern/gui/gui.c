@@ -15,9 +15,21 @@ Button empty_button = {
 };
 
 Button main_button = {
+    .error = NO_CHECK,
     .x = 5,
     .y = 5,
     .len_x = 7,
+    .len_y = 2,
+    .background_color = BLACK,
+    .foreground_color = YELLOW,
+    .title = "test",
+};
+
+Button invalid_button = {
+    .error = NO_CHECK,
+    .x = 6,
+    .y = 6,
+    .len_x = 2,
     .len_y = 2,
     .background_color = BLACK,
     .foreground_color = YELLOW,
@@ -34,9 +46,12 @@ ContextMenu context_menu = {
     .foreground_color = WHITE,
 };
 
+ContextButton empty_context_button = {
+    .content = "n/a",
+};
+
 ContextButton context_button = {
-    .len_y = 2,
-    .title = "123",
+    .content = "one",
 };
 
 Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
@@ -239,7 +254,7 @@ void draw_window(Window window)
     printf("%s", window.title);
 }
 
-void draw_window_elements(Window window)
+void draw_window_elements(Window window, int window_id)
 {
     /* ******************************** */
     /*          Buttons                 */
@@ -257,11 +272,11 @@ void draw_window_elements(Window window)
             continue;
         }
 
-        check_button(window, &window.elements.button[i]);
+        check_button(&window, i);
 
         if (window.elements.button[i].error != 0)
         {
-            printf("Error code %d in button %d: \r\n", window.elements.button[i].error, i);
+            printf("Error code %d of button %d, window %d\r\n", window.elements.button[i].error, i, window_id);
             continue;
         }
 
@@ -269,31 +284,18 @@ void draw_window_elements(Window window)
         move_cursor(0, 0);
     }
 
-    /* ******************************** */
-    /*          Context menu            */
-    /* ******************************** */
+    check_context_menu(window, &window.elements.context_menu);
 
-    if (window.elements.context_menu.error != EMPTY) /* not empty */
+    if (window.elements.context_menu.error == NO_ERROR)
     {
-        if (window.elements.context_menu.error == 0) /* no error */
-        {
-            draw_context_menu(window, window.elements.context_menu);
-            move_cursor(0, 0);
-        }
-
-        else
-        {
-            printf("Error code during initialization of a context menu\r\n");
-        }
+        draw_context_menu(window, window.elements.context_menu);
     }
 
     else
     {
-        if (window.debug)
-        {
-            printf("Empty context menu! Skipping...\r\n");
-        }
+        printf("Error code %d of context menu, window %d\r\n", window.elements.context_menu.error, window_id);
     }
+
 }
 
 void clear_window(Window window)
@@ -424,22 +426,33 @@ void start_gui()
             if (screen.windows[i].error != EMPTY)
             {
                 move_cursor(0, i);
-                printf("Error code %d of button %d\r\n", screen.windows[i].error, i);
+                printf("Error code %d of window %d\r\n", screen.windows[i].error, i);
             }
         }
     }
 
-    test_window.elements.button[0] = main_button;
+    screen.windows[0].elements.button[0] = main_button;
+    screen.windows[0].elements.button[1] = invalid_button;
+    screen.windows[0].elements.button[2].error = EMPTY;
+    screen.windows[0].elements.button[3].error = EMPTY;
 
-    context_menu.buttons[0] = context_button;
-    context_menu.buttons[1].error = EMPTY;
-    context_menu.buttons[2].error = EMPTY;
-    context_menu.buttons[3].error = EMPTY;
+    ContextButton context_buttons[NUMBER_OF_BUTTONS];
+    context_buttons[0] = context_button;
+    context_buttons[1] = empty_context_button;
+    context_buttons[2] = empty_context_button;
+    context_buttons[3] = empty_context_button;
 
-    test_window.elements.context_menu = context_menu;
-    screen.windows[0] = test_window;
+    ContextMenu context_menu = init_context_menu(9, 9, 5, 5, LGRAY, LGRAY, context_buttons);
 
-    draw_window_elements(test_window);
+    screen.windows[0].elements.context_menu = context_menu;
+
+    for (int i = 0; i < NUMBER_OF_WINDOWS; i++)
+    {
+        if (screen.windows[i].error == NO_ERROR)
+        {
+            draw_window_elements(screen.windows[i], i);
+        }
+    }
 
 keyboard_loop:
     move_cursor(0, 0);
