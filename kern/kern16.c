@@ -94,14 +94,17 @@ void _cdecl kstart_(uint16_t bootDrive)
     bbfs_write_block(44032, test_buffer, 512);
     bbfs_read_block(44032, test_buffer2, 512); */
 
+/*
     char buffer_b[512];
 
     for (int x = 0; x < 512; x++) {
         buffer_b[x] = 'a';
     }
+*/
 
-    x86_Disk_Write(1, 1, 0, 1, 0, buffer_b);
+    //x86_Disk_Write(1, 1, 0, 1, 0, buffer_b);
 
+    bbfs_v3_write_file();
     // start_gui();
 
 end:

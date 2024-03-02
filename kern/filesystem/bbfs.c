@@ -131,18 +131,70 @@ bbfs_read_block_end:
 
 /**
  * just a bare bones function for 
- * readining a file. Only for BBFS v3
+ * writing a file. Only for BBFS v3
 */
-void bbfs_v3_read_file()
-{
-    printf("WIP");
+
+void bbfs_v3_write_file() {
+    BBFS_v3_file_header test_file;
+    char data_buffer[512];
+
+    memset(data_buffer, 0, 512);
+
+    for (int x = 0; x < 512; x++)
+        data_buffer[x] = ' ';
+
+    // Clear data_buffer
+    //memset(data_buffer, 0, 512);
+    strcpy((char *)test_file.file_name, "HELLO WORLD \0");
+    strcpy((char *)test_file.file_exst, "TXT\0");
+
+    test_file.is_file_exe = 1;
+    test_file.is_sys_file = 0;
+
+    strcpy((char *)test_file.day, "02\0");
+    strcpy((char *)test_file.month, "03\0");
+    strcpy((char *)test_file.year, "2024\0");
+
+    // Copy the file header to data_buffer
+
+    // TODO: change the loops to the strncpy
+
+    // Copy the file_name
+    for (int x = 3; x <= 15; x++)
+        data_buffer[x+3] = test_file.file_name;
+
+    // Copy the file exst.
+    for (int x = 15; x <= 18; x++)
+        data_buffer[x+15] = test_file.file_exst;
+
+    // Is file exe?
+    for (int x = 18; x <= 19; x++)
+        data_buffer[x+18] = test_file.is_file_exe;
+
+    // Is sys. file?
+    for (int x = 19; x <= 20; x++)
+        data_buffer[x+19] = test_file.is_sys_file;
+
+    // day
+    for (int x = 20; x <= 22; x++)
+        data_buffer[x+20] = test_file.day;
+
+    // month
+    for (int x = 22; x <= 24; x++)
+        data_buffer[x+22] = test_file.month;
+
+    // year
+    for (int x = 24; x <= 28; x++)
+        data_buffer[x+24] = test_file.year;
+
 }
+
 
 /**
  * just a bare bones function for 
- * writing a file. Only for BBFS v3
+ * readining a file. Only for BBFS v3
 */
-void bbfs_v3_write_file()
+void bbfs_v3_read_file()
 {
     printf("WIP");
 }
