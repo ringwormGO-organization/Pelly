@@ -7,6 +7,17 @@
 
 #include "heap.h"
 
+void init_malloc()
+{
+    char *PP = (char *)pmm_request_pages(2);
+    if (PP == NULL) 
+    {
+        return;
+    }
+
+    free(PP);
+}
+
 void *malloc(size_t size) 
 {
     char *PP = (char *)pmm_request_pages((size / PAGE_SIZE) + 1);

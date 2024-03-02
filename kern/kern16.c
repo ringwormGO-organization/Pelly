@@ -106,11 +106,16 @@ void _cdecl kstart_(uint16_t bootDrive)
     printf("Used memory: %d\r\n", used_memory);
 
     detect_memory();
+
     init_pmm();
+    init_malloc();
 
     int* test = malloc(sizeof(int));
 
-    putc('a');
+    *test = 10;
+    printf("Value of test variable is: %d\r\n", *test);
+
+    free(test);
 
     //start_gui();
 

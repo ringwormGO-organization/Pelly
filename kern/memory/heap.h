@@ -12,6 +12,8 @@
 
 #include "allocator.h"
 
+void init_malloc();
+
 void *malloc(size_t size);
 void *calloc(size_t size);
 void *realloc(void *old, size_t size);
