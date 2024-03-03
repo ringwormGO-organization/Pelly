@@ -10,30 +10,13 @@
 // NOTE: use `init` function
 // this is just to speed up development process
 
+void test()
+{
+    putc('e');
+}
+
 Button empty_button = {
     .error = EMPTY,
-};
-
-Button main_button = {
-    .error = NO_CHECK,
-    .x = 5,
-    .y = 5,
-    .len_x = 7,
-    .len_y = 2,
-    .background_color = BLACK,
-    .foreground_color = YELLOW,
-    .title = "test",
-};
-
-Button invalid_button = {
-    .error = NO_CHECK,
-    .x = 6,
-    .y = 6,
-    .len_x = 2,
-    .len_y = 2,
-    .background_color = BLACK,
-    .foreground_color = YELLOW,
-    .title = "test",
 };
 
 ContextMenu context_menu = {
@@ -52,6 +35,7 @@ ContextButton empty_context_button = {
 
 ContextButton context_button = {
     .content = "one",
+    .action = test,
 };
 
 Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
@@ -431,10 +415,17 @@ void start_gui()
         }
     }
 
+    /* ------------ */
+
+    Button main_button = init_button(screen.windows[0], 5, 5, 7, 2, BLACK, YELLOW, "test", test);
+    Button invalid_button = init_button(screen.windows[0], 6, 6, 2, 2, BLACK, YELLOW, "test", test);
+
     screen.windows[0].elements.button[0] = main_button;
     screen.windows[0].elements.button[1] = invalid_button;
     screen.windows[0].elements.button[2].error = EMPTY;
     screen.windows[0].elements.button[3].error = EMPTY;
+
+    /* ------------ */
 
     ContextButton context_buttons[NUMBER_OF_BUTTONS];
     context_buttons[0] = context_button;

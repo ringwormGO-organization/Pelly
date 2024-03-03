@@ -26,4 +26,5 @@ typedef struct button_T
     uint16_t foreground_color;
 
     char* title;
+    void (*action)();
 } Button;

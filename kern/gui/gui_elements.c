@@ -8,7 +8,7 @@
 #include "gui.h"
 
 Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, char* title)
+                    uint16_t background_color, uint16_t foreground_color, char* title, void (*action)())
 {
     Button new;
     new.error = NO_CHECK;
@@ -23,6 +23,7 @@ Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16
     new.foreground_color = foreground_color;
     
     new.title = title;
+    new.action = action;
 
     return new;
 }
@@ -193,6 +194,7 @@ ContextMenu init_context_menu(uint16_t x, uint16_t y, uint16_t len_x, uint16_t l
     for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
         new.context_buttons[i].content = context_buttons[i].content;
+        new.context_buttons[i].action = context_buttons[i].action;
     }
 
     return new;

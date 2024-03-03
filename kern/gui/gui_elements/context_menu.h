@@ -18,6 +18,7 @@
 typedef struct context_button_T
 {
     char* content;
+    void (*action)();
 } ContextButton;
 
 typedef struct context_menu_T

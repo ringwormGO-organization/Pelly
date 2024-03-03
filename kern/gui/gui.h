@@ -85,9 +85,10 @@ typedef struct screen_T
  * @param background_color background color of a button
  * @param foreground_color foreground color of a button
  * @param title title of a button
+ * @param action function that will get executed when button is pressed
 */
 Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, char* title);
+                    uint16_t background_color, uint16_t foreground_color, char* title, void (*action)());
 
 /**
  * Check if button can be drawn

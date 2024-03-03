@@ -39,6 +39,7 @@ int keyboard_event(Screen screen)
                 screen.windows[i].elements.button[j].len_y)
                 {
                     /* execute a function */
+                    screen.windows[i].elements.button[j].action();
                 }
             }
         }
@@ -59,7 +60,7 @@ void c_keyboard_loop(Screen screen)
         /* Get pressed key from assembly */
         asm_keyboard_loop();
         
-        /* Check ASCII code*/
+        /* Check ASCII code */
         switch (ascii_code)
         {
             case 0:
