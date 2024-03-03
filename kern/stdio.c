@@ -275,3 +275,57 @@ size_t strlen(const char* str)
 
     return i;
 }
+
+void separate_bases(uint64_t number, uint16_t parts[4]) 
+{
+    uint64_t result;
+    uint32_t rem;
+
+    // Divide the number successively by 65536 and store the remainders
+    for (int i = 0; i < 4; ++i) 
+    {
+        x86_div64_32(number, 65536, &result, &rem);
+
+        parts[i] = (uint16_t)(rem);
+        number = result;
+    }
+}
+
+uint16_t multiply(uint16_t a, uint16_t n)
+{
+    uint16_t result = 0;
+
+    for (uint16_t i = 0; i < n; i++)
+    {
+        result = result + a;
+    }
+
+    return result;
+}
+
+void x86_mul64_64(uint64_t first_factor, uint64_t second_factor, uint64_t* result)
+{
+    uint16_t first_factor_digits[4];
+    uint16_t second_factor_digits[4];
+
+    uint16_t m_digits[4];
+    uint16_t c_digits[4];
+
+    uint64_t M = 0;
+    uint64_t C = 0;
+
+    separate_bases(first_factor, first_factor_digits);
+    separate_bases(second_factor, second_factor_digits);
+
+    for (uint16_t i = 0; i < 4; i++)
+    {
+        M = first_factor_digits[0] * second_factor_digits[0] + C;
+
+        uint32_t rem;
+        x86_div64_32(M, 65536, &C, &rem);
+
+        c_digits[i] = (uint16_t)rem;
+    }
+
+    *result = M;
+}
