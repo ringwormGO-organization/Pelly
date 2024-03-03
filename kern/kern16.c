@@ -99,6 +99,14 @@ void _cdecl kstart_(uint16_t bootDrive)
     bbfs_write_block(44032, test_buffer, 512);
     bbfs_read_block(44032, test_buffer2, 512); */
 
+    /*char buffer_b[512];
+
+    for (int x = 0; x < 512; x++) {
+        buffer_b[x] = 'a';
+    }
+
+    x86_Disk_Write(1, 1, 0, 1, 0, buffer_b);*/
+
     get_low_memory();
     get_used_memory();
 
@@ -110,22 +118,14 @@ void _cdecl kstart_(uint16_t bootDrive)
     init_pmm();
     init_malloc();
 
-    int* test = malloc(sizeof(int));
+    /*int* test = malloc(sizeof(int));
 
     *test = 10;
     printf("Value of test variable is: %d\r\n", *test);
 
-    free(test);
+    free(test);*/
 
-    char buffer_b[512];
-
-    for (int x = 0; x < 512; x++) {
-        buffer_b[x] = 'a';
-    }
-
-    x86_Disk_Write(1, 1, 0, 1, 0, buffer_b);
-
-    // start_gui();
+    start_gui();
 
 end:
     for (;;);
