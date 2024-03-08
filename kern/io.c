@@ -22,6 +22,13 @@ int keyboard_event(Screen screen)
 {
     for (int i = 0; i < NUMBER_OF_WINDOWS; i++)
     {
+        /* Check if close window button is pressed */
+        if (global_cursor.x == screen.windows[i].x + 1 && global_cursor.y == screen.windows[i].y)
+        {
+            clear_window(screen.windows[i]);
+            continue;
+        }
+
         for (int j = 0; j < NUMBER_OF_BUTTONS; j++)
         {
             if (global_cursor.x > screen.windows[i].x + 
