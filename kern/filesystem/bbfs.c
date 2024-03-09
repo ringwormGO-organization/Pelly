@@ -134,58 +134,28 @@ bbfs_read_block_end:
  * writing a file. Only for BBFS v3
 */
 
-void bbfs_v3_write_file() {
-    BBFS_v3_file_header test_file;
+void bbfs_v3_write_file(char file_name[], char file_exst[], char data[], int file_id) {
     char data_buffer[512];
 
-    memset(data_buffer, 0, 512);
+    // copy the file name
+    for (int x = 0; x <= 12; x++)
+        data_buffer[x] = file_name[x];
 
-    for (int x = 0; x < 512; x++)
-        data_buffer[x] = ' ';
+    // copy the file exst.
+    for (int x = 13; x <= 16; x++)
+        data_buffer[x] = file_exst[x-13];
 
-    // Clear data_buffer
-    //memset(data_buffer, 0, 512);
-    strcpy((char *)test_file.file_name, "HELLO WORLD \0");
-    strcpy((char *)test_file.file_exst, "TXT\0");
+    // copy data to the data_buffer
+    for (int x = 16; x <= 496; x++)
+        data_buffer[x] = data[x-16];
 
-    test_file.is_file_exe = 1;
-    test_file.is_sys_file = 0;
+    // write to disk
+    // TODO: fix the junk writing after the data[] is written.
+    printf("BBFS: writing file [%s.%s] to disk...\r\n", file_name, file_exst);
+    x86_Disk_Write(1, 1, 0, file_id, 0, data_buffer);
 
-    strcpy((char *)test_file.day, "02\0");
-    strcpy((char *)test_file.month, "03\0");
-    strcpy((char *)test_file.year, "2024\0");
-
-    // Copy the file header to data_buffer
-
-    // TODO: change the loops to the strncpy
-
-    // Copy the file_name
-    for (int x = 3; x <= 15; x++)
-        data_buffer[x+3] = test_file.file_name;
-
-    // Copy the file exst.
-    for (int x = 15; x <= 18; x++)
-        data_buffer[x+15] = test_file.file_exst;
-
-    // Is file exe?
-    for (int x = 18; x <= 19; x++)
-        data_buffer[x+18] = test_file.is_file_exe;
-
-    // Is sys. file?
-    for (int x = 19; x <= 20; x++)
-        data_buffer[x+19] = test_file.is_sys_file;
-
-    // day
-    for (int x = 20; x <= 22; x++)
-        data_buffer[x+20] = test_file.day;
-
-    // month
-    for (int x = 22; x <= 24; x++)
-        data_buffer[x+22] = test_file.month;
-
-    // year
-    for (int x = 24; x <= 28; x++)
-        data_buffer[x+24] = test_file.year;
+    // finished
+    printf("BBFS: finished writing file [%s.%s] to the disk.\r\n", file_name, file_exst);
 
 }
 

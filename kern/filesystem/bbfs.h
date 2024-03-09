@@ -28,14 +28,8 @@ typedef struct
 
 typedef struct
 {
-    uint8_t blank[3];
-    uint8_t file_name[13];
-    uint8_t file_exst[4];
-    uint8_t is_file_exe;
-    uint8_t is_sys_file;
-    uint8_t day[3];
-    uint8_t month[3];
-    uint8_t year[5];
+    char file_name;
+    char file_exst;
 } BBFS_v3_file_header;
 
 bool _file_sys_not_recognized;
@@ -54,4 +48,4 @@ void bbfs_read_block(void far* block_address_src,
                      uint16_t num_bytes);
 
 void bbfs_v3_read_file();
-void bbfs_v3_write_file();
+void bbfs_v3_write_file(char file_name[], char file_exst[], char data[], int file_id);

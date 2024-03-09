@@ -1,20 +1,5 @@
 filesystem/bbfs.c(103): Warning! W131: No prototype found for function 'memcpy'
 filesystem/bbfs.c(141): Warning! W131: No prototype found for function 'memset'
-filesystem/bbfs.c(162): Warning! W102: Type mismatch (warning)
-filesystem/bbfs.c(162): Note! I2003: source conversion type is 'unsigned char *'
-filesystem/bbfs.c(162): Note! I2004: target conversion type is 'char'
-filesystem/bbfs.c(166): Warning! W102: Type mismatch (warning)
-filesystem/bbfs.c(166): Note! I2003: source conversion type is 'unsigned char *'
-filesystem/bbfs.c(166): Note! I2004: target conversion type is 'char'
-filesystem/bbfs.c(178): Warning! W102: Type mismatch (warning)
-filesystem/bbfs.c(178): Note! I2003: source conversion type is 'unsigned char *'
-filesystem/bbfs.c(178): Note! I2004: target conversion type is 'char'
-filesystem/bbfs.c(182): Warning! W102: Type mismatch (warning)
-filesystem/bbfs.c(182): Note! I2003: source conversion type is 'unsigned char *'
-filesystem/bbfs.c(182): Note! I2004: target conversion type is 'char'
-filesystem/bbfs.c(186): Warning! W102: Type mismatch (warning)
-filesystem/bbfs.c(186): Note! I2003: source conversion type is 'unsigned char *'
-filesystem/bbfs.c(186): Note! I2004: target conversion type is 'char'
 filesystem/bbfs.c(103): Warning! W308: The function 'memcpy' without prototyped parameters called
 filesystem/bbfs.c(103): Note! I2002: 'memcpy' defined in: filesystem/bbfs.c(103)
 filesystem/bbfs.c(126): Warning! W308: The function 'memcpy' without prototyped parameters called
