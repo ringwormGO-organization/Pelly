@@ -10,6 +10,8 @@
 #include "memory/heap.h"
 #include "gui/gui.h"
 
+#include "libc/vector.h"
+
 void far* g_data = (void far*)0x00500200;
 void _cdecl disk_test_write();
 
@@ -117,13 +119,6 @@ void _cdecl kstart_(uint16_t bootDrive)
 
     init_pmm();
     init_malloc();
-
-    /*int* test = malloc(sizeof(int));
-
-    *test = 10;
-    printf("Value of test variable is: %d\r\n", *test);
-
-    free(test);*/
 
     start_gui();
 

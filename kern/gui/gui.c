@@ -38,40 +38,33 @@ ContextButton context_button = {
     .action = test,
 };
 
-Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+Window* init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, bool debug)
 {
-    Window new;
+    Window* new = malloc(sizeof(Window));
 
-    new.debug = debug;
-    new.error = NO_CHECK;
+    new->debug = debug;
+    new->error = NO_CHECK;
 
-    new.x = x;
-    new.y = y;
+    new->x = x;
+    new->y = y;
 
-    new.len_x = len_x;
-    new.len_y = len_y;
+    new->len_x = len_x;
+    new->len_y = len_y;
     
-    new.background_color = background_color;
-    new.foreground_color = foreground_color;
+    new->background_color = background_color;
+    new->foreground_color = foreground_color;
     
-    new.title = title;
+    new->title = title;
     
-    /* Initializing arrays */
-
-    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) 
-    {
-        new.elements.button[i].error = EMPTY;
-    }
-
-    if (new.debug)
+    if (new->debug)
     {
         printf("X = %d : Y = %d | LEN(X) = %d : LEN(Y) = %d | BG = %d : FG = %d | TITLE = %s \r\n",
-                new.x, new.y,
-                new.len_x, new.len_y, 
-                new.background_color,
-                new.foreground_color,
-                new.title);
+                new->x, new->y,
+                new->len_x, new->len_y, 
+                new->background_color,
+                new->foreground_color,
+                new->title);
     }
 
     return new;
@@ -79,36 +72,36 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
 
 void check_window(Screen* screen, int id)
 {
-    Window window = screen->windows[id];
+    Window* current_window = screen->windows.array[id];
 
-    if (window.error == EMPTY)
+    if (current_window->error == EMPTY)
     {
         return;
     }
 
-    if (strlen(window.title) > 70 || strlen(window.title) > (window.len_x - 2))
+    if (strlen(current_window->title) > 70 || strlen(current_window->title) > (current_window->len_x - 2))
     {
-        screen->windows[id].error = TITLE_BOUNDARY_EXCEEDED;
+        current_window->error = TITLE_BOUNDARY_EXCEEDED;
     }
 
-    if (window.x > screen->len_x - 1)
+    if (current_window->x > screen->len_x - 1)
     {
-        screen->windows[id].error = X_BOUNDARY_EXCEEDED;
+        current_window->error = X_BOUNDARY_EXCEEDED;
     }
 
-    if (window.y > screen->len_y - 1)
+    if (current_window->y > screen->len_y - 1)
     {
-        screen->windows[id].error = Y_BOUNDARY_EXCEEDED;
+        current_window->error = Y_BOUNDARY_EXCEEDED;
     }
 
-    if (window.len_x >= ((screen->len_x - 1) - window.x))
+    if (current_window->len_x >= ((screen->len_x - 1) - current_window->x))
     {
-        screen->windows[id].error = LEN_X_BOUNDARY_EXCEEDED;
+        current_window->error = LEN_X_BOUNDARY_EXCEEDED;
     }
 
-    if (window.len_y >= ((screen->len_y - 1) - window.y))
+    if (current_window->len_y >= ((screen->len_y - 1) - current_window->y))
     {
-        screen->windows[id].error = LEN_Y_BOUNDARY_EXCEEDED;
+        current_window->error = LEN_Y_BOUNDARY_EXCEEDED;
     }
 
     /* Check if window interferes with other windows */
@@ -117,9 +110,9 @@ void check_window(Screen* screen, int id)
         if (id == 0)
         {
             /* Window passed checks above */
-            if (window.error == NO_CHECK)
+            if (current_window->error == NO_CHECK)
             {
-                screen->windows[id].error = NO_ERROR;
+                current_window->error = NO_ERROR;
                 break;
             }
 
@@ -128,37 +121,38 @@ void check_window(Screen* screen, int id)
         }
 
         /* Window already has an error, we don't need to go deeper */
-        if (screen->windows[id].error != NO_CHECK)
+        if (current_window->error != NO_CHECK)
         {
             break;
         }
 
-        int previous_window = i - 1;
+        int previous_window_id = i - 1;
+        Window* previous_window = screen->windows.array[previous_window_id];
 
-        if (screen->windows[previous_window].error == NO_ERROR)
+        if (previous_window->error == NO_ERROR)
         {
-            if (window.x +  window.len_x < 
-                            screen->windows[previous_window].x ||
-                window.x >  screen->windows[previous_window].x + 
-                            screen->windows[previous_window].len_x)
+            if (previous_window->x +  previous_window->len_x < 
+                                        previous_window->x ||
+                previous_window->x >  previous_window->x + 
+                                        previous_window->len_x)
             {
-                if (window.y +  window.len_y < 
-                                screen->windows[previous_window].y ||
-                    window.y >  screen->windows[previous_window].y + 
-                                screen->windows[previous_window].len_y)
+                if (previous_window->y +  previous_window->len_y < 
+                                            previous_window->y ||
+                    previous_window->y >  previous_window->y + 
+                                            previous_window->len_y)
                 {
-                    screen->windows[id].error = NO_ERROR;
+                    current_window->error = NO_ERROR;
                 }
 
                 else
                 {
-                    screen->windows[id].error = Y_IN_WINDOW;
+                    current_window->error = Y_IN_WINDOW;
                 }
             }
 
             else
             {
-                screen->windows[id].error = X_IN_WINDOW;
+               current_window->error = X_IN_WINDOW;
             }
         }
     }
@@ -244,9 +238,10 @@ void draw_window_elements(Window window, int window_id)
     /*          Buttons                 */
     /* ******************************** */
 
-    for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
+    for (int i = 0; i < window.elements.button.size; i++)
     {
-        if (window.elements.button[i].error == EMPTY)
+        Button* current_button = window.elements.button.array[i];
+        if (current_button == EMPTY)
         {
             if (window.debug)
             {
@@ -258,13 +253,13 @@ void draw_window_elements(Window window, int window_id)
 
         check_button(&window, i);
 
-        if (window.elements.button[i].error != 0)
+        if (current_button->error != 0)
         {
-            printf("Error code %d of button %d, window %d\r\n", window.elements.button[i].error, i, window_id);
+            printf("Error code %d of button %d, window %d\r\n", current_button->error, i, window_id);
             continue;
         }
 
-        draw_button(window, window.elements.button[i]);
+        draw_button(window, *current_button);
         move_cursor(0, 0);
     }
 
@@ -374,6 +369,24 @@ void clear_window(Window window)
 // 0x0a - \r\n
 // 0x0d - \r
 
+/*void init_buttons(Screen* screen)
+{
+    return;
+    Button* main_button = init_button(5, 5, 7, 2, BLACK, YELLOW, "test", test);
+    Button* invalid_button = init_button(6, 6, 2, 2, BLACK, YELLOW, "test", test);
+
+    Window* current_window = screen->windows.array[0];
+    vector_new(&current_window->elements.button, 2);
+
+    current_window->elements.button.array[0] = main_button;
+    current_window->elements.button.array[0] = invalid_button;
+}*/
+
+void gui_init_context_menu(Screen* screen)
+{
+
+}
+
 void start_gui()
 {
     clear_screen();
@@ -386,62 +399,69 @@ void start_gui()
     screen.len_x = 80;
     screen.len_y = 25;
 
+    vector_new(&screen.windows, 2);
+
     /* ------------ */
 
-    Window test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
-    Window invalid_window = init_window(17, 17, 2, 2, LGRAY, LGRAY, "", false);
+    Window* test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
+    Window* invalid_window = init_window(17, 17, 2, 2, LGRAY, LGRAY, "", false);
 
-    screen.windows[0] = test_window;
-    screen.windows[1] = invalid_window;
-    screen.windows[2].error = EMPTY;
-    screen.windows[3].error = EMPTY;
+    screen.windows.array[0] = test_window;
+    screen.windows.array[1] = invalid_window;
 
-    for (int i = 0; i < NUMBER_OF_WINDOWS; i++)
+    for (int i = 0; i < screen.windows.size; i++)
     {
         check_window(&screen, i);
 
-        if (screen.windows[i].error == NO_ERROR)
+        Window* current_window = screen.windows.array[i];
+        if (current_window->error == NO_ERROR)
         {
-            draw_window(screen.windows[i]);
+            draw_window(*current_window);
         }
 
         else
         {
-            if (screen.windows[i].error != EMPTY)
+            if (current_window->error != EMPTY)
             {
                 move_cursor(0, i);
-                printf("Error code %d of window %d\r\n", screen.windows[i].error, i);
+                printf("Error code %d of window %d\r\n", current_window->error, i);
             }
         }
     }
 
     /* ------------ */
 
-    Button main_button = init_button(screen.windows[0], 5, 5, 7, 2, BLACK, YELLOW, "test", test);
-    Button invalid_button = init_button(screen.windows[0], 6, 6, 2, 2, BLACK, YELLOW, "test", test);
+    Button* main_button = init_button(5, 5, 7, 2, BLACK, YELLOW, "test", test);
+    Button* invalid_button = init_button(6, 6, 2, 2, BLACK, YELLOW, "test", test);
 
-    screen.windows[0].elements.button[0] = main_button;
-    screen.windows[0].elements.button[1] = invalid_button;
-    screen.windows[0].elements.button[2].error = EMPTY;
-    screen.windows[0].elements.button[3].error = EMPTY;
+    Window* current_window = screen.windows.array[0];
+    vector_new(&current_window->elements.button, 2);
+
+    current_window->elements.button.array[0] = main_button;
+    current_window->elements.button.array[1] = invalid_button;
 
     /* ------------ */
 
-    ContextButton context_buttons[NUMBER_OF_BUTTONS];
-    context_buttons[0] = context_button;
-    context_buttons[1] = empty_context_button;
-    context_buttons[2] = empty_context_button;
-    context_buttons[3] = empty_context_button;
+    ContextButton* context_button;
+    context_button->content = "one";
+    context_button->action = test;
+
+    vector_t context_buttons;
+    vector_new(&context_buttons, 1);
+
+    context_buttons.array[0] = context_button;
 
     ContextMenu context_menu = init_context_menu(9, 9, 5, 5, LGRAY, LGRAY, context_buttons);
+    current_window->elements.context_menu = context_menu;
 
-    screen.windows[0].elements.context_menu = context_menu;
+    /* ------------ */
 
-    for (int i = 0; i < NUMBER_OF_WINDOWS; i++)
+    for (int i = 0; i < screen.windows.size; i++)
     {
-        if (screen.windows[i].error == NO_ERROR)
+        Window* current_window = screen.windows.array[i];
+        if (current_window->error == NO_ERROR)
         {
-            draw_window_elements(screen.windows[i], i);
+            draw_window_elements(*current_window, i);
         }
     }
 

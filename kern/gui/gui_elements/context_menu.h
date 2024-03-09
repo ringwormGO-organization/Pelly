@@ -10,10 +10,8 @@
 #include "../../stdio.h"
 #include "../../stdint.h"
 
+#include "../../libc/vector.h"
 #include "../error.h"
-#include "button.h"
-
-#define NUMBER_OF_BUTTONS 4
 
 typedef struct context_button_T
 {
@@ -34,5 +32,5 @@ typedef struct context_menu_T
     uint16_t background_color;
     uint16_t foreground_color;
 
-    struct context_button_T context_buttons[NUMBER_OF_BUTTONS];
+    vector_t context_buttons;
 } ContextMenu;

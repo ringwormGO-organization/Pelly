@@ -12,6 +12,8 @@
 #include "../stdio.h"
 #include "../stdint.h"
 
+#include "../libc/vector.h"
+
 #include "cursor.h"
 #include "error.h"
 
@@ -35,14 +37,11 @@
 #define YELLOW  14
 #define WHITE   15
 
-#define NUMBER_OF_BUTTONS 4
-#define NUMBER_OF_WINDOWS 4
-
 /* ------------------------------------------------------------------------- */
 
 typedef struct elements_T
 {
-    struct button_T button[NUMBER_OF_BUTTONS];
+    vector_t button;
     struct context_menu_T context_menu;
 } Elements;
 
@@ -70,14 +69,13 @@ typedef struct screen_T
     uint16_t len_x;
     uint16_t len_y;
 
-    Window windows[4];
+    vector_t windows;
 } Screen;
 
 /* ------------------------------------------------------------------------- */
 
 /**
  * Initialize a button
- * @param window window element where button will be drawn
  * @param x starting position (x)
  * @param y starting position (y)
  * @param len_x width of a button
@@ -87,7 +85,7 @@ typedef struct screen_T
  * @param title title of a button
  * @param action function that will get executed when button is pressed
 */
-Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+Button* init_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, void (*action)());
 
 /**
@@ -115,10 +113,10 @@ void draw_button(Window window, Button button);
  * @param len_y height
  * @param background_color background color
  * @param foreground_color foreground color
- * @param buttons context menu elements in form of buttons
+ * @param context_buttons context menu elements in form of buttons
 */
 ContextMenu init_context_menu(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, ContextButton context_buttons[NUMBER_OF_BUTTONS]);
+                    uint16_t background_color, uint16_t foreground_color, vector_t context_buttons);
 
 /**
  * Check if context menu can be drawn
@@ -148,7 +146,7 @@ void draw_context_menu(Window window, ContextMenu context_menu);
  * @param title title of a window
  * @param debug debug mode?
 */
-Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+Window* init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, bool debug);
 
 /**
