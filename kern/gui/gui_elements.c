@@ -10,7 +10,7 @@
 Button* init_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, void (*action)())
 {
-    Button* new;
+    Button* new = malloc(sizeof(Button));
     new->error = NO_CHECK;
 
     new->x = x;

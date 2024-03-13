@@ -1,4 +1,3 @@
-gui/gui_elements.c(14): Warning! W200: 'new' has been referenced but never assigned a value
 gui/../libc/../memory/allocator.h(24): Warning! W202: Symbol 'bitmap_size' has been defined, but not referenced
 gui/../libc/../memory/allocator.h(23): Warning! W202: Symbol 'bitmap_pages' has been defined, but not referenced
 gui/../libc/../memory/allocator.h(22): Warning! W202: Symbol 'bitmap' has been defined, but not referenced

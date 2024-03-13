@@ -15,8 +15,6 @@
 void far* g_data = (void far*)0x00500200;
 void _cdecl disk_test_write();
 
-uint64_t result = 2;
-
 void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
@@ -101,13 +99,13 @@ void _cdecl kstart_(uint16_t bootDrive)
     bbfs_write_block(44032, test_buffer, 512);
     bbfs_read_block(44032, test_buffer2, 512); */
 
-    /*char buffer_b[512];
+    /* char buffer_b[512];
 
     for (int x = 0; x < 512; x++) {
         buffer_b[x] = 'a';
     }
 
-    x86_Disk_Write(1, 1, 0, 1, 0, buffer_b);*/
+    x86_Disk_Write(1, 1, 0, 1, 0, buffer_b); */
 
     get_low_memory();
     get_used_memory();

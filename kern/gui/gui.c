@@ -253,7 +253,7 @@ void draw_window_elements(Window window, int window_id)
 
         check_button(&window, i);
 
-        if (current_button->error != 0)
+        if (current_button->error != NO_ERROR)
         {
             printf("Error code %d of button %d, window %d\r\n", current_button->error, i, window_id);
             continue;
@@ -369,24 +369,6 @@ void clear_window(Window window)
 // 0x0a - \r\n
 // 0x0d - \r
 
-/*void init_buttons(Screen* screen)
-{
-    return;
-    Button* main_button = init_button(5, 5, 7, 2, BLACK, YELLOW, "test", test);
-    Button* invalid_button = init_button(6, 6, 2, 2, BLACK, YELLOW, "test", test);
-
-    Window* current_window = screen->windows.array[0];
-    vector_new(&current_window->elements.button, 2);
-
-    current_window->elements.button.array[0] = main_button;
-    current_window->elements.button.array[0] = invalid_button;
-}*/
-
-void gui_init_context_menu(Screen* screen)
-{
-
-}
-
 void start_gui()
 {
     clear_screen();
@@ -468,4 +450,22 @@ void start_gui()
 keyboard_loop:
     move_cursor(0, 0);
     c_keyboard_loop(screen);
+
+    vector_free(&context_buttons);
+
+    for (int i = 0; i < screen.windows.size; i++)
+    {
+        Window* current_window = screen.windows.array[i];
+        
+        for (int j = 0; j < current_window->elements.button.size; j++)
+        {
+            Button* current_button = current_window->elements.button.array[i];
+            free(current_button);
+        }
+
+        vector_free(&current_window->elements.button);
+        free(current_window);
+    }
+
+    vector_free(&screen.windows);
 }
