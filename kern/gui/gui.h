@@ -37,6 +37,8 @@
 #define YELLOW  14
 #define WHITE   15
 
+#define NUMBER_OF_PROGRAMS 6
+
 /* ------------------------------------------------------------------------- */
 
 typedef struct elements_T

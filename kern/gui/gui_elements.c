@@ -90,31 +90,25 @@ void check_button(Window* window, int id)
         int previous_button_id = i - 1;
         Button* previous_button = window->elements.button.array[previous_button_id];
 
-        if (button->error == NO_ERROR)
+        if (button->x + button->len_x < previous_button->x ||
+            button->x > previous_button->x + previous_button->len_x)
         {
-            if (button->x +  button->len_x < 
-                                button->x ||
-                button->x >  button->x + 
-                                button->len_x)
+            if (button->y + button->len_y < previous_button->y ||
+                button->y > previous_button->y + previous_button->len_y ||
+                button->y + button->len_y == previous_button->y + previous_button->len_y)
             {
-                if (button->y +  button->len_y < 
-                                    previous_button->y ||
-                    button->y >  previous_button->y + 
-                                    previous_button->len_y)
-                {
-                    button->error = NO_ERROR;
-                }
-
-                else
-                {
-                    button->error = Y_IN_WINDOW;
-                }
+                button->error = NO_ERROR;
             }
 
             else
             {
-                button->error = X_IN_WINDOW;
+                button->error = Y_IN_WINDOW;
             }
+        }
+
+        else
+        {
+            button->error = X_IN_WINDOW;
         }
     }
 }

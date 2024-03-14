@@ -238,6 +238,7 @@ void draw_window_elements(Window window, int window_id)
     /*          Buttons                 */
     /* ******************************** */
 
+    move_cursor(0, 0);
     for (int i = 0; i < window.elements.button.size; i++)
     {
         Button* current_button = window.elements.button.array[i];
@@ -381,15 +382,12 @@ void start_gui()
     screen.len_x = 80;
     screen.len_y = 25;
 
-    vector_new(&screen.windows, 2);
+    vector_new(&screen.windows, 1);
 
     /* ------------ */
 
-    Window* test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
-    Window* invalid_window = init_window(17, 17, 2, 2, LGRAY, LGRAY, "", false);
-
-    screen.windows.array[0] = test_window;
-    screen.windows.array[1] = invalid_window;
+    Window* window_manager = init_window(12, 5, 40, 15, BLUE, WHITE, "Window manager", false);
+    screen.windows.array[0] = window_manager;
 
     for (int i = 0; i < screen.windows.size; i++)
     {
@@ -413,31 +411,20 @@ void start_gui()
 
     /* ------------ */
 
-    Button* main_button = init_button(5, 5, 7, 2, BLACK, YELLOW, "test", test);
-    Button* invalid_button = init_button(6, 6, 2, 2, BLACK, YELLOW, "test", test);
-
     Window* current_window = screen.windows.array[0];
-    vector_new(&current_window->elements.button, 2);
+    vector_new(&current_window->elements.button, NUMBER_OF_PROGRAMS);
 
-    current_window->elements.button.array[0] = main_button;
-    current_window->elements.button.array[1] = invalid_button;
-
-    /* ------------ */
-
-    ContextButton* context_button;
-    context_button->content = "one";
-    context_button->action = test;
-
-    vector_t context_buttons;
-    vector_new(&context_buttons, 1);
-
-    context_buttons.array[0] = context_button;
-
-    ContextMenu context_menu = init_context_menu(9, 9, 5, 5, LGRAY, LGRAY, context_buttons);
-    current_window->elements.context_menu = context_menu;
+    for (int i = 0; i < NUMBER_OF_PROGRAMS; i++)
+    {
+        Button* program_button = init_button(   (current_window->x + 1) + 5 * i,
+                                                (current_window->y + 1) + 5 * (i / 3),
+                                                3, 3, WHITE, BLUE, "1", test);
+        
+        current_window->elements.button.array[i] = program_button;
+    }
 
     /* ------------ */
-
+    
     for (int i = 0; i < screen.windows.size; i++)
     {
         Window* current_window = screen.windows.array[i];
@@ -450,8 +437,6 @@ void start_gui()
 keyboard_loop:
     move_cursor(0, 0);
     c_keyboard_loop(screen);
-
-    vector_free(&context_buttons);
 
     for (int i = 0; i < screen.windows.size; i++)
     {
