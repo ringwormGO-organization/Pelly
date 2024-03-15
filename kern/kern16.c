@@ -5,7 +5,12 @@
 #include "filesystem/disk.h"
 #include "filesystem/fat.h"
 #include "filesystem/bbfs.h"
+#include "memory/e820.h"
+#include "memory/allocator.h"
+#include "memory/heap.h"
 #include "gui/gui.h"
+
+#include "libc/vector.h"
 
 void far* g_data = (void far*)0x00500200;
 void _cdecl disk_test_write();
@@ -94,14 +99,19 @@ void _cdecl kstart_(uint16_t bootDrive)
     bbfs_write_block(44032, test_buffer, 512);
     bbfs_read_block(44032, test_buffer2, 512); */
 
+<<<<<<< HEAD
 /*
     char buffer_b[512];
+=======
+    /* char buffer_b[512];
+>>>>>>> master
 
     for (int x = 0; x < 512; x++) {
         buffer_b[x] = 'a';
     }
 */
 
+<<<<<<< HEAD
     //x86_Disk_Write(1, 1, 0, 1, 0, buffer_b);
 
     char test_file_name[] = "HELLO WORLD";
@@ -113,6 +123,20 @@ void _cdecl kstart_(uint16_t bootDrive)
     char test_out_file[512];
 
     bbfs_v3_read_file(1, test_out_file);
+=======
+    x86_Disk_Write(1, 1, 0, 1, 0, buffer_b); */
+
+    get_low_memory();
+    get_used_memory();
+
+    printf("Free lower memory: %d\r\n", low_memory);
+    printf("Used memory: %d\r\n", used_memory);
+
+    detect_memory();
+
+    init_pmm();
+    init_malloc();
+>>>>>>> master
 
     start_gui();
 

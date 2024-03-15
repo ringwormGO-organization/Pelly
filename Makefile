@@ -35,7 +35,7 @@ disk2:
 	dd if=/dev/zero of=$(DF2) bs=512 count=2880
 
 run:
-	qemu-system-i386 -fda $(DF) -fdb $(DF2)
+	qemu-system-i386 -m 1M -fda $(DF) -fdb $(DF2)
 
 .PHONY: clean
 clean:

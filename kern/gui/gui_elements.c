@@ -7,60 +7,61 @@
 
 #include "gui.h"
 
-Button init_button(Window window, uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, char* title)
+Button* init_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+                    uint16_t background_color, uint16_t foreground_color, char* title, void (*action)())
 {
-    Button new;
-    new.error = NO_CHECK;
+    Button* new = malloc(sizeof(Button));
+    new->error = NO_CHECK;
 
-    new.x = x;
-    new.y = y;
+    new->x = x;
+    new->y = y;
 
-    new.len_x = len_x;
-    new.len_y = len_y;
+    new->len_x = len_x;
+    new->len_y = len_y;
     
-    new.background_color = background_color;
-    new.foreground_color = foreground_color;
+    new->background_color = background_color;
+    new->foreground_color = foreground_color;
     
-    new.title = title;
+    new->title = title;
+    new->action = action;
 
     return new;
 }
 
 void check_button(Window* window, int id)
 {
-    Button button = window->elements.button[id];
+    Button* button = window->elements.button.array[id];
 
-    uint16_t max_x = button.x + button.len_x;
-    uint16_t max_y = button.y + button.len_y;
+    uint16_t max_x = button->x + button->len_x;
+    uint16_t max_y = button->y + button->len_y;
 
-    if (strlen(button.title) > max_x - 2)
+    if (strlen(button->title) > max_x - 2)
     {
-        window->elements.button[id].error = TITLE_BOUNDARY_EXCEEDED;
+        button->error = TITLE_BOUNDARY_EXCEEDED;
         return;
     }
 
-    if (button.x > (window->x + window->len_x) - 1)
+    if (button->x > (window->x + window->len_x) - 1)
     {
-        window->elements.button[id].error = X_BOUNDARY_EXCEEDED;
+        button->error = X_BOUNDARY_EXCEEDED;
         return;
     }
 
-    if (button.y > (window->x + window->len_x) - 1)
+    if (button->y > (window->x + window->len_x) - 1)
     {
-        window->elements.button[id].error = Y_BOUNDARY_EXCEEDED;
+        button->error = Y_BOUNDARY_EXCEEDED;
         return;
     }
 
     if (max_x >= (window->x + window->len_x) - 1)
     {
-        window->elements.button[id].error = LEN_X_BOUNDARY_EXCEEDED;
+        button->error = LEN_X_BOUNDARY_EXCEEDED;
         return;
     }
 
     if (max_y >= (window->y + window->len_y) - 1)
     {
-        window->elements.button[id].error = LEN_Y_BOUNDARY_EXCEEDED;
+        button->error = LEN_Y_BOUNDARY_EXCEEDED;
         return;
     }
 
@@ -70,9 +71,9 @@ void check_button(Window* window, int id)
         if (id == 0)
         {
             /* Button passed checks above */
-            if (button.error == NO_CHECK)
+            if (button->error == NO_CHECK)
             {
-                window->elements.button[id].error = NO_ERROR;
+                button->error = NO_ERROR;
                 break;
             }
 
@@ -81,37 +82,38 @@ void check_button(Window* window, int id)
         }
 
         /* Button already has an error, we don't need to go deeper */
-        if (window->elements.button[id].error != NO_CHECK)
+        if (button->error != NO_CHECK)
         {
             break;
         }
 
-        int previous_button = i - 1;
+        int previous_button_id = i - 1;
+        Button* previous_button = window->elements.button.array[previous_button_id];
 
-        if (window->elements.button[previous_button].error == NO_ERROR)
+        if (button->error == NO_ERROR)
         {
-            if (button.x +  button.len_x < 
-                            window->elements.button[previous_button].x ||
-                button.x >  window->elements.button[previous_button].x + 
-                            window->elements.button[previous_button].len_x)
+            if (button->x +  button->len_x < 
+                                button->x ||
+                button->x >  button->x + 
+                                button->len_x)
             {
-                if (button.y +  button.len_y < 
-                                window->elements.button[previous_button].y ||
-                    button.y >  window->elements.button[previous_button].y + 
-                                window->elements.button[previous_button].len_y)
+                if (button->y +  button->len_y < 
+                                    previous_button->y ||
+                    button->y >  previous_button->y + 
+                                    previous_button->len_y)
                 {
-                    window->elements.button[id].error = NO_ERROR;
+                    button->error = NO_ERROR;
                 }
 
                 else
                 {
-                    window->elements.button[id].error = Y_IN_WINDOW;
+                    button->error = Y_IN_WINDOW;
                 }
             }
 
             else
             {
-                window->elements.button[id].error = X_IN_WINDOW;
+                button->error = X_IN_WINDOW;
             }
         }
     }
@@ -176,7 +178,7 @@ void draw_button(Window window, Button button)
 /* ------------------------------------ */
 
 ContextMenu init_context_menu(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, ContextButton context_buttons[NUMBER_OF_BUTTONS])
+                    uint16_t background_color, uint16_t foreground_color, vector_t context_buttons)
 {
     ContextMenu new;
     new.error = NO_CHECK;
@@ -190,11 +192,7 @@ ContextMenu init_context_menu(uint16_t x, uint16_t y, uint16_t len_x, uint16_t l
     new.background_color = background_color;
     new.foreground_color = foreground_color;
 
-    for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
-    {
-        new.context_buttons[i].content = context_buttons[i].content;
-    }
-
+    new.context_buttons = context_buttons;
     return new;
 }
 
@@ -281,9 +279,10 @@ void draw_context_menu(Window window, ContextMenu context_menu)
     /*          Buttons                 */
     /* ******************************** */
 
-    for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
+    for (int i = 0; i < context_menu.context_buttons.size; i++)
     {
-        if (context_menu.context_buttons[i].content == "n/a")
+        ContextButton* current_context_button = context_menu.context_buttons.array[i];
+        if (current_context_button->content == "n/a")
         {
             if (window.debug)
             {
@@ -306,7 +305,7 @@ void draw_context_menu(Window window, ContextMenu context_menu)
             }
 
             move_cursor(window.x + context_menu.x, window.y + context_menu.y + ((i + 1) * 2));
-            printf("%s", context_menu.context_buttons[i].content);
+            printf("%s", current_context_button->content);
         }
     }
 }

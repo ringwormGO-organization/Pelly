@@ -1,6 +1,17 @@
+<<<<<<< HEAD
 kern16.c(35): Warning! W101: Parameter 4: Non-portable pointer conversion
 kern16.c(35): Note! I2003: source conversion type is 'int'
 kern16.c(35): Note! I2004: target conversion type is 'void __far *'
 kern16.c(35): Note! I2002: 'DISK_ReadSectors' defined in: filesystem/disk.h(17)
 kern16.c(113): Warning! W308: The function 'bbfs_v3_read_file' without prototyped parameters called
 kern16.c(113): Note! I2002: 'bbfs_v3_read_file' defined in: filesystem/bbfs.h(50)
+=======
+kern16.c(40): Warning! W101: Parameter 4: Non-portable pointer conversion
+kern16.c(40): Note! I2003: source conversion type is 'int'
+kern16.c(40): Note! I2004: target conversion type is 'void __far *'
+kern16.c(40): Note! I2002: 'DISK_ReadSectors' defined in: filesystem/disk.h(17)
+memory/allocator.h(24): Warning! W202: Symbol 'bitmap_size' has been defined, but not referenced
+memory/allocator.h(23): Warning! W202: Symbol 'bitmap_pages' has been defined, but not referenced
+memory/allocator.h(22): Warning! W202: Symbol 'bitmap' has been defined, but not referenced
+memory/allocator.h(21): Warning! W202: Symbol 'free_memory' has been defined, but not referenced
+>>>>>>> master

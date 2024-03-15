@@ -20,25 +20,31 @@ int _cdecl ascii_code;
 */
 int keyboard_event(Screen screen)
 {
-    for (int i = 0; i < NUMBER_OF_WINDOWS; i++)
+    for (int i = 0; i < screen.windows.size; i++)
     {
-        for (int j = 0; j < NUMBER_OF_BUTTONS; j++)
+        Window* current_window = screen.windows.array[i];
+
+        /* Check if close window button is pressed */
+        if (global_cursor.x == current_window->x + 1 && global_cursor.y == current_window->y)
         {
-            if (global_cursor.x > screen.windows[i].x + 
-                screen.windows[i].elements.button[j].x 
-                && 
-                global_cursor.x < screen.windows[i].x + 
-                screen.windows[i].elements.button[j].x + 
-                screen.windows[i].elements.button[j].len_x)
+            clear_window(*current_window);
+            continue;
+        }
+
+        for (int j = 0; j < current_window->elements.button.size; j++)
+        {
+            Button* current_button = current_window->elements.button.array[j];
+
+            if (global_cursor.x > current_window->x + current_button->x && 
+                global_cursor.x < current_window->x + current_button->x + 
+                current_button->len_x)
             {
-                if (global_cursor.y > screen.windows[i].y + 
-                screen.windows[i].elements.button[j].y 
-                && 
-                global_cursor.y < screen.windows[i].y + 
-                screen.windows[i].elements.button[j].y + 
-                screen.windows[i].elements.button[j].len_y)
+                if (global_cursor.y > current_window->y + current_button->y &&
+                    global_cursor.y < current_window->y + current_button->y +
+                    current_button->len_y)
                 {
                     /* execute a function */
+                    current_button->action();
                 }
             }
         }
@@ -59,7 +65,7 @@ void c_keyboard_loop(Screen screen)
         /* Get pressed key from assembly */
         asm_keyboard_loop();
         
-        /* Check ASCII code*/
+        /* Check ASCII code */
         switch (ascii_code)
         {
             case 0:
