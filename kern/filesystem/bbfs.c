@@ -164,7 +164,14 @@ void bbfs_v3_write_file(char file_name[], char file_exst[], char data[], int fil
  * just a bare bones function for 
  * readining a file. Only for BBFS v3
 */
-void bbfs_v3_read_file()
+void bbfs_v3_read_file(int file_id, char data[])
 {
-    printf("WIP");
+    char data_buffer[512];
+
+    printf("BBFS: reading file [%d] from disk...\r\n", file_id);
+
+    x86_Disk_Read(1, 1, 0, file_id, 0, data_buffer);
+
+    // finished
+    printf("BBFS: file [%d] read.\r\n", file_id);
 }
