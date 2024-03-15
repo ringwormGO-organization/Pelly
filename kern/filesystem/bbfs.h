@@ -9,6 +9,10 @@
 #define RAM_BLOCK_SIZE 512      /* maximum size of a RAM block (blck. name not counted)*/
 #define REAL_BLCK_SIZE 500      /* actual size of a RAM block (-12B for blck. name)*/
 
+#define FILE_NAME_LENGTH 12
+#define FILE_EXST_LENGTH 4
+#define FILE_HEADER_SIZE 28
+
 typedef struct
 {
     char disk_label[10];
@@ -21,6 +25,12 @@ typedef struct
     char block_name[12];
     char free_space[500];
 } BBFS_v2_block_data;
+
+typedef struct
+{
+    char file_name;
+    char file_exst;
+} BBFS_v3_file_header;
 
 bool _file_sys_not_recognized;
 
@@ -36,3 +46,6 @@ void bbfs_write_block(void far* block_address_dest,
 void bbfs_read_block(void far* block_address_src,
                      uint8_t buffer[512],
                      uint16_t num_bytes);
+
+void bbfs_v3_read_file();
+void bbfs_v3_write_file(char file_name[], char file_exst[], char data[], int file_id);

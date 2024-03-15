@@ -41,6 +41,32 @@ char* strcpy(char* dst, const char* src)
     return origDst;
 }
 
+char *strncpy(char *s1, const char *s2, size_t n)
+{
+	unsigned int extern_iter = 0;
+
+	unsigned int iterator = 0;
+	for (iterator = 0; iterator < n; iterator++)
+	{
+		if (s2[iterator] != '\0')
+			s1[iterator] = s2[iterator];
+		else
+		{
+			s1[iterator] = s2[iterator];
+			extern_iter = iterator + 1;
+			break;
+		}
+	}
+
+	while (extern_iter < n)
+	{
+		s1[extern_iter] = '\0';
+		extern_iter++;
+	}
+
+	return s1;
+}
+
 unsigned strlen(const char* str)
 {
     unsigned len = 0;

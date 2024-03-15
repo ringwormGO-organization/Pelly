@@ -128,3 +128,50 @@ void bbfs_read_block(void far* block_address_src,
 bbfs_read_block_end:
     printf("BBFS: finished.\r\n");
 }
+
+/**
+ * just a bare bones function for 
+ * writing a file. Only for BBFS v3
+*/
+
+void bbfs_v3_write_file(char file_name[], char file_exst[], char data[], int file_id) {
+    char data_buffer[512];
+
+    // copy the file name
+    for (int x = 0; x <= 12; x++)
+        data_buffer[x] = file_name[x];
+
+    // copy the file exst.
+    for (int x = 13; x <= 16; x++)
+        data_buffer[x] = file_exst[x-13];
+
+    // copy data to the data_buffer
+    for (int x = 16; x <= 496; x++)
+        data_buffer[x] = data[x-16];
+
+    // write to disk
+    // TODO: fix the junk writing after the data[] is written.
+    printf("BBFS: writing file [%s.%s] to disk...\r\n", file_name, file_exst);
+    x86_Disk_Write(1, 1, 0, file_id, 0, data_buffer);
+
+    // finished
+    printf("BBFS: finished writing file [%s.%s] to the disk.\r\n", file_name, file_exst);
+
+}
+
+
+/**
+ * just a bare bones function for 
+ * readining a file. Only for BBFS v3
+*/
+void bbfs_v3_read_file(int file_id, char data[])
+{
+    char data_buffer[512];
+
+    printf("BBFS: reading file [%d] from disk...\r\n", file_id);
+
+    x86_Disk_Read(1, 1, 0, file_id, 0, data_buffer);
+
+    // finished
+    printf("BBFS: file [%d] read.\r\n", file_id);
+}
