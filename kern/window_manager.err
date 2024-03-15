@@ -1,7 +1,4 @@
-gui/window_manager.h(27): Error! E1009: Expecting ',' but found '*'
-gui/window_manager.h(27): Error! E1116: An id list not allowed except for function definition
-gui/window_manager.h(34): Error! E1009: Expecting ',' but found '*'
-gui/window_manager.h(34): Error! E1116: An id list not allowed except for function definition
+gui/window_manager.c(34): Warning! W303: Parameter 'wm' has been defined, but not referenced
 gui/../libc/../memory/allocator.h(24): Warning! W202: Symbol 'bitmap_size' has been defined, but not referenced
 gui/../libc/../memory/allocator.h(23): Warning! W202: Symbol 'bitmap_pages' has been defined, but not referenced
 gui/../libc/../memory/allocator.h(22): Warning! W202: Symbol 'bitmap' has been defined, but not referenced

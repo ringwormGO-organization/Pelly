@@ -382,12 +382,15 @@ void start_gui()
     screen.len_x = 80;
     screen.len_y = 25;
 
-    vector_new(&screen.windows, 1);
+    vector_new(&screen.windows, 2);
 
     /* ------------ */
 
     Window* window_manager = init_window(12, 5, 40, 15, BLUE, WHITE, "Window manager", false);
     screen.windows.array[0] = window_manager;
+
+    Window* test = init_window(1, 1, 2, 2, WHITE, BLACK, "", false);
+    screen.windows.array[1] = test;
 
     for (int i = 0; i < screen.windows.size; i++)
     {
@@ -437,6 +440,11 @@ void start_gui()
 
     /* ------------ */
     
+    WindowManager* window_manager = malloc(sizeof(WindowManager));
+    window_manager->window_manager_id = 0;
+
+    wm_open_window(screen, window_manager, 1);
+
     for (int i = 0; i < screen.windows.size; i++)
     {
         Window* current_window = screen.windows.array[i];

@@ -16,6 +16,7 @@
 
 #include "cursor.h"
 #include "error.h"
+#include "window_manager.h"
 
 #include "gui_elements/button.h"
 #include "gui_elements/context_menu.h"
