@@ -416,9 +416,21 @@ void start_gui()
 
     for (int i = 0; i < NUMBER_OF_PROGRAMS; i++)
     {
-        Button* program_button = init_button(   (current_window->x + 1) + 5 * i,
-                                                (current_window->y + 1) + 5 * (i / 3),
-                                                3, 3, WHITE, BLUE, "1", test);
+        const int button_per_row = 3;
+
+        int row = i / button_per_row;
+        int col = i % button_per_row;
+
+        const int margin_x = 2;
+        const int margin_y = 1;
+
+        const int width = 3;
+        const int height = 2;
+    
+        Button* program_button = init_button(
+            current_window->x + margin_x + (width + margin_x) * col,
+            current_window->y + margin_y + (height + margin_y) * row,
+            width, height, WHITE, BLUE, "1", test);
         
         current_window->elements.button.array[i] = program_button;
     }
