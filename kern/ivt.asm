@@ -1,11 +1,30 @@
 
 bits     16
-section _TEXT class=CODE
+section _TEXT class=CODEs
+
+extern _bbfs_v3_read_file
+extern _bbfs_v3_write_file
 
 global _set_ivt
 _set_ivt:
     mov     al, 0x69
     mov     si, _int_0x69_handler
+    call    _load_interrupt
+
+    ;
+    ;   To use this interrupt you need to
+    ;   pass arguments to bp
+    ;
+    mov     al, 0x70
+    mov     si, _bbfs_v3_write_file
+    call    _load_interrupt
+
+    ;
+    ;   To use this interrupt you need to
+    ;   pass arguments to bp
+    ;
+    mov     al, 0x71
+    mov     si, _bbfs_v3_read_file
     call    _load_interrupt
 
     ret

@@ -134,7 +134,7 @@ bbfs_read_block_end:
  * writing a file. Only for BBFS v3
 */
 
-void bbfs_v3_write_file(char file_name[], char file_exst[], char data[], int file_id) {
+void _cdecl bbfs_v3_write_file(char file_name[], char file_exst[], char data[], int file_id) {
     char data_buffer[512];
 
     // copy the file name
@@ -164,7 +164,7 @@ void bbfs_v3_write_file(char file_name[], char file_exst[], char data[], int fil
  * just a bare bones function for 
  * readining a file. Only for BBFS v3
 */
-void bbfs_v3_read_file(int file_id, char data[])
+void _cdecl bbfs_v3_read_file(int file_id, char data[])
 {
     char data_buffer[512];
 
