@@ -7,61 +7,61 @@
 
 #include "gui.h"
 
-Button* init_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+Button init_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, void (*action)())
 {
-    Button* new = malloc(sizeof(Button));
-    new->error = NO_CHECK;
+    Button new;
+    new.error = NO_CHECK;
 
-    new->x = x;
-    new->y = y;
+    new.x = x;
+    new.y = y;
 
-    new->len_x = len_x;
-    new->len_y = len_y;
+    new.len_x = len_x;
+    new.len_y = len_y;
     
-    new->background_color = background_color;
-    new->foreground_color = foreground_color;
+    new.background_color = background_color;
+    new.foreground_color = foreground_color;
     
-    new->title = title;
-    new->action = action;
+    new.title = title;
+    new.action = action;
 
     return new;
 }
 
 void check_button(Window* window, int id)
 {
-    Button* button = window->elements.button.array[id];
+    Button button = window->elements.button[id];
 
-    uint16_t max_x = button->x + button->len_x;
-    uint16_t max_y = button->y + button->len_y;
+    uint16_t max_x = button.x + button.len_x;
+    uint16_t max_y = button.y + button.len_y;
 
-    if (strlen(button->title) > max_x - 2)
+    if (strlen(button.title) > max_x - 2)
     {
-        button->error = TITLE_BOUNDARY_EXCEEDED;
+        button.error = TITLE_BOUNDARY_EXCEEDED;
         return;
     }
 
-    if (button->x > (window->x + window->len_x) - 1)
+    if (button.x > (window->x + window->len_x) - 1)
     {
-        button->error = X_BOUNDARY_EXCEEDED;
+        button.error = X_BOUNDARY_EXCEEDED;
         return;
     }
 
-    if (button->y > (window->x + window->len_x) - 1)
+    if (button.y > (window->x + window->len_x) - 1)
     {
-        button->error = Y_BOUNDARY_EXCEEDED;
+        button.error = Y_BOUNDARY_EXCEEDED;
         return;
     }
 
     if (max_x >= (window->x + window->len_x) - 1)
     {
-        button->error = LEN_X_BOUNDARY_EXCEEDED;
+        button.error = LEN_X_BOUNDARY_EXCEEDED;
         return;
     }
 
     if (max_y >= (window->y + window->len_y) - 1)
     {
-        button->error = LEN_Y_BOUNDARY_EXCEEDED;
+        button.error = LEN_Y_BOUNDARY_EXCEEDED;
         return;
     }
 
@@ -71,9 +71,9 @@ void check_button(Window* window, int id)
         if (id == 0)
         {
             /* Button passed checks above */
-            if (button->error == NO_CHECK)
+            if (button.error == NO_CHECK)
             {
-                button->error = NO_ERROR;
+                button.error = NO_ERROR;
                 break;
             }
 
@@ -82,41 +82,37 @@ void check_button(Window* window, int id)
         }
 
         /* Button already has an error, we don't need to go deeper */
-        if (button->error != NO_CHECK)
+        if (button.error != NO_CHECK)
         {
             break;
         }
 
         int previous_button_id = i - 1;
-        Button* previous_button = window->elements.button.array[previous_button_id];
+        Button previous_button = window->elements.button[previous_button_id];
 
-        if (button->error == NO_ERROR)
+        if (button.x + button.len_x < previous_button.x ||
+            button.x > previous_button.x + previous_button.len_x)
         {
-            if (button->x +  button->len_x < 
-                                button->x ||
-                button->x >  button->x + 
-                                button->len_x)
+            if (button.y + button.len_y < previous_button.y ||
+                button.y > previous_button.y + previous_button.len_y ||
+                button.y + button.len_y == previous_button.y + previous_button.len_y)
             {
-                if (button->y +  button->len_y < 
-                                    previous_button->y ||
-                    button->y >  previous_button->y + 
-                                    previous_button->len_y)
-                {
-                    button->error = NO_ERROR;
-                }
-
-                else
-                {
-                    button->error = Y_IN_WINDOW;
-                }
+                button.error = NO_ERROR;
             }
 
             else
             {
-                button->error = X_IN_WINDOW;
+                button.error = Y_IN_WINDOW;
             }
         }
+
+        else
+        {
+            button.error = X_IN_WINDOW;
+        }
     }
+
+    window->elements.button[id].error = button.error;
 }
 
 void draw_button(Window window, Button button)

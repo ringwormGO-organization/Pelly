@@ -37,11 +37,13 @@
 #define YELLOW  14
 #define WHITE   15
 
+#define NUMBER_OF_BUTTONS 16
+
 /* ------------------------------------------------------------------------- */
 
 typedef struct elements_T
 {
-    vector_t button;
+    Button button[NUMBER_OF_BUTTONS];
     struct context_menu_T context_menu;
 } Elements;
 
@@ -85,7 +87,7 @@ typedef struct screen_T
  * @param title title of a button
  * @param action function that will get executed when button is pressed
 */
-Button* init_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+Button init_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, void (*action)());
 
 /**

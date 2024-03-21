@@ -31,20 +31,20 @@ int keyboard_event(Screen screen)
             continue;
         }
 
-        for (int j = 0; j < current_window->elements.button.size; j++)
+        for (int j = 0; j < NUMBER_OF_BUTTONS; j++)
         {
-            Button* current_button = current_window->elements.button.array[j];
+            Button current_button = current_window->elements.button[j];
 
-            if (global_cursor.x > current_window->x + current_button->x && 
-                global_cursor.x < current_window->x + current_button->x + 
-                current_button->len_x)
+            if (global_cursor.x > current_window->x + current_button.x && 
+                global_cursor.x < current_window->x + current_button.x + 
+                current_button.len_x)
             {
-                if (global_cursor.y > current_window->y + current_button->y &&
-                    global_cursor.y < current_window->y + current_button->y +
-                    current_button->len_y)
+                if (global_cursor.y > current_window->y + current_button.y &&
+                    global_cursor.y < current_window->y + current_button.y +
+                    current_button.len_y)
                 {
                     /* execute a function */
-                    current_button->action();
+                    current_button.action();
                 }
             }
         }

@@ -56,6 +56,12 @@ Window* init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     new->foreground_color = foreground_color;
     
     new->title = title;
+
+    /* Initialize an array */
+    for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
+    {
+        new->elements.button[i].error = EMPTY;
+    }
     
     if (new->debug)
     {
@@ -238,10 +244,10 @@ void draw_window_elements(Window window, int window_id)
     /*          Buttons                 */
     /* ******************************** */
 
-    for (int i = 0; i < window.elements.button.size; i++)
+    for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
-        Button* current_button = window.elements.button.array[i];
-        if (current_button == EMPTY)
+        Button current_button = window.elements.button[i];
+        if (current_button.error == EMPTY)
         {
             if (window.debug)
             {
@@ -253,13 +259,13 @@ void draw_window_elements(Window window, int window_id)
 
         check_button(&window, i);
 
-        if (current_button->error != NO_ERROR)
+        if (window.elements.button[i].error != NO_ERROR)
         {
-            printf("Error code %d of button %d, window %d\r\n", current_button->error, i, window_id);
+            printf("Error code %d of button %d, window %d\r\n", current_button.error, i, window_id);
             continue;
         }
 
-        draw_button(window, *current_button);
+        draw_button(window, current_button);
         move_cursor(0, 0);
     }
 
@@ -381,15 +387,12 @@ void start_gui()
     screen.len_x = 80;
     screen.len_y = 25;
 
-    vector_new(&screen.windows, 2);
+    vector_new(&screen.windows, 1);
 
     /* ------------ */
 
-    Window* test_window = init_window(5, 5, 15, 15, WHITE, BLACK, "test window", false);
-    Window* invalid_window = init_window(17, 17, 2, 2, LGRAY, LGRAY, "", false);
-
-    screen.windows.array[0] = test_window;
-    screen.windows.array[1] = invalid_window;
+    Window* window_manager = init_window(12, 5, 40, 15, BLUE, WHITE, "Window manager", false);
+    vector_pushback(&screen.windows, window_manager);
 
     for (int i = 0; i < screen.windows.size; i++)
     {
@@ -413,31 +416,29 @@ void start_gui()
 
     /* ------------ */
 
-    Button* main_button = init_button(5, 5, 7, 2, BLACK, YELLOW, "test", test);
-    Button* invalid_button = init_button(6, 6, 2, 2, BLACK, YELLOW, "test", test);
+    for (int i = 0; i < 6; i++)
+    {
+        const int button_per_row = 3;
 
-    Window* current_window = screen.windows.array[0];
-    vector_new(&current_window->elements.button, 2);
+        int row = i / button_per_row;
+        int col = i % button_per_row;
 
-    current_window->elements.button.array[0] = main_button;
-    current_window->elements.button.array[1] = invalid_button;
+        const int margin_x = 2;
+        const int margin_y = 1;
 
-    /* ------------ */
-
-    ContextButton* context_button;
-    context_button->content = "one";
-    context_button->action = test;
-
-    vector_t context_buttons;
-    vector_new(&context_buttons, 1);
-
-    context_buttons.array[0] = context_button;
-
-    ContextMenu context_menu = init_context_menu(9, 9, 5, 5, LGRAY, LGRAY, context_buttons);
-    current_window->elements.context_menu = context_menu;
+        const int width = 3;
+        const int height = 2;
+    
+        Button program_button = init_button(
+            window_manager->x + margin_x + (width + margin_x) * col,
+            window_manager->y + margin_y + (height + margin_y) * row,
+            width, height, WHITE, BLUE, "1", test);
+        
+        window_manager->elements.button[i] = program_button;
+    }
 
     /* ------------ */
-
+    
     for (int i = 0; i < screen.windows.size; i++)
     {
         Window* current_window = screen.windows.array[i];
@@ -450,22 +451,4 @@ void start_gui()
 keyboard_loop:
     move_cursor(0, 0);
     c_keyboard_loop(screen);
-
-    vector_free(&context_buttons);
-
-    for (int i = 0; i < screen.windows.size; i++)
-    {
-        Window* current_window = screen.windows.array[i];
-        
-        for (int j = 0; j < current_window->elements.button.size; j++)
-        {
-            Button* current_button = current_window->elements.button.array[i];
-            free(current_button);
-        }
-
-        vector_free(&current_window->elements.button);
-        free(current_window);
-    }
-
-    vector_free(&screen.windows);
 }
