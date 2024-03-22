@@ -372,6 +372,36 @@ void clear_window(Window window)
 
 }
 
+void calculator()
+{
+    return;
+}
+
+void file_explorer()
+{
+    return;
+}
+
+void notepad()
+{
+    return;
+}
+
+void paint()
+{
+    return;
+}
+
+void shell()
+{
+    return;
+}
+
+void web_browser()
+{
+    return;
+}
+
 // 0x0a - \r\n
 // 0x0d - \r
 
@@ -416,6 +446,12 @@ void start_gui()
 
     /* ------------ */
 
+    char* programs_names[6] = { "Calc", "Explorer", "Notepad", 
+                                "Paint", "Shell", "Web"};
+
+    void (*p[6]) (void) = {  calculator, file_explorer, notepad,
+                            paint, shell, web_browser};
+
     for (int i = 0; i < 6; i++)
     {
         const int button_per_row = 3;
@@ -426,13 +462,13 @@ void start_gui()
         const int margin_x = 2;
         const int margin_y = 1;
 
-        const int width = 3;
+        const int width = 10;
         const int height = 2;
     
         Button program_button = init_button(
-            window_manager->x + margin_x + (width + margin_x) * col,
+            window_manager->x + margin_x + (width + margin_x) * col - 10,
             window_manager->y + margin_y + (height + margin_y) * row,
-            width, height, WHITE, BLUE, "1", test);
+            width, height, WHITE, BLUE, programs_names[i], p[i]);
         
         window_manager->elements.button[i] = program_button;
     }
