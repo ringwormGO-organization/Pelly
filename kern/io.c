@@ -18,40 +18,35 @@ int _cdecl ascii_code;
  * Check if enter key has been pressed on button
  * @param screen screen containing all windows containing all buttons
 */
-int keyboard_event(Screen screen)
+void keyboard_event(Screen screen)
 {
-    for (int i = 0; i < screen.windows.size; i++)
+    Window* current_window = &screen.windows[screen.active_window];
+
+    /* Check if close window button is pressed */
+    if (global_cursor.x == current_window->x + 1 && global_cursor.y == current_window->y)
     {
-        Window* current_window = screen.windows.array[i];
+        clear_window(*current_window);
+        return;
+    }
 
-        /* Check if close window button is pressed */
-        if (global_cursor.x == current_window->x + 1 && global_cursor.y == current_window->y)
+    for (int j = 0; j < NUMBER_OF_BUTTONS; j++)
+    {
+        Button current_button = current_window->elements.button[j];
+
+        if (global_cursor.x > current_window->x + current_button.x && 
+            global_cursor.x < current_window->x + current_button.x + 
+            current_button.len_x)
         {
-            clear_window(*current_window);
-            continue;
-        }
-
-        for (int j = 0; j < NUMBER_OF_BUTTONS; j++)
-        {
-            Button current_button = current_window->elements.button[j];
-
-            if (global_cursor.x > current_window->x + current_button.x && 
-                global_cursor.x < current_window->x + current_button.x + 
-                current_button.len_x)
+            if (global_cursor.y > current_window->y + current_button.y &&
+                global_cursor.y < current_window->y + current_button.y +
+                current_button.len_y)
             {
-                if (global_cursor.y > current_window->y + current_button.y &&
-                    global_cursor.y < current_window->y + current_button.y +
-                    current_button.len_y)
-                {
-                    /* execute a function */
-                    current_button.action();
-                }
+                /* execute a function */
+                current_button.action(screen.windows[j + 1]);
+                break;
             }
         }
     }
-
-
-    return -1;
 }
 
 /**

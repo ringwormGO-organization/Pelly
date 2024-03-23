@@ -71,7 +71,8 @@ typedef struct screen_T
     uint16_t len_x;
     uint16_t len_y;
 
-    vector_t windows;
+    Window windows[7];
+    int active_window;
 } Screen;
 
 /* ------------------------------------------------------------------------- */
@@ -148,7 +149,7 @@ void draw_context_menu(Window window, ContextMenu context_menu);
  * @param title title of a window
  * @param debug debug mode?
 */
-Window* init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, bool debug);
 
 /**
