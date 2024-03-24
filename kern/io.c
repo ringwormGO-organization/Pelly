@@ -18,14 +18,23 @@ int _cdecl ascii_code;
  * Check if enter key has been pressed on button
  * @param screen screen containing all windows containing all buttons
 */
-void keyboard_event(Screen screen)
+void keyboard_event(Screen* screen)
 {
-    Window* current_window = &screen.windows[screen.active_window];
+    Window* current_window = &screen->windows[screen->active_window];
 
     /* Check if close window button is pressed */
     if (global_cursor.x == current_window->x + 1 && global_cursor.y == current_window->y)
     {
-        clear_window(*current_window);
+        if (screen->active_window != 0)
+        {
+            clear_window(*current_window);
+
+            draw_window(screen->windows[0]);
+            screen->active_window = 0;
+
+            draw_window_elements(screen->windows[0], 0);
+        }
+
         return;
     }
 
@@ -42,7 +51,13 @@ void keyboard_event(Screen screen)
                 current_button.len_y)
             {
                 /* execute a function */
-                current_button.action(screen.windows[j + 1]);
+
+                if (screen->active_window == 0)
+                {
+                    screen->active_window = j + 1;
+                }
+
+                current_button.action(screen->windows[j + 1]);
                 break;
             }
         }
@@ -53,7 +68,7 @@ void keyboard_event(Screen screen)
  * Main keyboard loop
  * @param screen screen for checking events
 */
-void c_keyboard_loop(Screen screen) 
+void c_keyboard_loop(Screen* screen) 
 {
     while (1)
     {

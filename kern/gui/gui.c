@@ -553,5 +553,5 @@ void start_gui()
 
 keyboard_loop:
     move_cursor(0, 0);
-    c_keyboard_loop(screen);
+    c_keyboard_loop(&screen);
 }
