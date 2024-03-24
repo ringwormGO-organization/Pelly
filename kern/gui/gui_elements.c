@@ -38,80 +38,29 @@ void check_button(Window* window, int id)
     if (strlen(button.title) > max_x - 2)
     {
         button.error = TITLE_BOUNDARY_EXCEEDED;
-        return;
     }
 
     if (button.x > (window->x + window->len_x) - 1)
     {
         button.error = X_BOUNDARY_EXCEEDED;
-        return;
     }
 
     if (button.y > (window->x + window->len_x) - 1)
     {
         button.error = Y_BOUNDARY_EXCEEDED;
-        return;
     }
 
     if (max_x >= (window->x + window->len_x) - 1)
     {
         button.error = LEN_X_BOUNDARY_EXCEEDED;
-        return;
     }
 
     if (max_y >= (window->y + window->len_y) - 1)
     {
         button.error = LEN_Y_BOUNDARY_EXCEEDED;
-        return;
     }
 
-    /* Check if button interferes with other buttons */
-    for (int i = id; i >= 0; i--)
-    {
-        if (id == 0)
-        {
-            /* Button passed checks above */
-            if (button.error == NO_CHECK)
-            {
-                button.error = NO_ERROR;
-                break;
-            }
-
-            /* Return button with error above */
-            break;
-        }
-
-        /* Button already has an error, we don't need to go deeper */
-        if (button.error != NO_CHECK)
-        {
-            break;
-        }
-
-        int previous_button_id = i - 1;
-        Button previous_button = window->elements.button[previous_button_id];
-
-        if (button.x + button.len_x < previous_button.x ||
-            button.x > previous_button.x + previous_button.len_x)
-        {
-            if (button.y + button.len_y < previous_button.y ||
-                button.y > previous_button.y + previous_button.len_y ||
-                button.y + button.len_y == previous_button.y + previous_button.len_y)
-            {
-                button.error = NO_ERROR;
-            }
-
-            else
-            {
-                button.error = Y_IN_WINDOW;
-            }
-        }
-
-        else
-        {
-            button.error = X_IN_WINDOW;
-        }
-    }
-
+    button.error = NO_ERROR;
     window->elements.button[id].error = button.error;
 }
 

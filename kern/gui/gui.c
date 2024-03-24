@@ -373,6 +373,7 @@ void calculator(Window program_window)
 {
     clear_screen();
     draw_window(program_window);
+    draw_window_elements(program_window, 1);
 
     return;
 }
@@ -381,6 +382,7 @@ void file_explorer(Window program_window)
 {
     clear_screen();
     draw_window(program_window);
+    draw_window_elements(program_window, 2);
 
     return;
 }
@@ -389,6 +391,7 @@ void notepad(Window program_window)
 {
     clear_screen();
     draw_window(program_window);
+    draw_window_elements(program_window, 3);
 
     return;
 }
@@ -397,6 +400,7 @@ void paint(Window program_window)
 {
     clear_screen();
     draw_window(program_window);
+    draw_window_elements(program_window, 4);
 
     return;
 }
@@ -405,6 +409,7 @@ void shell(Window program_window)
 {
     clear_screen();
     draw_window(program_window);
+    draw_window_elements(program_window, 5);
 
     return;
 }
@@ -413,6 +418,7 @@ void web_browser(Window program_window)
 {
     clear_screen();
     draw_window(program_window);
+    draw_window_elements(program_window, 6);
 
     return;
 }
@@ -437,7 +443,7 @@ void start_gui()
     Window window_manager = init_window(12, 5, 40, 15, BLUE, WHITE, "Window manager", false);
     screen.windows[0] = window_manager;
 
-    Window calculator_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Calculator", false);
+    Window calculator_window = init_window(12, 3, 40, 20, BLUE, WHITE, "Calculator", false);
     screen.windows[1] = calculator_window;
 
     Window file_explorer_window = init_window(12, 5, 40, 15, BLUE, WHITE, "File Explorer", false);
@@ -446,7 +452,7 @@ void start_gui()
     Window notepad_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Notepad", false);
     screen.windows[3] = notepad_window;
 
-    Window paint_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Paint", false);
+    Window paint_window = init_window(5, 5, 55, 17, BLUE, WHITE, "Paint", false);
     screen.windows[4] = paint_window;
 
     Window shell_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Shell", false);
@@ -454,6 +460,45 @@ void start_gui()
 
     Window web_browser_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Web browser", false);
     screen.windows[6] = web_browser_window;
+
+    /* ------------ */
+
+    /* Digits 0-9 buttons */
+    for (int i = 0; i < 10; i++) 
+    {
+        screen.windows[1].elements.button[i] = init_button(2 + (i % 3) * 9, 3 + (i / 3) * 3, 6, 2, BLUE, WHITE, "0", NULL);
+    }
+    
+    screen.windows[1].elements.button[10] = init_button(28, 3, 6, 2, BLUE, WHITE, "+", NULL);
+    screen.windows[1].elements.button[11] = init_button(28, 6, 6, 2, BLUE, WHITE, "-", NULL);
+    screen.windows[1].elements.button[12] = init_button(28, 9, 6, 2, BLUE, WHITE, "*", NULL);
+    screen.windows[1].elements.button[13] = init_button(28, 12, 6, 2, BLUE, WHITE, "/", NULL);
+    screen.windows[1].elements.button[14] = init_button(2, 15, 17, 2, BLUE, WHITE, "Enter", NULL);
+    screen.windows[1].elements.button[15] = init_button(22, 15, 17, 2, BLUE, WHITE, "Reset", NULL);
+
+    /* ------------ */
+
+    screen.windows[2].elements.button[0] = init_button(2, 3, 8, 2, BLUE, WHITE, "Search", NULL);
+
+    /* ------------ */
+
+    screen.windows[3].elements.button[0] = init_button(2, 3, 6, 2, BLUE, WHITE, "Save", NULL);
+    screen.windows[3].elements.button[1] = init_button(10, 3, 6, 2, BLUE, WHITE, "Open", NULL);
+
+    /* ------------ */
+
+    for (int i = 0; i < 8; i++) 
+    {
+        screen.windows[4].elements.button[i] = init_button(i * 5 + 2, 3, 3, 2, BLUE, 0xFFFF, "1", NULL);
+    }
+
+    /* ------------ */
+
+    screen.windows[5].elements.button[0] = init_button(2, 3, 9, 2, BLUE, WHITE, "Execute", NULL);
+
+    /* ------------ */
+
+    screen.windows[6].elements.button[0] = init_button(2, 3, 8, 2, BLUE, WHITE, "Search", NULL);
 
     /* -------------------------------- */
 
