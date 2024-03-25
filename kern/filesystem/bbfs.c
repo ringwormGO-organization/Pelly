@@ -176,6 +176,13 @@ void _cdecl bbfs_v3_read_file(int file_id, char data[])
     printf("BBFS: file [%d] read.\r\n", file_id);
 }
 
+/**
+ * Search for files
+ * 
+ * NOTE: NOT WORKING! I think the issue is with strcmp
+ * @param file_name name of file to be searched
+ * @return file sector
+*/
 int bbfs_v3_search_for_file(char file_name[])
 {
     char data_buffer[512];
@@ -183,11 +190,12 @@ int bbfs_v3_search_for_file(char file_name[])
     bool found_file = false;
     int file_id = 1;
 
-    while (found_file == false)
+    while (!found_file)
     {
         x86_Disk_Read(1, 1, 0, file_id, 0, data_buffer);
 
-        strncpy(tmp_file_name, file_name, 12);
+        for (int x = 0; x <= 12; x++)
+            tmp_file_name[x] = data_buffer[x];
 
         if (strcmp(tmp_file_name, file_name) == 0) {
             found_file = true;
