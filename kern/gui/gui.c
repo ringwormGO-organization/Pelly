@@ -551,6 +551,9 @@ void start_gui()
 
     draw_window_elements(screen.windows[0], 0);
 
+    change_color(format_color(BLUE, LRED));
+    putc('P');
+
 keyboard_loop:
     move_cursor(0, 0);
     c_keyboard_loop(&screen);
