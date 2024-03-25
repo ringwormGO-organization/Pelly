@@ -1,6 +1,6 @@
-gui/gui.c(557): Warning! W118: Label 'keyboard_loop' has been defined but not referenced
-gui/gui.c(556): Warning! W308: The function 'c_keyboard_loop' without prototyped parameters called
-gui/gui.c(556): Note! I2002: 'c_keyboard_loop' defined in: gui/../io.h(25)
+gui/gui.c(560): Warning! W118: Label 'keyboard_loop' has been defined but not referenced
+gui/gui.c(559): Warning! W308: The function 'c_keyboard_loop' without prototyped parameters called
+gui/gui.c(559): Note! I2002: 'c_keyboard_loop' defined in: gui/../io.h(28)
 gui/../libc/../memory/allocator.h(24): Warning! W202: Symbol 'bitmap_size' has been defined, but not referenced
 gui/../libc/../memory/allocator.h(23): Warning! W202: Symbol 'bitmap_pages' has been defined, but not referenced
 gui/../libc/../memory/allocator.h(22): Warning! W202: Symbol 'bitmap' has been defined, but not referenced

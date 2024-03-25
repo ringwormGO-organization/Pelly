@@ -250,3 +250,25 @@ _clear_screen:
     int         0x10
 
     ret
+
+;
+;   _change_color -> changes foreground color
+;
+global _change_color
+_change_color:
+    ; make new call frame
+    push bp             ; save old call frame
+    mov bp, sp          ; initialize new call frame
+
+    mov ah, 0x09        ; int 10,9
+    mov al, 0x00        ; don't print any character; aka print NULL character
+    mov bh, 0x00        ; display page
+    mov bl, [bp + 4]    ; color | [bp + 4] - first argument
+    mov cx, 1           ; print only NULL character once
+
+    int 0x10
+
+    ; restore bx
+    pop bx
+
+    ret

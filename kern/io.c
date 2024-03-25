@@ -15,6 +15,16 @@ int _cdecl cursor_y;
 int _cdecl ascii_code;
 
 /**
+ * Format color so it can be used properly in `change_color` function
+ * @param background_color current background color
+ * @param foreground_color foreground_color
+*/
+int format_color(int background_color, int foreground_color)
+{
+    return (background_color * 16) + foreground_color;
+}
+
+/**
  * Check if enter key has been pressed on button
  * @param screen screen containing all windows containing all buttons
 */
