@@ -123,6 +123,10 @@ void _cdecl kstart_(uint16_t bootDrive)
 
     bbfs_v3_read_file(1, test_out_file);
 
+    int test_id = bbfs_v3_search_for_file(test_file_name);
+
+    printf("FILE ID: %d\r\n", test_id);
+
     get_low_memory();
     get_used_memory();
 

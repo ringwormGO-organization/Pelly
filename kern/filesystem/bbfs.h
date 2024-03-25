@@ -49,3 +49,5 @@ void bbfs_read_block(void far* block_address_src,
 
 void _cdecl bbfs_v3_read_file();
 void _cdecl bbfs_v3_write_file(char file_name[], char file_exst[], char data[], int file_id);
+
+int bbfs_v3_search_for_file(char file_name[]);

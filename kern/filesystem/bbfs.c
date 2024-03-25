@@ -175,3 +175,36 @@ void _cdecl bbfs_v3_read_file(int file_id, char data[])
     // finished
     printf("BBFS: file [%d] read.\r\n", file_id);
 }
+
+int bbfs_v3_search_for_file(char file_name[])
+{
+    char data_buffer[512];
+    char tmp_file_name[13];
+    bool found_file = false;
+    int file_id = 1;
+
+    while (found_file == false)
+    {
+        x86_Disk_Read(1, 1, 0, file_id, 0, data_buffer);
+
+        strncpy(tmp_file_name, file_name, 12);
+
+        if (strcmp(tmp_file_name, "HELLO WORLD") == 0) {
+            found_file = true;
+            printf("BBFS: file [%d] checked. File [%s] was found there.\r\n", file_id, file_name);
+            return file_id;
+
+        } else {
+            printf("BBFS: file [%d] checked. File [%s] not found there.\r\n", file_id, file_name);
+        }
+
+        if (file_id >= 16) {
+            printf("BBFS: checked all files and file [%s] not found.\r\n", file_name);
+            return -1;
+        }
+
+        file_id++;
+
+    }
+
+}
