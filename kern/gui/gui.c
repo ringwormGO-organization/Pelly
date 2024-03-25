@@ -369,7 +369,7 @@ void clear_window(Window window)
     }
 }
 
-void calculator(Window program_window)
+void calculator(Window program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -378,7 +378,7 @@ void calculator(Window program_window)
     return;
 }
 
-void file_explorer(Window program_window)
+void file_explorer(Window program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -387,7 +387,7 @@ void file_explorer(Window program_window)
     return;
 }
 
-void notepad(Window program_window)
+void notepad(Window program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -396,7 +396,7 @@ void notepad(Window program_window)
     return;
 }
 
-void paint(Window program_window)
+void paint(Window program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -405,7 +405,7 @@ void paint(Window program_window)
     return;
 }
 
-void shell(Window program_window)
+void shell(Window program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -414,7 +414,7 @@ void shell(Window program_window)
     return;
 }
 
-void web_browser(Window program_window)
+void web_browser(Window program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -466,6 +466,9 @@ void start_gui()
     /* Digits 0-9 buttons */
     for (int i = 0; i < 10; i++) 
     {
+        /* char* str = malloc(sizeof(char) * 2);
+        num_to_string(i, str); */
+
         screen.windows[1].elements.button[i] = init_button(2 + (i % 3) * 9, 3 + (i / 3) * 3, 6, 2, BLUE, WHITE, "0", NULL);
     }
     
@@ -519,10 +522,24 @@ void start_gui()
 
     /* -------------------------------- */
 
+    Calculator calculator_struct;
+
+    calculator_struct.first_number = 0;
+    calculator_struct.op = '+';
+    calculator_struct.second_number = 0;
+    calculator_struct.is_first_number = true;
+
+    /* ------------ */
+
+    Argument argument;
+    argument.calculator = &calculator_struct;
+
+    screen.argument = &argument;
+
     char* programs_names[6] = { "Calc", "Explorer", "Notepad", 
                                 "Paint", "Shell", "Web"};
 
-    void (*p[6]) (Window) = {  calculator, file_explorer, notepad,
+    void (*p[6]) (Window, Argument*) = {  calculator, file_explorer, notepad,
                             paint, shell, web_browser};
 
     for (int i = 0; i < 6; i++)
@@ -551,8 +568,11 @@ void start_gui()
 
     draw_window_elements(screen.windows[0], 0);
 
-    change_color(format_color(BLUE, LRED));
-    putc('P');
+    /* change_color(format_color(BLUE, LRED));
+    putc('P'); */
+
+    printf("===> Pelly Operating System - 0.9.0\r\n");
+    printf("Now with heap & GUI! %d\r\n", 30);
 
 keyboard_loop:
     move_cursor(0, 0);

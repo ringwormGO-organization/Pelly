@@ -12,8 +12,10 @@
 #include "../stdio.h"
 #include "../stdint.h"
 
+#include "../libc/convert.h"
 #include "../libc/vector.h"
 
+#include "argument.h"
 #include "cursor.h"
 #include "error.h"
 
@@ -73,6 +75,8 @@ typedef struct screen_T
 
     Window windows[7];
     int active_window;
+
+    Argument* argument;
 } Screen;
 
 /* ------------------------------------------------------------------------- */

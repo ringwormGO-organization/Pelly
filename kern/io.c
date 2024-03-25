@@ -37,6 +37,15 @@ void keyboard_event(Screen* screen)
     {
         if (screen->active_window != 0)
         {
+            /* Free strings in calculator */
+            /*if (screen->active_window == 1)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    free(screen->windows[screen->active_window].elements.button[i].title);
+                }
+            }*/
+
             clear_window(*current_window);
 
             draw_window(screen->windows[0]);
@@ -65,9 +74,99 @@ void keyboard_event(Screen* screen)
                 if (screen->active_window == 0)
                 {
                     screen->active_window = j + 1;
+                    current_button.action(screen->windows[j + 1], screen->argument);
                 }
 
-                current_button.action(screen->windows[j + 1]);
+                else if (screen->active_window == 1)
+                {
+                    if (j > -1 && j < 10)
+                    {
+                        printf("%d", j);
+
+                        if (screen->argument->calculator->is_first_number == true)
+                        {
+                            screen->argument->calculator->first_number = screen->argument->calculator->first_number * 10 + j;
+                        }
+
+                        else if (screen->argument->calculator->is_first_number == false)
+                        {
+                            screen->argument->calculator->second_number = screen->argument->calculator->second_number * 10 + j;
+                        }
+                    }
+
+                    else if (j == 10)
+                    {
+                        screen->argument->calculator->op = '+';
+                    }
+
+                    else if (j == 11)
+                    {
+                        screen->argument->calculator->op = '-';
+                    }
+
+                    else if (j == 12)
+                    {
+                        screen->argument->calculator->op = '*';
+                    }
+
+                    else if (j == 13)
+                    {
+                        screen->argument->calculator->op = '/';
+                    }
+
+                    else if (j == 14)
+                    {
+                        /* enter */
+
+                        if (screen->argument->calculator->is_first_number == true)
+                        {
+                            screen->argument->calculator->is_first_number = false;
+                        }
+
+                        else /* second number is entered */
+                        {
+                            uint32_t result = 0;
+                            switch (screen->argument->calculator->op)
+                            {
+                                case '+':
+                                    result = screen->argument->calculator->first_number + screen->argument->calculator->second_number;
+                                    break;
+
+                                case '-':
+                                    result = screen->argument->calculator->first_number - screen->argument->calculator->second_number;
+                                    break;
+
+                                case '*':
+                                    result = screen->argument->calculator->first_number * screen->argument->calculator->second_number;
+                                    break;
+
+                                case '/':
+                                    result = screen->argument->calculator->first_number / screen->argument->calculator->second_number;
+                                    break;
+                                
+                                default:
+                                    break;
+                            }
+
+                            move_cursor(current_window->x + 2, 22);
+                            printf("Result is: %d", result);
+                        }
+                    }
+
+                    else if (j == 15)
+                    {
+                        if (screen->argument->calculator->is_first_number == true)
+                        {
+                            screen->argument->calculator->first_number = 0;
+                        }
+
+                        else
+                        {
+                            screen->argument->calculator->second_number = 0;
+                        }
+                    }
+                }
+
                 break;
             }
         }
@@ -115,7 +214,6 @@ void c_keyboard_loop(Screen* screen)
                 /* Update global cursor */
                 get_cursor_position();
                 move_cursor(cursor_x, cursor_y);
-
 
                 break;
 
