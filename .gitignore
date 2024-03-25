@@ -1,3 +1,7 @@
 .vscode/*
 *.map
 *.o
+
+bin/kern16.bin
+disk.img
+diskB.img
