@@ -189,7 +189,7 @@ int bbfs_v3_search_for_file(char file_name[])
 
         strncpy(tmp_file_name, file_name, 12);
 
-        if (strcmp(tmp_file_name, "HELLO WORLD") == 0) {
+        if (strcmp(tmp_file_name, file_name) == 0) {
             found_file = true;
             printf("BBFS: file [%d] checked. File [%s] was found there.\r\n", file_id, file_name);
             return file_id;
