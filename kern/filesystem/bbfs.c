@@ -142,6 +142,22 @@ int bbfs_read_block(void far* block_address_src,
 }
 
 /**
+ * IMPORTANT:
+ * I swear to God if I have to touch this file system
+ * one more time I will go sign myself in to a insane
+ * asylum. None of this works. For some reason the
+ * read function doesn't put the first few bytes in
+ * the buffer, but it will add few bytes to the end
+ * of the buffer. Over the last few days that I had
+ * to work with this I have lost my sanity. To anyone
+ * whom it my concern: I think that the issue is with
+ * strcmp and data_buffer, if you find a way to fix it
+ * please do submit a PR.
+ * 
+ * - stjepanbm1
+*/
+
+/**
  * just a bare bones function for 
  * writing a file. Only for BBFS v3
 */

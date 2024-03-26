@@ -28,6 +28,7 @@ _Recommend to install desktop version of Qemu because it does not require to use
 - [x] Kernel
   - [X] PS/2 keyboard (BIOS Int. 16h)
   - [ ] PS/2 mouse
+  - [X] Custom interrupts
   - [X] File systems
     - [X] FAT12
     - [X] BBFS
