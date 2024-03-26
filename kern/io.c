@@ -37,24 +37,39 @@ void keyboard_event(Screen* screen)
     {
         if (screen->active_window != 0)
         {
-            /* Free strings in calculator */
-            /*if (screen->active_window == 1)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    free(screen->windows[screen->active_window].elements.button[i].title);
-                }
-            }*/
-
             clear_window(*current_window);
-
-            return;
 
             draw_window(screen->windows[0]);
             screen->active_window = 0;
 
             draw_window_elements(screen->windows[0], 0);
         }
+
+        return;
+    }
+
+    /* Perform actions regarding shell window */
+    if (screen->active_window == 5)
+    {
+        if (global_cursor.y + 2 >= current_window->y + current_window->len_y)
+        {
+            clear_window(*current_window);
+            draw_window(*current_window);
+            draw_window_elements(*current_window, screen->active_window);
+        }
+
+        move_cursor(current_window->x + 2, global_cursor.y + 2);
+
+        /* execute command */
+        move_cursor(current_window->x + 2, global_cursor.y - 1);
+        for (int i = 0; i < screen->argument->shell->index; i++)
+        {
+            putc(screen->argument->shell->line[i]);
+        }
+
+        move_cursor(current_window->x + 2, global_cursor.y + 1);
+        printf(">> ");
+        move_cursor(global_cursor.x + 3, global_cursor.y);
 
         return;
     }
@@ -183,18 +198,6 @@ void keyboard_event(Screen* screen)
                     }
                 }
 
-                /* Perform actions regarding shell window */
-                else if (screen->active_window == 5)
-                {
-                    /**
-                     * See comments on line 248-251 in this file
-                    */
-                    move_cursor(current_window->x + 2, global_cursor.y + 1);
-
-                    printf(">> ");
-                    move_cursor(global_cursor.x + 3, global_cursor.y);
-                }
-
                 break;
             }
         }
@@ -259,15 +262,6 @@ void c_keyboard_loop(Screen* screen)
                 /* Print character (disabled) */
                 // printf("%c", ascii_code);
 
-                /**
-                 * If we are in shell window, print character.
-                 * Otherwise, character printing is disabled as before. 
-                */
-                if (screen->active_window == 5)
-                {
-                    printf("%c", ascii_code);
-                }
-
                 /* Enter key*/
                 if (ascii_code == 13)
                 {
@@ -289,11 +283,19 @@ void c_keyboard_loop(Screen* screen)
                     // move_cursor(global_cursor.x + 1, global_cursor.y);
 
                     /**
-                     * See comments on line 248-251 in this file
+                     * If we are in shell window, print character.
+                     * Otherwise, character printing is disabled as before. 
                     */
                     if (screen->active_window == 5)
                     {
+                        printf("%c", ascii_code);
                         move_cursor(global_cursor.x + 1, global_cursor.y);
+
+                        if (screen->argument->shell->index != 59)
+                        {
+                            screen->argument->shell->index++;
+                            screen->argument->shell->line[screen->argument->shell->index] = ascii_code;
+                        }
                     }
                 }
 

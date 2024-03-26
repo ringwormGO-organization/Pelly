@@ -21,6 +21,8 @@ typedef struct
 
 typedef struct
 {
+    int index;
+
     char line[60];
     char* history[5];
 } Shell;

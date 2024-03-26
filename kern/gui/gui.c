@@ -537,6 +537,7 @@ void start_gui()
     /* ------------ */
 
     Shell shell_struct;
+    shell_struct.index = 0;
 
     /* ------------ */
 
