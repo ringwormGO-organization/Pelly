@@ -294,7 +294,7 @@ void clear_window(Window window)
     {
         printf("%c", 0x20);
     }
-    
+
     /* ******************************** */
     /*          Close window but.       */
     /* ******************************** */
@@ -362,10 +362,11 @@ void clear_window(Window window)
     move_cursor(window.x, window.y);
     for (uint16_t i = 0; i < window.len_y; i++)
     {
+        move_cursor(window.x, window.y + i);
         for (uint16_t j = 0; j < window.len_x; j++)
+        {
             printf("%c", 0x20);
-        
-        move_cursor(window.x, window.y+i);
+        }   
     }
 }
 
@@ -464,12 +465,11 @@ void start_gui()
     /* ------------ */
 
     /* Digits 0-9 buttons */
+
+    char* digits[10] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
     for (int i = 0; i < 10; i++) 
     {
-        /* char* str = malloc(sizeof(char) * 2);
-        num_to_string(i, str); */
-
-        screen.windows[1].elements.button[i] = init_button(2 + (i % 3) * 9, 3 + (i / 3) * 3, 6, 2, BLUE, WHITE, "0", NULL);
+        screen.windows[1].elements.button[i] = init_button(2 + (i % 3) * 9, 3 + (i / 3) * 3, 6, 2, BLUE, WHITE, digits[i], NULL);
     }
     
     screen.windows[1].elements.button[10] = init_button(28, 3, 6, 2, BLUE, WHITE, "+", NULL);

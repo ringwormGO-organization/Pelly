@@ -12,9 +12,6 @@
 #include "../stdio.h"
 #include "../stdint.h"
 
-#include "../libc/convert.h"
-#include "../libc/vector.h"
-
 #include "argument.h"
 #include "cursor.h"
 #include "error.h"

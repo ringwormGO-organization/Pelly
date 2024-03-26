@@ -48,6 +48,8 @@ void keyboard_event(Screen* screen)
 
             clear_window(*current_window);
 
+            return;
+
             draw_window(screen->windows[0]);
             screen->active_window = 0;
 
@@ -81,8 +83,6 @@ void keyboard_event(Screen* screen)
                 {
                     if (j > -1 && j < 10)
                     {
-                        printf("%d", j);
-
                         if (screen->argument->calculator->is_first_number == true)
                         {
                             screen->argument->calculator->first_number = screen->argument->calculator->first_number * 10 + j;
@@ -125,6 +125,8 @@ void keyboard_event(Screen* screen)
 
                         else /* second number is entered */
                         {
+                            bool print_result = true;
+
                             uint32_t result = 0;
                             switch (screen->argument->calculator->op)
                             {
@@ -141,6 +143,15 @@ void keyboard_event(Screen* screen)
                                     break;
 
                                 case '/':
+                                    if (screen->argument->calculator->second_number == 0)
+                                    {
+                                        move_cursor(current_window->x + 2, 22);
+                                        printf("Result is: N/A");
+
+                                        print_result = false;
+                                        break;
+                                    }
+
                                     result = screen->argument->calculator->first_number / screen->argument->calculator->second_number;
                                     break;
                                 
@@ -148,8 +159,11 @@ void keyboard_event(Screen* screen)
                                     break;
                             }
 
-                            move_cursor(current_window->x + 2, 22);
-                            printf("Result is: %d", result);
+                            if (print_result == true)
+                            {
+                                move_cursor(current_window->x + 2, 22);
+                                printf("Result is: %d", result);
+                            }
                         }
                     }
 
