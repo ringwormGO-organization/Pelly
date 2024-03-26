@@ -73,12 +73,14 @@ void keyboard_event(Screen* screen)
             {
                 /* execute a function */
 
+                /* Perform actions on window manager's buttons */
                 if (screen->active_window == 0)
                 {
                     screen->active_window = j + 1;
                     current_button.action(screen->windows[j + 1], screen->argument);
                 }
 
+                /* Perform actions of calculator's buttons */
                 else if (screen->active_window == 1)
                 {
                     if (j > -1 && j < 10)
@@ -181,6 +183,18 @@ void keyboard_event(Screen* screen)
                     }
                 }
 
+                /* Perform actions regarding shell window */
+                else if (screen->active_window == 5)
+                {
+                    /**
+                     * See comments on line 248-251 in this file
+                    */
+                    move_cursor(current_window->x + 2, global_cursor.y + 1);
+
+                    printf(">> ");
+                    move_cursor(global_cursor.x + 3, global_cursor.y);
+                }
+
                 break;
             }
         }
@@ -245,6 +259,15 @@ void c_keyboard_loop(Screen* screen)
                 /* Print character (disabled) */
                 // printf("%c", ascii_code);
 
+                /**
+                 * If we are in shell window, print character.
+                 * Otherwise, character printing is disabled as before. 
+                */
+                if (screen->active_window == 5)
+                {
+                    printf("%c", ascii_code);
+                }
+
                 /* Enter key*/
                 if (ascii_code == 13)
                 {
@@ -264,6 +287,14 @@ void c_keyboard_loop(Screen* screen)
                 {
                     /* Update global cursor (disabled because we are not printing a character) */
                     // move_cursor(global_cursor.x + 1, global_cursor.y);
+
+                    /**
+                     * See comments on line 248-251 in this file
+                    */
+                    if (screen->active_window == 5)
+                    {
+                        move_cursor(global_cursor.x + 1, global_cursor.y);
+                    }
                 }
 
                 break;

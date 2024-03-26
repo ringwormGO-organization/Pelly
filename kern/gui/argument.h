@@ -19,6 +19,12 @@ typedef struct
     bool is_first_number;
 } Calculator;
 
+typedef struct
+{
+    char line[60];
+    char* history[5];
+} Shell;
+
 /**
  * Struct holding information which is passed to program's function
  * @param calculator data needed for calculator program
@@ -26,4 +32,5 @@ typedef struct
 typedef struct
 {
     Calculator* calculator;
+    Shell* shell;
 } Argument;

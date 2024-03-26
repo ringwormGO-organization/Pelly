@@ -412,6 +412,11 @@ void shell(Window program_window, Argument* argument)
     draw_window(program_window);
     draw_window_elements(program_window, 5);
 
+    move_cursor(program_window.x + 2, program_window.y + 3);
+
+    printf(">> ");
+    move_cursor(global_cursor.x + 3, global_cursor.y);
+
     return;
 }
 
@@ -497,7 +502,7 @@ void start_gui()
 
     /* ------------ */
 
-    screen.windows[5].elements.button[0] = init_button(2, 3, 9, 2, BLUE, WHITE, "Execute", NULL);
+    /* screen.windows[5].elements.button[0] = init_button(2, 3, 9, 2, BLUE, WHITE, "Execute", NULL); */
 
     /* ------------ */
 
@@ -531,8 +536,14 @@ void start_gui()
 
     /* ------------ */
 
+    Shell shell_struct;
+
+    /* ------------ */
+
     Argument argument;
+
     argument.calculator = &calculator_struct;
+    argument.shell = &shell_struct;
 
     screen.argument = &argument;
 
