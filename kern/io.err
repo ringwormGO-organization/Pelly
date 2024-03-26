@@ -1,4 +1,7 @@
-io.c(95): Warning! W309: The function without prototyped parameters indirectly called
+io.c(76): Warning! W131: No prototype found for function 'strcmp'
+io.c(76): Warning! W308: The function 'strcmp' without prototyped parameters called
+io.c(76): Note! I2002: 'strcmp' defined in: io.c(76)
+io.c(118): Warning! W309: The function without prototyped parameters indirectly called
 gui/gui_elements/../../libc/../memory/allocator.h(24): Warning! W202: Symbol 'bitmap_size' has been defined, but not referenced
 gui/gui_elements/../../libc/../memory/allocator.h(23): Warning! W202: Symbol 'bitmap_pages' has been defined, but not referenced
 gui/gui_elements/../../libc/../memory/allocator.h(22): Warning! W202: Symbol 'bitmap' has been defined, but not referenced

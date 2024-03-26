@@ -61,11 +61,34 @@ void keyboard_event(Screen* screen)
         move_cursor(current_window->x + 2, global_cursor.y + 2);
 
         /* execute command */
+        char parsed_line[60];
+        char* command;
+
         move_cursor(current_window->x + 2, global_cursor.y - 1);
-        for (int i = 0; i < screen->argument->shell->index; i++)
+        for (int i = 1; i < screen->argument->shell->index + 1; i++)
         {
-            putc(screen->argument->shell->line[i]);
+            parsed_line[i - 1] = screen->argument->shell->line[i];
         }
+
+        parsed_line[screen->argument->shell->index] = '\0';
+        command = parsed_line;
+
+        if (strcmp(command, "about") == 0)
+        {
+            printf("Pelly (v0.9.0) is a 16-bit operating system!");
+        }
+
+        else
+        {
+            printf("Command (%s) not found!", command);
+        }
+
+        for (int i = 0; i < 60; i++)
+        {
+            screen->argument->shell->line[i] = 0;
+        }
+
+        screen->argument->shell->index = 0;
 
         move_cursor(current_window->x + 2, global_cursor.y + 1);
         printf(">> ");
@@ -275,6 +298,11 @@ void c_keyboard_loop(Screen* screen)
                 {
                     /* Update global cursor */
                     move_cursor(global_cursor.x - 1, global_cursor.y);
+
+                    if (screen->active_window == 5)
+                    {
+                        screen->argument->shell->index--;
+                    }
                 }
 
                 else

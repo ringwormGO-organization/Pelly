@@ -461,7 +461,7 @@ void start_gui()
     Window paint_window = init_window(5, 5, 55, 17, BLUE, WHITE, "Paint", false);
     screen.windows[4] = paint_window;
 
-    Window shell_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Shell", false);
+    Window shell_window = init_window(4, 5, 60, 15, BLUE, WHITE, "Shell", false);
     screen.windows[5] = shell_window;
 
     Window web_browser_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Web browser", false);
