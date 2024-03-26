@@ -118,9 +118,8 @@ void _cdecl kstart_(uint16_t bootDrive)
     char test_data[] = "THIS IS JUST SOME RANDOM JUNK THAT WILL BE WRITTEN TO THE DISK AS [HELLO  WORLD.TXT]";
 
     bbfs_v3_write_file(test_file_name, test_file_exst, test_data, 1);
-    
-    char test_out_file[512];
 
+    char test_out_file[512];
     bbfs_v3_read_file(1, test_out_file);
 
     int test_id = bbfs_v3_search_for_file(test_file_name);

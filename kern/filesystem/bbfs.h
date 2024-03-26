@@ -32,6 +32,13 @@ typedef struct
     char file_exst;
 } BBFS_v3_file_header;
 
+typedef enum
+{
+    OK,
+    FILE_SYSTEM_NOT_RECOGNIZED,
+    BLOCK_SIZE_LIMIT_EXCEEDED,
+} BBFS_v3_error;
+
 bool _file_sys_not_recognized;
 
 void bbfs_get_disk_params(char disk_label[10], 
@@ -39,11 +46,11 @@ void bbfs_get_disk_params(char disk_label[10],
                           char file_sys[8],
                           uint16_t device);
 
-void bbfs_write_block(void far* block_address_dest,
+int bbfs_write_block(void far* block_address_dest,
                      void far* block_address_src,
                      uint16_t num_bytes);
 
-void bbfs_read_block(void far* block_address_src,
+int bbfs_read_block(void far* block_address_src,
                      uint8_t buffer[512],
                      uint16_t num_bytes);
 

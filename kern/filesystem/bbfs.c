@@ -68,65 +68,77 @@ _end_bbfs_d_params:
 }
 
 /**
- *  bbfs_write_block:
  *      write a 512 byte block from RAM. Could be
  *      written differently, but we need compatibility
  *      with OS/1 v5.4.0
  * 
- *  paremeters:
- * 
- *      block_address_src - source of data to write
+ *      @param block_address_src - source of data to write
  *      
- *      block_address_dest - destination of where
+ *      @param block_address_dest - destination of where
  *                           to write the data
  * 
- *      num_bytes - number of bytes to write
+ *      @param num_bytes - number of bytes to write
+ * 
+ *      @return `BBFS_v3_error` enum value
  *
  */
-void bbfs_write_block(void far* block_address_dest,
+int bbfs_write_block(void far* block_address_dest,
                      void far* block_address_src,
                      uint16_t num_bytes)
 {
-    if (_file_sys_not_recognized == true) {
-        printf("BBFS: cannot read RAM blocks. File system not recognized.\r\n");
-        goto bbfs_write_block_end;
-    }
-    else if (num_bytes > RAM_BLOCK_SIZE) {
-        printf("BBFS: block size limit exceeded. %dB out of 512B maximum.\r\n", num_bytes);
-        goto bbfs_write_block_end;
+    if (_file_sys_not_recognized == true) 
+    {
+        return FILE_SYSTEM_NOT_RECOGNIZED;
     }
 
-    printf("BBFS: writing data from 0x%X\r\n", block_address_src);
+    else if (num_bytes > RAM_BLOCK_SIZE) 
+    {
+        return BLOCK_SIZE_LIMIT_EXCEEDED;
+    }
+
+    /* printf("BBFS: writing data from 0x%X\r\n", block_address_src);
     printf("BBFS: writing data to 0x%X\r\n", block_address_dest);
-    printf("BBFS: writing %d bytes\r\n", num_bytes);
+    printf("BBFS: writing %d bytes\r\n", num_bytes); */
 
     memcpy(block_address_dest, block_address_src, num_bytes);
-
-bbfs_write_block_end:
-    printf("BBFS: finished.\r\n");
+    return OK;
 }
 
-void bbfs_read_block(void far* block_address_src,
+/**
+ *      read a 512 byte block from RAM. Could be
+ *      written differently, but we need compatibility
+ *      with OS/1 v5.4.0
+ * 
+ *      @param block_address_src - source of data to read
+ *      
+ *      @param buffer - destination of where
+ *                           to write the read data
+ * 
+ *      @param num_bytes - number of bytes to read
+ * 
+ *      @return `BBFS_v3_error` enum value
+ *
+ */
+int bbfs_read_block(void far* block_address_src,
                      uint8_t buffer[512],
                      uint16_t num_bytes)
 {
 
-    if (_file_sys_not_recognized == true) {
-        printf("BBFS: cannot read RAM blocks. File system not recognized.\r\n");
-        goto bbfs_read_block_end;
-    }
-    else if (num_bytes > RAM_BLOCK_SIZE) {
-        printf("BBFS: block size limit exceeded. %dB out of 512B maximum.\r\n", num_bytes);
-        goto bbfs_read_block_end;
+    if (_file_sys_not_recognized == true) 
+    {
+        return FILE_SYSTEM_NOT_RECOGNIZED;
     }
 
-    printf("BBFS: reading data from 0x%X\r\n", block_address_src);
-    printf("BBFS: writing %d bytes\r\n", num_bytes);
+    else if (num_bytes > RAM_BLOCK_SIZE) 
+    {
+        return BLOCK_SIZE_LIMIT_EXCEEDED;
+    }
+
+    /* printf("BBFS: reading data from 0x%X\r\n", block_address_src);
+    printf("BBFS: writing %d bytes\r\n", num_bytes); */
 
     memcpy(buffer, block_address_src, num_bytes);
-
-bbfs_read_block_end:
-    printf("BBFS: finished.\r\n");
+    return OK;
 }
 
 /**
@@ -151,12 +163,11 @@ void _cdecl bbfs_v3_write_file(char file_name[], char file_exst[], char data[], 
 
     // write to disk
     // TODO: fix the junk writing after the data[] is written.
-    printf("BBFS: writing file [%s.%s] to disk...\r\n", file_name, file_exst);
+    /* printf("BBFS: writing file [%s.%s] to disk...\r\n", file_name, file_exst); */
     x86_Disk_Write(1, 1, 0, file_id, 0, data_buffer);
 
     // finished
-    printf("BBFS: finished writing file [%s.%s] to the disk.\r\n", file_name, file_exst);
-
+    /* printf("BBFS: finished writing file [%s.%s] to the disk.\r\n", file_name, file_exst); */
 }
 
 
@@ -168,12 +179,12 @@ void _cdecl bbfs_v3_read_file(int file_id, char data[])
 {
     char data_buffer[512];
 
-    printf("BBFS: reading file [%d] from disk...\r\n", file_id);
+    // printf("BBFS: reading file [%d] from disk...\r\n", file_id);
 
     x86_Disk_Read(1, 1, 0, file_id, 0, data_buffer);
 
     // finished
-    printf("BBFS: file [%d] read.\r\n", file_id);
+    /* printf("BBFS: file [%d] read.\r\n", file_id); */
 }
 
 /**
@@ -202,12 +213,10 @@ int bbfs_v3_search_for_file(char file_name[])
             printf("BBFS: file [%d] checked. File [%s] was found there.\r\n", file_id, file_name);
             return file_id;
 
-        } else {
-            printf("BBFS: file [%d] checked. File [%s] not found there.\r\n", file_id, file_name);
         }
-
+        
         if (file_id >= 16) {
-            printf("BBFS: checked all files and file [%s] not found.\r\n", file_name);
+            printf("BBFS: checked all files and file [%s] was not found.\r\n", file_name);
             return -1;
         }
 
