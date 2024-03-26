@@ -1,5 +1,5 @@
 
-## Pelly
+# Pelly
 
 16 bit operating system
 
@@ -25,12 +25,20 @@ _Recommend to install desktop version of Qemu because it does not require to use
 
 - [X] Bootloader
   - [X] FAT12
-- [ ] Kernel
+- [x] Kernel
   - [X] PS/2 keyboard (BIOS Int. 16h)
   - [ ] PS/2 mouse
-  - [ ] GUI
-    - [ ] Basic windows
-    - [ ] Taskbar
+  - [X] File systems
+    - [X] FAT12
+    - [X] BBFS
+  - [X] Memory
+    - [X] Get E820 memory map
+    - [X] Allocator
+    - [X] Heap
+  - [X] GUI
+    - [X] Basic windows
+    - [X] GUI elements
+    - [X] Applications
     - [ ] Rounded windows (optional feature)
 
 

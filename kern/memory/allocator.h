@@ -2,8 +2,10 @@
  * @author Kevin Alavik (https://github.com/KevinAlavik)
  * PROJECT: Pelly
  * LICENSE: MIT
- * DESCRIPTION: Main header file for cursor
+ * DESCRIPTION: Main header file for allocator
 */
+
+/* This file is subject to Paradox's license */
 
 #pragma once
 

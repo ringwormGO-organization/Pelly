@@ -1,3 +1,12 @@
+/**
+ * @author Andre Bartulin, nanobyte (https://github.com/chibicitiberiu)
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main C file for e820 memory map
+*/
+
+/* This file is subject to Paradox's license */
+
 #include "e820.h"
 
 E820MemoryBlock array[100];
