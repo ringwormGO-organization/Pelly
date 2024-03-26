@@ -22,7 +22,7 @@ void _cdecl right_cursor();
 void _cdecl get_cursor_position();
 void _cdecl clear_screen();
 
-int format_color(int background_color, int foreground_color);
-void _cdecl change_color(int color);
+uint16_t format_color(uint16_t background_color, uint16_t foreground_color);
+void _cdecl change_color(uint16_t color, uint16_t count);
 
 void c_keyboard_loop();

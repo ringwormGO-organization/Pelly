@@ -261,14 +261,18 @@ _change_color:
     mov bp, sp          ; initialize new call frame
 
     mov ah, 0x09        ; int 10,9
-    mov al, 0x00        ; don't print any character; aka print NULL character
+    mov al, 0x00        ; don't print any character here; use NULL character here
     mov bh, 0x00        ; display page
     mov bl, [bp + 4]    ; color | [bp + 4] - first argument
-    mov cx, 1           ; print only NULL character once
+    mov cx, [bp + 6]    ; enable this color for `x` number of characters
 
     int 0x10
 
     ; restore bx
     pop bx
+
+    ; restore old call frame
+    mov sp, bp
+    pop bp
 
     ret

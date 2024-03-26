@@ -19,7 +19,7 @@ int _cdecl ascii_code;
  * @param background_color current background color
  * @param foreground_color foreground_color
 */
-int format_color(int background_color, int foreground_color)
+uint16_t format_color(uint16_t background_color, uint16_t foreground_color)
 {
     return (background_color * 16) + foreground_color;
 }
@@ -30,6 +30,8 @@ int format_color(int background_color, int foreground_color)
 */
 void keyboard_event(Screen* screen)
 {
+    bool dont_draw = false; /* we are clicking one of paint's button if true, we are not drawing */
+
     Window* current_window = &screen->windows[screen->active_window];
 
     /* Check if close window button is pressed */
@@ -221,9 +223,25 @@ void keyboard_event(Screen* screen)
                     }
                 }
 
+                /* Perform actions of paint's buttons */
+                else if (screen->active_window == 4)
+                {
+                    uint16_t bg_colors[9] = {RED, YELLOW, GREEN, CYAN, BLACK, WHITE, LGRAY, BROWN, MAGENTA};
+                    screen->argument->paint->background_color = bg_colors[j];
+
+                    dont_draw = true;
+                }
+
                 break;
             }
         }
+    }
+
+    /* Perform actions regarding shell window */
+    if (screen->active_window == 4 && !dont_draw)
+    {
+        change_color(format_color(BLUE, screen->argument->paint->background_color), (uint16_t)1);
+        printf("%c", 0xDB);
     }
 }
 

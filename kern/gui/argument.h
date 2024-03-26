@@ -1,3 +1,10 @@
+/**
+ * @author Andrej Bartulin
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main header file for programs' arguments
+*/
+
 #pragma once
 
 #include "../stdint.h"
@@ -19,6 +26,22 @@ typedef struct
     bool is_first_number;
 } Calculator;
 
+/**
+ * Struct holding paint runtime info
+ * @param background_color current background_color
+*/
+typedef struct
+{
+    uint16_t background_color;
+} Paint;
+
+/**
+ * Struct holding shell runtime info
+ * @param index current index in `line` array
+ * 
+ * @param line content of current line
+ * @param history shell's history
+*/
 typedef struct
 {
     int index;
@@ -30,9 +53,12 @@ typedef struct
 /**
  * Struct holding information which is passed to program's function
  * @param calculator data needed for calculator program
+ * @param paint data needed for paint program
+ * @param shell data needed for shell program
 */
 typedef struct
 {
     Calculator* calculator;
+    Paint* paint;
     Shell* shell;
 } Argument;

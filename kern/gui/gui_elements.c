@@ -66,6 +66,20 @@ void check_button(Window* window, int id)
 
 void draw_button(Window window, Button button)
 {
+    if (button.background_color != BLUE)
+    {
+        move_cursor(window.x + button.x, window.y + button.y);
+        for (uint16_t i = 1; i < button.len_y; i++)
+        {
+            move_cursor(window.x + button.x, window.y + button.y + i);
+            for (uint16_t j = 0; j < button.len_x; j++)
+            {
+                change_color(format_color(button.background_color, button.background_color), (uint16_t)1);
+                printf("%c", 0x20);
+            }
+        }
+    }
+
     /* ******************************** */
     /*          Top border              */
     /* ******************************** */
@@ -113,6 +127,11 @@ void draw_button(Window window, Button button)
     /* ******************************** */
     /*          Title                   */
     /* ******************************** */
+
+    if (button.background_color != BLUE)
+    {
+        change_color(format_color(button.background_color, button.foreground_color), (uint16_t)2);
+    }
 
     move_cursor(window.x + (button.x + 1), window.y + (button.y + 1));
     printf("%s", button.title);

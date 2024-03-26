@@ -495,9 +495,12 @@ void start_gui()
 
     /* ------------ */
 
-    for (int i = 0; i < 8; i++) 
+    for (int i = 0; i < 9; i++) 
     {
-        screen.windows[4].elements.button[i] = init_button(i * 5 + 2, 3, 3, 2, BLUE, 0xFFFF, "1", NULL);
+        uint16_t bg_colors[9] = {RED, YELLOW, GREEN, CYAN, BLACK, WHITE, LGRAY, BROWN, MAGENTA};
+        uint16_t fg_colors[9] = {WHITE, BLACK, WHITE, WHITE, WHITE, BLACK, WHITE, WHITE, WHITE};
+
+        screen.windows[4].elements.button[i] = init_button(i * 5 + 2, 3, 3, 2, bg_colors[i], fg_colors[i], "1", NULL);
     }
 
     /* ------------ */
@@ -536,6 +539,11 @@ void start_gui()
 
     /* ------------ */
 
+    Paint paint_struct;
+    paint_struct.background_color = RED;
+
+    /* ------------ */
+
     Shell shell_struct;
     shell_struct.index = 0;
 
@@ -544,6 +552,7 @@ void start_gui()
     Argument argument;
 
     argument.calculator = &calculator_struct;
+    argument.paint = &paint_struct;
     argument.shell = &shell_struct;
 
     screen.argument = &argument;
@@ -570,7 +579,7 @@ void start_gui()
         Button program_button = init_button(
             window_manager.x + margin_x + (width + margin_x) * col - 10,
             window_manager.y + margin_y + (height + margin_y) * row,
-            width, height, WHITE, BLUE, programs_names[i], p[i]);
+            width, height, BLUE, WHITE, programs_names[i], p[i]);
         
         window_manager.elements.button[i] = program_button;
         screen.windows[0] = window_manager;
@@ -580,10 +589,10 @@ void start_gui()
 
     draw_window_elements(screen.windows[0], 0);
 
-    /* change_color(format_color(BLUE, LRED));
-    putc('P'); */
-
+    change_color(format_color(BLUE, LRED), (uint16_t)35);
     printf("===> Pelly Operating System - 0.9.0\r\n");
+
+    change_color(format_color(BLUE, LGREN), (uint16_t)23);
     printf("Now with heap & GUI! %d\r\n", 30);
 
 keyboard_loop:
