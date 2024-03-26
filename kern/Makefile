@@ -2,9 +2,9 @@
 BUILD_DIR=$(abspath bin)
 ASM=nasm
 ASMFLAGS?=-f obj
-CC16?=/usr/bin/watcom/binl/wcc
+CC16?=wcc
 CFLAGS16?=-4 -d3 -s -wx -ms -zl -zq -za99 # -oneatxzh
-LD16?=/usr/bin/watcom/binl/wlink
+LD16?=wlink
 
 SOURCES_C=$(shell find -type f -name "*.c")
 SOURCES_ASM=$(shell find -type f -name "*.asm")
