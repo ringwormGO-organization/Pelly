@@ -31,6 +31,7 @@ uint16_t format_color(uint16_t background_color, uint16_t foreground_color)
 void keyboard_event(Screen* screen)
 {
     bool dont_draw = false; /* we are clicking one of paint's button if true, we are not drawing */
+    bool dont_write = false; /* we are clicking save button in notepad, do not enter '\r\n' in text variable */
 
     Window* current_window = &screen->windows[screen->active_window];
 
@@ -273,6 +274,17 @@ void keyboard_event(Screen* screen)
                     }
                 }
 
+                /* Perform actions of notepad's buttons */
+                else if (screen->active_window == 3)
+                {
+                    screen->argument->notepad->text[screen->argument->notepad->index] = '\0';
+                    screen->argument->notepad->index++;
+
+                    /* save a file */
+
+                    dont_write = true;
+                }
+
                 /* Perform actions of paint's buttons */
                 else if (screen->active_window == 4)
                 {
@@ -306,7 +318,19 @@ void keyboard_event(Screen* screen)
         }
     }
 
-    /* Perform actions regarding shell window */
+    /* Perform actions regarding notepad window */
+    if (screen->active_window == 3 && !dont_write)
+    {
+        move_cursor(current_window->x + 2, global_cursor.y + 1);
+
+        screen->argument->notepad->text[screen->argument->notepad->index] = '\r';
+        screen->argument->shell->index++;
+
+        screen->argument->notepad->text[screen->argument->notepad->index] = '\n';
+        screen->argument->shell->index++;
+    }
+
+    /* Perform actions regarding paint window */
     if (screen->active_window == 4 && !dont_draw)
     {
         change_color(format_color(BLUE, screen->argument->paint->background_color), (uint16_t)1);
@@ -386,7 +410,14 @@ void c_keyboard_loop(Screen* screen)
                     /* Update global cursor */
                     move_cursor(global_cursor.x - 1, global_cursor.y);
 
-                    if (screen->active_window == 6)
+                    /* Notepad window */
+                    if (screen->active_window == 3)
+                    {
+                        screen->argument->notepad->index--;
+                    }
+
+                    /* Shell window */
+                    else if (screen->active_window == 6)
                     {
                         screen->argument->shell->index--;
                     }
@@ -398,10 +429,26 @@ void c_keyboard_loop(Screen* screen)
                     // move_cursor(global_cursor.x + 1, global_cursor.y);
 
                     /**
+                     * If we are in notepad window, print character.
+                     * Otherwise, character printing is disabled as before. 
+                    */
+                    if (screen->active_window == 3)
+                    {
+                        printf("%c", ascii_code);
+                        move_cursor(global_cursor.x + 1, global_cursor.y);
+
+                        if (screen->argument->notepad->index != 179)
+                        {
+                            screen->argument->notepad->text[screen->argument->notepad->index] = ascii_code;
+                            screen->argument->notepad->index++;
+                        }
+                    }
+
+                    /**
                      * If we are in shell window, print character.
                      * Otherwise, character printing is disabled as before. 
                     */
-                    if (screen->active_window == 6)
+                    else if (screen->active_window == 6)
                     {
                         printf("%c", ascii_code);
                         move_cursor(global_cursor.x + 1, global_cursor.y);

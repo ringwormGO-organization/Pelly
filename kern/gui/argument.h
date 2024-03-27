@@ -32,6 +32,17 @@ typedef struct
 } Calculator;
 
 /**
+ * Struct holding notepad runtime info
+ * @param index current index in `text` array
+ * @param text content of current file
+*/
+typedef struct
+{
+    int index;
+    char text[180]; /* 36 (len_x - 4) * 5 (len_y - 11) */
+} Notepad;
+
+/**
  * Struct holding paint runtime info
  * @param background_color current background_color
 */
@@ -67,6 +78,7 @@ typedef struct
 /**
  * Struct holding information which is passed to program's function
  * @param calculator data needed for calculator program
+ * @param notepad data needed for notepad program
  * @param paint data needed for paint program
  * @param random data needed for random program
  * @param shell data needed for shell program
@@ -74,6 +86,7 @@ typedef struct
 typedef struct
 {
     Calculator* calculator;
+    Notepad* notepad;
     Paint* paint;
     Random* random;
     Shell* shell;

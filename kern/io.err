@@ -1,15 +1,15 @@
-io.c(81): Warning! W131: No prototype found for function 'strcmp'
-io.c(81): Warning! W308: The function 'strcmp' without prototyped parameters called
-io.c(81): Note! I2002: 'strcmp' defined in: io.c(81)
-io.c(86): Warning! W308: The function 'strcmp' without prototyped parameters called
-io.c(86): Note! I2002: 'strcmp' defined in: io.c(81)
-io.c(86): Warning! W308: The function 'strcmp' without prototyped parameters called
-io.c(86): Note! I2002: 'strcmp' defined in: io.c(81)
-io.c(94): Warning! W308: The function 'strcmp' without prototyped parameters called
-io.c(94): Note! I2002: 'strcmp' defined in: io.c(81)
-io.c(107): Warning! W308: The function 'strcmp' without prototyped parameters called
-io.c(107): Note! I2002: 'strcmp' defined in: io.c(81)
-io.c(158): Warning! W309: The function without prototyped parameters indirectly called
+io.c(82): Warning! W131: No prototype found for function 'strcmp'
+io.c(82): Warning! W308: The function 'strcmp' without prototyped parameters called
+io.c(82): Note! I2002: 'strcmp' defined in: io.c(82)
+io.c(87): Warning! W308: The function 'strcmp' without prototyped parameters called
+io.c(87): Note! I2002: 'strcmp' defined in: io.c(82)
+io.c(87): Warning! W308: The function 'strcmp' without prototyped parameters called
+io.c(87): Note! I2002: 'strcmp' defined in: io.c(82)
+io.c(95): Warning! W308: The function 'strcmp' without prototyped parameters called
+io.c(95): Note! I2002: 'strcmp' defined in: io.c(82)
+io.c(108): Warning! W308: The function 'strcmp' without prototyped parameters called
+io.c(108): Note! I2002: 'strcmp' defined in: io.c(82)
+io.c(159): Warning! W309: The function without prototyped parameters indirectly called
 gui/gui_elements/../../libc/../memory/allocator.h(26): Warning! W202: Symbol 'bitmap_size' has been defined, but not referenced
 gui/gui_elements/../../libc/../memory/allocator.h(25): Warning! W202: Symbol 'bitmap_pages' has been defined, but not referenced
 gui/gui_elements/../../libc/../memory/allocator.h(24): Warning! W202: Symbol 'bitmap' has been defined, but not referenced

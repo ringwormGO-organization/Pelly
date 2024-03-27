@@ -394,6 +394,8 @@ void notepad(Window program_window, Argument* argument)
     draw_window(program_window);
     draw_window_elements(program_window, 3);
 
+    move_cursor(program_window.x + 2, 11);
+
     return;
 }
 
@@ -504,8 +506,7 @@ void start_gui()
 
     /* ------------ */
 
-    screen.windows[3].elements.button[0] = init_button(2, 3, 6, 2, BLUE, WHITE, "Save", NULL);
-    screen.windows[3].elements.button[1] = init_button(10, 3, 6, 2, BLUE, WHITE, "Open", NULL);
+    screen.windows[3].elements.button[0] = init_button(2, 3, screen.windows[3].len_x - 4, 2, BLUE, WHITE, "Save", NULL);
 
     /* ------------ */
 
@@ -524,6 +525,7 @@ void start_gui()
     /* ------------ */
 
     /* screen.windows[6].elements.button[0] = init_button(2, 3, 9, 2, BLUE, WHITE, "Execute", NULL); */
+    /* screen.windows[6].elements.button[0] = init_button(2, 3, 8, 2, BLUE, WHITE, "Search", NULL); */
 
     /* -------------------------------- */
 
@@ -553,6 +555,11 @@ void start_gui()
 
     /* ------------ */
 
+    Notepad notepad_struct;
+    notepad_struct.index = 0;
+
+    /* ------------ */
+
     Paint paint_struct;
     paint_struct.background_color = RED;
 
@@ -571,6 +578,7 @@ void start_gui()
     Argument argument;
 
     argument.calculator = &calculator_struct;
+    argument.notepad = &notepad_struct;
     argument.paint = &paint_struct;
     argument.random = &random_struct;
     argument.shell = &shell_struct;
