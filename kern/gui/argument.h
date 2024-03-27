@@ -18,6 +18,7 @@ static uint16_t LCG_MODULUS = 65535; // 2^31
 #define EXPLORER_SIZE 5
 #define HISTORY_SIZE 5
 #define LINE_SIZE 60 /* len_x - 4 */
+#define OPEN_LINE_SIZE 21
 #define TEXT_SIZE 180 /* 36 (len_x - 4) * 5 (len_y - 11) */
 
 /**
@@ -44,11 +45,17 @@ typedef struct
  *        TODO: make BBFS write file structure to RAM, 
  *              implement read function for that,
  *              and don't use char arrays
+ * 
+ * @param open_index index for `open` array
+ * @param open array containing name of a file to open
 */
 typedef struct
 {
     int index;
     char* files[EXPLORER_SIZE];
+
+    int open_index;
+    char open[OPEN_LINE_SIZE];
 } FileExplorer;
 
 /**

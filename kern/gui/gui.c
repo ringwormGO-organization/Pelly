@@ -505,6 +505,7 @@ void start_gui(DISK diskA)
     /* ------------ */
 
     screen.windows[2].elements.button[0] = init_button(2, 3, 8, 2, BLUE, WHITE, "Search", NULL);
+    screen.windows[2].elements.button[1] = init_button(12, 3, 6, 2, BLUE, WHITE, "Open", NULL);
 
     /* ------------ */
 
@@ -559,6 +560,7 @@ void start_gui(DISK diskA)
 
     FileExplorer file_explorer_struct;
     file_explorer_struct.index = 0;
+    file_explorer_struct.open_index = 0;
 
     /* ------------ */
 

@@ -33,7 +33,7 @@ uint16_t format_color(uint16_t background_color, uint16_t foreground_color)
 void keyboard_event(Screen* screen)
 {
     bool dont_draw = false; /* we are clicking one of paint's button if true, we are not drawing */
-    bool dont_write = false; /* we are clicking save button in notepad, do not enter '\r\n' in text variable */
+    bool dont_write = false; /* we are clicking save button in notepad if true, do not enter '\r\n' in text variable */
 
     Window* current_window = &screen->windows[screen->active_window];
 
@@ -279,35 +279,109 @@ void keyboard_event(Screen* screen)
                 /* Perform actions of file explorer's window */
                 else if (screen->active_window == 2)
                 {
-                    move_cursor(current_window->x + 2, global_cursor.y + 2);
-                    printf("FAT: \r\n");
-                    move_cursor(current_window->x + 2, global_cursor.y + 1);
-
                     FAT_File far* fd = FAT_Open(&screen->diskA, "/");
                     FAT_DirectoryEntry entry;
-                    int i = 0;
-                    while (FAT_ReadEntry(&screen->diskA, fd, &entry) && i++ < 5)
+
+                    /* Search button */
+                    if (j == 0)
                     {
-                        printf("  ");
-                        for (int i = 0; i < 11; i++)
-                            putc(entry.Name[i]);
-
-                        printf("\r\n");
+                        move_cursor(current_window->x + 2, global_cursor.y + 2);
+                        printf("FAT: \r\n");
                         move_cursor(current_window->x + 2, global_cursor.y + 1);
+
+                        int i = 0;
+                        while (FAT_ReadEntry(&screen->diskA, fd, &entry) && i++ < 5)
+                        {
+                            printf("  ");
+                            for (int i = 0; i < 11; i++)
+                                putc(entry.Name[i]);
+
+                            printf("\r\n");
+                            move_cursor(current_window->x + 2, global_cursor.y + 1);
+                        }
+                        FAT_Close(fd);
+
+                        /* -------------------- */
+
+                        printf("BBFS v2: \r\n");
+                        move_cursor(current_window->x + 2, global_cursor.y + 1);
+
+                        for (int i = 0; i < screen->argument->file_explorer->index; i++)
+                        {
+                            printf("  %s\r\n", screen->argument->file_explorer->files[i]);
+                            move_cursor(current_window->x + 2, global_cursor.y + 1);
+                        }
                     }
-                    FAT_Close(fd);
 
-                    /* -------------------- */
-
-                    printf("BBFS v2: \r\n");
-                    move_cursor(current_window->x + 2, global_cursor.y + 1);
-
-                    for (int i = 0; i < screen->argument->file_explorer->index; i++)
+                    /* Open button */
+                    else if (j == 1)
                     {
-                        printf("  %s\r\n", screen->argument->file_explorer->files[i]);
-                        move_cursor(current_window->x + 2, global_cursor.y + 1);
+                        char file_system[5];
+                        char path[OPEN_LINE_SIZE - 5];
+
+                        screen->argument->file_explorer->open[screen->argument->file_explorer->open_index] = '\0';
+
+                        for (int i = 0; i < screen->argument->file_explorer->open_index; i++)
+                        {
+                            if (i < 4)
+                            {
+                                file_system[i] = screen->argument->file_explorer->open[i];
+                            }
+
+                            file_system[5] = '\0';
+
+                            if (i >= 4)
+                            {
+                                path[i - 4] = screen->argument->file_explorer->open[i];
+                            }
+                        }
+
+                        path[screen->argument->file_explorer->open_index] = '\0';
+
+                        char* file_system_str = file_system;
+                        char* path_str = path;
+
+                        if (strcmp(file_system_str, "fat/") == 0)
+                        {
+                            /* TODO */
+                        }
+
+                        else if (strcmp(file_system_str, "ram/") == 0)
+                        {
+                            bool found = false;
+
+                            char temp[12];
+                            for (int i = 0; i < screen->argument->file_explorer->index; i++)
+                            {
+                                strncpy(temp, screen->argument->file_explorer->files[i], 11);
+
+                                char* tmp = temp;
+                                if (strcmp(tmp, path_str) <= 0)
+                                {
+                                    move_cursor(current_window->x + 2, global_cursor.y + 2);
+                                    printf("File: %s\r\n", screen->argument->file_explorer->files[i]);
+                                    move_cursor(current_window->x + 2, global_cursor.y + 1);
+
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (found == false)
+                            {
+                                move_cursor(current_window->x + 2, global_cursor.y + 2);
+                                printf("File (%s) not found!", path_str);
+                                move_cursor(current_window->x + 2, global_cursor.y + 1);
+                            }
+                        }
+
+                        for (int i = 0; i < screen->argument->file_explorer->open_index; i++)
+                        {
+                            screen->argument->file_explorer->open[i] = ' ';
+                        }
+
+                        screen->argument->file_explorer->open_index = 0;
                     }
-                    
                 }
 
                 /* Perform actions of notepad's buttons */
@@ -456,8 +530,14 @@ void c_keyboard_loop(Screen* screen)
                     /* Update global cursor */
                     move_cursor(global_cursor.x - 1, global_cursor.y);
 
+                    /* File explorer window */
+                    if (screen->active_window == 2)
+                    {
+                        screen->argument->file_explorer->open_index--;
+                    }
+
                     /* Notepad window */
-                    if (screen->active_window == 3)
+                    else if (screen->active_window == 3)
                     {
                         screen->argument->notepad->index--;
                     }
@@ -475,10 +555,26 @@ void c_keyboard_loop(Screen* screen)
                     // move_cursor(global_cursor.x + 1, global_cursor.y);
 
                     /**
+                     * If we are in file explorer window, print character.
+                     * Otherwise, character printing is disabled as before. 
+                    */
+                    if (screen->active_window == 2)
+                    {
+                        printf("%c", ascii_code);
+                        move_cursor(global_cursor.x + 1, global_cursor.y);
+
+                        if (screen->argument->file_explorer->open_index != OPEN_LINE_SIZE - 1)
+                        {
+                            screen->argument->file_explorer->open[screen->argument->file_explorer->open_index] = ascii_code;
+                            screen->argument->file_explorer->open_index++;
+                        }
+                    }
+
+                    /**
                      * If we are in notepad window, print character.
                      * Otherwise, character printing is disabled as before. 
                     */
-                    if (screen->active_window == 3)
+                    else if (screen->active_window == 3)
                     {
                         printf("%c", ascii_code);
                         move_cursor(global_cursor.x + 1, global_cursor.y);
