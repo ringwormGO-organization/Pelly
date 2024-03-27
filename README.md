@@ -5,6 +5,8 @@
 
 Named after [river Pelly](https://www.google.com/maps/place/Pelly+River/@62.294708,-134.7159487,8z/data=!3m1!4b1!4m5!3m4!1s0x5150567ab729172f:0x2429c8233184845e!8m2!3d62.285926!4d-133.6080992) near [Pelly Crossing](https://www.google.com/maps/place/Pelly+Crossing,+YT,+Canada/@62.8257353,-136.5785531,14.33z/data=!4m5!3m4!1s0x514e2eec14cd51e1:0x3a02c1697ff0e317!8m2!3d62.817979!4d-136.568795)
 
+[v1.0.0](https://github.com/ringwormGO-organization/Pelly/releases/tag/v1.0.0)
+
 ## Compile Pelly
 
 ### Required packages
