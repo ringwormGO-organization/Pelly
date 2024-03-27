@@ -445,7 +445,7 @@ void shell(Window program_window, Argument* argument)
 // 0x0a - \r\n
 // 0x0d - \r
 
-void start_gui()
+void start_gui(DISK diskA)
 {
     clear_screen();
     move_cursor(0, 0);
@@ -457,6 +457,8 @@ void start_gui()
     screen.len_x = 80;
     screen.len_y = 25;
 
+    screen.diskA = diskA;
+
     /* -------------------------------- */
 
     Window window_manager = init_window(12, 5, 40, 15, BLUE, WHITE, "Window manager", false);
@@ -465,7 +467,7 @@ void start_gui()
     Window calculator_window = init_window(12, 3, 40, 20, BLUE, WHITE, "Calculator", false);
     screen.windows[1] = calculator_window;
 
-    Window file_explorer_window = init_window(12, 5, 40, 15, BLUE, WHITE, "File Explorer", false);
+    Window file_explorer_window = init_window(12, 1, 40, 23, BLUE, WHITE, "File Explorer", false);
     screen.windows[2] = file_explorer_window;
 
     Window notepad_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Notepad", false);
@@ -477,7 +479,7 @@ void start_gui()
     Window random_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Random", false);
     screen.windows[5] = random_window;
 
-    Window shell_window = init_window(4, 5, 60, 15, BLUE, WHITE, "Shell", false);
+    Window shell_window = init_window(4, 5, 64, 15, BLUE, WHITE, "Shell", false);
     screen.windows[6] = shell_window;
 
     /* Window web_browser_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Web browser", false);
@@ -555,6 +557,11 @@ void start_gui()
 
     /* ------------ */
 
+    FileExplorer file_explorer_struct;
+    file_explorer_struct.index = 0;
+
+    /* ------------ */
+
     Notepad notepad_struct;
     notepad_struct.index = 0;
 
@@ -578,6 +585,7 @@ void start_gui()
     Argument argument;
 
     argument.calculator = &calculator_struct;
+    argument.file_explorer = &file_explorer_struct;
     argument.notepad = &notepad_struct;
     argument.paint = &paint_struct;
     argument.random = &random_struct;
@@ -618,10 +626,10 @@ void start_gui()
     draw_window_elements(screen.windows[0], 0);
 
     change_color(format_color(BLUE, LRED), (uint16_t)35);
-    printf("===> Pelly Operating System - 0.9.0\r\n");
+    printf("===> Pelly Operating System - 1.0.0\r\n");
 
-    change_color(format_color(BLUE, LGREN), (uint16_t)23);
-    printf("Now with heap & GUI! %d\r\n", 30);
+    change_color(format_color(BLUE, LGREN), (uint16_t)34);
+    printf("Now with BBFS, GUI, heap & IVT! %d\r\n", 30);
 
 keyboard_loop:
     move_cursor(0, 0);

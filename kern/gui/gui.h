@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "../filesystem/fat.h"
 #include "../io.h"
 #include "../memory/memory.h"
 #include "../stdio.h"
@@ -74,6 +75,7 @@ typedef struct screen_T
     int active_window;
 
     Argument* argument;
+    DISK diskA;
 } Screen;
 
 /* ------------------------------------------------------------------------- */
@@ -183,5 +185,6 @@ void clear_window(Window window);
 
 /**
  * Entry point for GUI
+ * @param diskA diskA (FAT disk)
 */
-void start_gui();
+void start_gui(DISK diskA);

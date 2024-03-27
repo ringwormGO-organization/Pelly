@@ -7,7 +7,9 @@
 
 #include "io.h"
 
+#include "filesystem/fat.h"
 #include "gui/gui.h"
+#include "libc/string.h"
 
 int _cdecl cursor_x;
 int _cdecl cursor_y;
@@ -274,15 +276,59 @@ void keyboard_event(Screen* screen)
                     }
                 }
 
+                /* Perform actions of file explorer's window */
+                else if (screen->active_window == 2)
+                {
+                    move_cursor(current_window->x + 2, global_cursor.y + 2);
+                    printf("FAT: \r\n");
+                    move_cursor(current_window->x + 2, global_cursor.y + 1);
+
+                    FAT_File far* fd = FAT_Open(&screen->diskA, "/");
+                    FAT_DirectoryEntry entry;
+                    int i = 0;
+                    while (FAT_ReadEntry(&screen->diskA, fd, &entry) && i++ < 5)
+                    {
+                        printf("  ");
+                        for (int i = 0; i < 11; i++)
+                            putc(entry.Name[i]);
+
+                        printf("\r\n");
+                        move_cursor(current_window->x + 2, global_cursor.y + 1);
+                    }
+                    FAT_Close(fd);
+
+                    /* -------------------- */
+
+                    printf("BBFS v2: \r\n");
+                    move_cursor(current_window->x + 2, global_cursor.y + 1);
+
+                    for (int i = 0; i < screen->argument->file_explorer->index; i++)
+                    {
+                        printf("  %s\r\n", screen->argument->file_explorer->files[i]);
+                        move_cursor(current_window->x + 2, global_cursor.y + 1);
+                    }
+                    
+                }
+
                 /* Perform actions of notepad's buttons */
                 else if (screen->active_window == 3)
                 {
+                    if (screen->argument->file_explorer->index >= EXPLORER_SIZE)
+                    {
+                        printf("No space left!");
+                        return;
+                    }
+
                     screen->argument->notepad->text[screen->argument->notepad->index] = '\0';
                     screen->argument->notepad->index++;
 
-                    /* save a file */
+                    char* text = screen->argument->notepad->text;
+                    screen->argument->file_explorer->files[screen->argument->file_explorer->index] = strdup(text);
 
+                    screen->argument->file_explorer->index++;
                     dont_write = true;
+
+                    screen->argument->notepad->index = 0;
                 }
 
                 /* Perform actions of paint's buttons */
@@ -437,7 +483,7 @@ void c_keyboard_loop(Screen* screen)
                         printf("%c", ascii_code);
                         move_cursor(global_cursor.x + 1, global_cursor.y);
 
-                        if (screen->argument->notepad->index != 179)
+                        if (screen->argument->notepad->index != TEXT_SIZE - 1)
                         {
                             screen->argument->notepad->text[screen->argument->notepad->index] = ascii_code;
                             screen->argument->notepad->index++;
@@ -453,7 +499,7 @@ void c_keyboard_loop(Screen* screen)
                         printf("%c", ascii_code);
                         move_cursor(global_cursor.x + 1, global_cursor.y);
 
-                        if (screen->argument->shell->index != 59)
+                        if (screen->argument->shell->index != LINE_SIZE - 1)
                         {
                             screen->argument->shell->index++;
                             screen->argument->shell->line[screen->argument->shell->index] = ascii_code;

@@ -1,3 +1,9 @@
+/**
+ * @author Stjepan Bilić Matišić, Andrej Bartulin
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main header file for BBFS
+*/
 
 #pragma once
 
@@ -41,16 +47,16 @@ typedef enum
 
 bool _file_sys_not_recognized;
 
-void bbfs_get_disk_params(char disk_label[10], 
+void bbfs_v2_get_disk_params(char disk_label[10], 
                           uint8_t block_size,
                           char file_sys[8],
                           uint16_t device);
 
-int bbfs_write_block(void far* block_address_dest,
+int bbfs_v2_write_block(void far* block_address_dest,
                      void far* block_address_src,
                      uint16_t num_bytes);
 
-int bbfs_read_block(void far* block_address_src,
+int bbfs_v2_read_block(void far* block_address_src,
                      uint8_t buffer[512],
                      uint16_t num_bytes);
 

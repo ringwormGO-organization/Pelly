@@ -1,3 +1,9 @@
+/**
+ * @author Stjepan Bilić Matišić, Andrej Bartulin
+ * PROJECT: Pelly
+ * LICENSE: MIT
+ * DESCRIPTION: Main C file for BBFS
+*/
 
 #include "bbfs.h"
 
@@ -10,31 +16,43 @@
  *  For now it is only in RAM because if we try to
  *  write data to the disk FAT12 starts complaining.
  * 
- *  Also we only support BBFS v2.
- * 
  *  Oh btw: if you ever question why does every
  *  function end with (function_name)_end label
  *  it is because I like using goto statements!
  * 
  *  TODO: tell FAT to stfu and write to disk.
- */
+ *  TODO: write file structure
+*/
 
 /**
- *  bbfs_get_disk_params:
+ *          Bad Block File System v3
+ *          ------------------------
+ *      Bad Block File System v2 or BBFS v3 is
+ *  the third edition of a bad file system. Uses
+ *  diskB for storage
+ * 
+ * TODO: make everything more optimized
+ * TODO: write file structure
+*/
+
+/* ------------------------------------ */
+
+/**
  *      read the first sector of the disk
  *      to get parameters.
  * 
- *  paremeters:
- *      disk_label[10] - 10 bytes for the disk
- *                       label (starting from the 
+ *      @param disk_label[10]   10 bytes for the disk
+ *                              label (starting from the 
  *                              3rd byte)
  * 
- *      block_size  -   1 byte, practically useless
+ *      @param block_size       1 byte, practically useless
  * 
- *      file_sys[8] -   file system id, used to check
- *                      if either BBFS v1 or BBFS v2
+ *      @param file_sys[8]      file system id, used to check
+ *                              if either BBFS v1 or BBFS v2
+ * 
+ *      @param device           disk ID
  */
-void bbfs_get_disk_params(char disk_label[10], 
+void bbfs_v2_get_disk_params(char disk_label[10], 
                           uint8_t block_size,
                           char file_sys[8],
                           uint16_t device)
@@ -48,9 +66,11 @@ void bbfs_get_disk_params(char disk_label[10],
         file_sys[x-15]= buffer[x];
 
     if (strcmp(file_sys, "BBFS V02") != 0) {
-        printf(" file system not recognized.\r\n");
-        _file_sys_not_recognized = true;
-        goto _end_bbfs_d_params;
+        /* TODO: format diskB properly */
+
+        // printf(" file system not recognized.\r\n");
+        _file_sys_not_recognized = false;
+        // goto _end_bbfs_d_params;
     }
 
     for (uint16_t x = 3; x <= 13; x++)
@@ -72,17 +92,17 @@ _end_bbfs_d_params:
  *      written differently, but we need compatibility
  *      with OS/1 v5.4.0
  * 
- *      @param block_address_src - source of data to write
- *      
  *      @param block_address_dest - destination of where
  *                           to write the data
+ * 
+ *      @param block_address_src - source of data to write
  * 
  *      @param num_bytes - number of bytes to write
  * 
  *      @return `BBFS_v3_error` enum value
  *
  */
-int bbfs_write_block(void far* block_address_dest,
+int bbfs_v2_write_block(void far* block_address_dest,
                      void far* block_address_src,
                      uint16_t num_bytes)
 {
@@ -119,7 +139,7 @@ int bbfs_write_block(void far* block_address_dest,
  *      @return `BBFS_v3_error` enum value
  *
  */
-int bbfs_read_block(void far* block_address_src,
+int bbfs_v2_read_block(void far* block_address_src,
                      uint8_t buffer[512],
                      uint16_t num_bytes)
 {
