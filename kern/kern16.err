@@ -8,3 +8,6 @@ memory/allocator.h(25): Warning! W202: Symbol 'bitmap_pages' has been defined, b
 memory/allocator.h(24): Warning! W202: Symbol 'bitmap' has been defined, but not referenced
 memory/allocator.h(23): Warning! W202: Symbol 'free_memory' has been defined, but not referenced
 memory/allocator.h(26): Warning! W202: Symbol 'bitmap_size' has been defined, but not referenced
+gui/argument.h(14): Warning! W202: Symbol 'LCG_INCREMENT' has been defined, but not referenced
+gui/argument.h(13): Warning! W202: Symbol 'LCG_MULTIPLIER' has been defined, but not referenced
+gui/argument.h(15): Warning! W202: Symbol 'LCG_MODULUS' has been defined, but not referenced

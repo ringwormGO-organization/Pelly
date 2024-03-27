@@ -406,11 +406,22 @@ void paint(Window program_window, Argument* argument)
     return;
 }
 
-void shell(Window program_window, Argument* argument)
+void random(Window program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
     draw_window_elements(program_window, 5);
+
+    argument->random->lcg_seed = 1234;
+
+    return;
+}
+
+void shell(Window program_window, Argument* argument)
+{
+    clear_screen();
+    draw_window(program_window);
+    draw_window_elements(program_window, 6);
 
     move_cursor(program_window.x + 2, program_window.y + 3);
 
@@ -420,14 +431,14 @@ void shell(Window program_window, Argument* argument)
     return;
 }
 
-void web_browser(Window program_window, Argument* argument)
+/* void web_browser(Window program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
     draw_window_elements(program_window, 6);
 
     return;
-}
+} */
 
 // 0x0a - \r\n
 // 0x0d - \r
@@ -461,11 +472,14 @@ void start_gui()
     Window paint_window = init_window(5, 5, 55, 17, BLUE, WHITE, "Paint", false);
     screen.windows[4] = paint_window;
 
-    Window shell_window = init_window(4, 5, 60, 15, BLUE, WHITE, "Shell", false);
-    screen.windows[5] = shell_window;
+    Window random_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Random", false);
+    screen.windows[5] = random_window;
 
-    Window web_browser_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Web browser", false);
-    screen.windows[6] = web_browser_window;
+    Window shell_window = init_window(4, 5, 60, 15, BLUE, WHITE, "Shell", false);
+    screen.windows[6] = shell_window;
+
+    /* Window web_browser_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Web browser", false);
+    screen.windows[6] = web_browser_window; */
 
     /* ------------ */
 
@@ -505,11 +519,11 @@ void start_gui()
 
     /* ------------ */
 
-    /* screen.windows[5].elements.button[0] = init_button(2, 3, 9, 2, BLUE, WHITE, "Execute", NULL); */
+    screen.windows[5].elements.button[0] = init_button(2, 3, 10, 2, BLUE, WHITE, "Generate", NULL);
 
     /* ------------ */
 
-    screen.windows[6].elements.button[0] = init_button(2, 3, 8, 2, BLUE, WHITE, "Search", NULL);
+    /* screen.windows[6].elements.button[0] = init_button(2, 3, 9, 2, BLUE, WHITE, "Execute", NULL); */
 
     /* -------------------------------- */
 
@@ -544,6 +558,11 @@ void start_gui()
 
     /* ------------ */
 
+    Random random_struct;
+    random_struct.lcg_seed = 0;
+
+    /* ------------ */
+
     Shell shell_struct;
     shell_struct.index = 0;
 
@@ -553,15 +572,16 @@ void start_gui()
 
     argument.calculator = &calculator_struct;
     argument.paint = &paint_struct;
+    argument.random = &random_struct;
     argument.shell = &shell_struct;
 
     screen.argument = &argument;
 
     char* programs_names[6] = { "Calc", "Explorer", "Notepad", 
-                                "Paint", "Shell", "Web"};
+                                "Paint", "Random", "Shell"};
 
     void (*p[6]) (Window, Argument*) = {  calculator, file_explorer, notepad,
-                            paint, shell, web_browser};
+                            paint, random, shell};
 
     for (int i = 0; i < 6; i++)
     {

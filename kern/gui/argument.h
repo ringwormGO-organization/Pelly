@@ -9,6 +9,11 @@
 
 #include "../stdint.h"
 
+/* Constants for the LCG algorithm */
+static uint16_t LCG_MULTIPLIER = 33676;
+static uint16_t LCG_INCREMENT = 12345;
+static uint16_t LCG_MODULUS = 65535; // 2^31
+
 /**
  * Struct holding calculator runtime info
  * @param first_number first number entered in calculator
@@ -36,6 +41,15 @@ typedef struct
 } Paint;
 
 /**
+ * Struct holding random program runtime info
+ * @param lcg_seed current seed
+*/
+typedef struct
+{
+    uint16_t lcg_seed;
+} Random;
+
+/**
  * Struct holding shell runtime info
  * @param index current index in `line` array
  * 
@@ -54,11 +68,13 @@ typedef struct
  * Struct holding information which is passed to program's function
  * @param calculator data needed for calculator program
  * @param paint data needed for paint program
+ * @param random data needed for random program
  * @param shell data needed for shell program
 */
 typedef struct
 {
     Calculator* calculator;
     Paint* paint;
+    Random* random;
     Shell* shell;
 } Argument;

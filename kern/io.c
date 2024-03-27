@@ -53,7 +53,7 @@ void keyboard_event(Screen* screen)
     }
 
     /* Perform actions regarding shell window */
-    if (screen->active_window == 5)
+    if (screen->active_window == 6)
     {
         if (global_cursor.y + 2 >= current_window->y + current_window->len_y)
         {
@@ -282,6 +282,25 @@ void keyboard_event(Screen* screen)
                     dont_draw = true;
                 }
 
+                /* Perform actions on random's window */
+                else if (screen->active_window == 5)
+                {
+                    screen->argument->random->lcg_seed = (LCG_MULTIPLIER * screen->argument->random->lcg_seed + LCG_INCREMENT) % LCG_MODULUS;
+
+                    uint16_t min = 0;
+                    uint16_t max = 100;
+                    
+                    uint16_t result = min + screen->argument->random->lcg_seed % (max - min + 1);
+
+                    uint16_t old_x = global_cursor.x;
+                    uint16_t old_y = global_cursor.y;
+
+                    move_cursor(current_window->x + 2, global_cursor.y + 3);
+                    printf("Random number is: %d!", result);
+
+                    move_cursor(old_x, old_y);
+                }
+
                 break;
             }
         }
@@ -367,7 +386,7 @@ void c_keyboard_loop(Screen* screen)
                     /* Update global cursor */
                     move_cursor(global_cursor.x - 1, global_cursor.y);
 
-                    if (screen->active_window == 5)
+                    if (screen->active_window == 6)
                     {
                         screen->argument->shell->index--;
                     }
@@ -382,7 +401,7 @@ void c_keyboard_loop(Screen* screen)
                      * If we are in shell window, print character.
                      * Otherwise, character printing is disabled as before. 
                     */
-                    if (screen->active_window == 5)
+                    if (screen->active_window == 6)
                     {
                         printf("%c", ascii_code);
                         move_cursor(global_cursor.x + 1, global_cursor.y);
