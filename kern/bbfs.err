@@ -1,6 +1,6 @@
 filesystem/bbfs.c(103): Warning! W131: No prototype found for function 'memcpy'
-filesystem/bbfs.c(178): Warning! W303: Parameter 'data' has been defined, but not referenced
-filesystem/bbfs.c(227): Warning! W107: Missing return value for function 'bbfs_v3_search_for_file'
+filesystem/bbfs.c(194): Warning! W303: Parameter 'data' has been defined, but not referenced
+filesystem/bbfs.c(243): Warning! W107: Missing return value for function 'bbfs_v3_search_for_file'
 filesystem/bbfs.c(103): Warning! W308: The function 'memcpy' without prototyped parameters called
 filesystem/bbfs.c(103): Note! I2002: 'memcpy' defined in: filesystem/bbfs.c(103)
 filesystem/bbfs.c(140): Warning! W308: The function 'memcpy' without prototyped parameters called

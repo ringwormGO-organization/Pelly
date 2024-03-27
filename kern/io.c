@@ -39,7 +39,9 @@ void keyboard_event(Screen* screen)
     {
         if (screen->active_window != 0)
         {
-            clear_window(*current_window);
+            // clear_window(*current_window);
+
+            clear_screen();
 
             draw_window(screen->windows[0]);
             screen->active_window = 0;
@@ -58,6 +60,7 @@ void keyboard_event(Screen* screen)
             clear_window(*current_window);
             draw_window(*current_window);
             draw_window_elements(*current_window, screen->active_window);
+            move_cursor(current_window->x + 2, global_cursor.y + 1);
         }
 
         move_cursor(current_window->x + 2, global_cursor.y + 2);
@@ -78,6 +81,41 @@ void keyboard_event(Screen* screen)
         if (strcmp(command, "about") == 0)
         {
             printf("Pelly (v0.9.0) is a 16-bit operating system!");
+        }
+
+        else if (strcmp(command, "clear") == 0 || strcmp(command, "cls") == 0)
+        {
+            clear_window(*current_window);
+            draw_window(*current_window);
+            draw_window_elements(*current_window, screen->active_window);
+            move_cursor(current_window->x + 2, global_cursor.y + 1);
+        }
+
+        else if (strcmp(command, "exit") == 0)
+        {
+            // clear_window(*current_window);
+
+            clear_screen();
+
+            draw_window(screen->windows[0]);
+            screen->active_window = 0;
+
+            draw_window_elements(screen->windows[0], 0);
+            return;
+        }
+
+        else if(strcmp(command, "help") == 0)
+        {
+            printf("about - something about Pelly");
+
+            move_cursor(current_window->x + 2, global_cursor.y + 1);
+            printf("clear/cls - clear shell window");
+
+            move_cursor(current_window->x + 2, global_cursor.y + 1);
+            printf("exit - exit shell window");
+
+            move_cursor(current_window->x + 2, global_cursor.y + 1);
+            printf("help - get list of available commands");
         }
 
         else
@@ -128,11 +166,23 @@ void keyboard_event(Screen* screen)
                         if (screen->argument->calculator->is_first_number == true)
                         {
                             screen->argument->calculator->first_number = screen->argument->calculator->first_number * 10 + j;
+
+                            move_cursor(current_window->x + 19, 22);
+                            printf("                         ");
+
+                            move_cursor(current_window->x + 19, 22);
+                            printf("First number is: %d", screen->argument->calculator->first_number);
                         }
 
                         else if (screen->argument->calculator->is_first_number == false)
                         {
                             screen->argument->calculator->second_number = screen->argument->calculator->second_number * 10 + j;
+
+                            move_cursor(current_window->x + 19, 22);
+                            printf("                         ");
+
+                            move_cursor(current_window->x + 19, 22);
+                            printf("Second number is: %d", screen->argument->calculator->second_number);
                         }
                     }
 
