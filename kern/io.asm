@@ -2,7 +2,7 @@
 ; @author Andrej Bartulin, Stjepan Bilić Matišić
 ; PROJECT: Pelly
 ; LICENSE: MIT
-; DESCRIPTION: Main assembly file for GUI
+; DESCRIPTION: Main assembly file for IO
 ;
 
 bits     16
@@ -14,10 +14,10 @@ extern _cursor_y
 _ascii_code:    dw  0
 
 ;
-;   _move_cursor -> set dh & dl to corresponding position
+;   _move_real_cursor -> set dh & dl to corresponding position
 ;
-global _move_keyboard
-_move_keyboard:
+global _move_real_cursor
+_move_real_cursor:
     ; make new call frame
     push bp             ; save old call frame
     mov bp, sp          ; initialize new call frame
@@ -46,6 +46,20 @@ _move_keyboard:
     ; restore old call frame
     mov sp, bp
     pop bp
+
+    ret
+
+;
+;   _get_real_cursor_position -> get cursor position
+;
+global  _get_real_cursor_position
+_get_real_cursor_position:
+    mov ah, 0x03
+    mov bh, 0
+    int 0x10
+
+    mov [_cursor_x], dl
+    mov [_cursor_y], dh
 
     ret
 
@@ -88,13 +102,13 @@ _asm_keyboard_loop:
 
     .backspace:
         ; Go left (0x08)
-        mov ah, 0x0e
-        mov al, 0x08
-        int     0x10
+        ; mov ah, 0x0e
+        ; mov al, 0x08
+        ; int     0x10
 
         ; Print space (delete character)
-        mov al, ' '
-        int     0x10
+        ; mov al, ' '
+        ; int     0x10
 
         ret
 
@@ -102,7 +116,7 @@ _asm_keyboard_loop:
         ; Go to END OF TEXT
         ; mov ah, 0x0e
         ; mov al, 0x0a
-        ; int 0x10
+        ; int 0x1
 
         ; Go to CARRIAGE RETURN
         ; mov ah, 0x0e
@@ -212,20 +226,6 @@ _right_cursor:
 
     .return:
         ret
-
-;
-;   _get_cursor_position -> get cursor postions
-;
-global  _get_cursor_position
-_get_cursor_position:
-    mov ah, 0x03
-    mov bh, 0
-    int 0x10
-
-    mov [_cursor_x], dl
-    mov [_cursor_y], dh
-
-    ret
 
 ;
 ;   _clear_screen -> clears the screen (80x25 res.), disable blinking

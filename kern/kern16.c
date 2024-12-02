@@ -19,8 +19,8 @@ void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
-    global_cursor.x = 0;
-    global_cursor.y = 0;
+    cursor_x = 0;
+    cursor_y = 0;
 
     printf("===> Pelly Operating System - 1.0.0\r\n");
     printf("Now with BBFS, GUI, heap & IVT! %d\r\n", 30);
@@ -115,12 +115,6 @@ void _cdecl kstart_(uint16_t bootDrive)
     printf("FILE ID: %d\r\n", test_id); */
 
     /* -------------------------------- */
-
-    get_low_memory();
-    get_used_memory();
-
-    printf("Free lower memory: %d\r\n", low_memory);
-    printf("Used memory: %d\r\n", used_memory);
 
     detect_memory();
 

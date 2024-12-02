@@ -11,23 +11,6 @@
 #include "x86.h"
 #include "io.h"
 
-#include "gui/cursor.h"
-#include "gui/error.h"
-
-struct cursor_T;
-
-/**
- * Virtual cursor
-*/
-struct cursor_T global_cursor;
-
-/**
- * Move virtual and real cursor
- * @param x
- * @param y
-*/
-void move_cursor(uint16_t x, uint16_t y);
-
 void putc(char c);
 void puts(const char* str);
 void puts_f(const char far* str);

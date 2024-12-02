@@ -1,10 +1,4 @@
 
-extern _low_memory
-_low_memory: dw 0
-
-extern _used_memory
-_used_memory: dw 0
-
 extern _entry_count
 _entry_count: dw 0
 
@@ -13,49 +7,6 @@ _segment: dw 0
 
 extern _offset
 _offset: dw 0
-
-;
-;   _get_low_memory -> get lower memory using int 0x12
-;
-global _get_low_memory
-_get_low_memory:
-    ; Clear carry flag
-    clc
- 
-    ; Switch to the BIOS (= request low memory size)
-    int 0x12
- 
-    ; The carry flag is set if it failed
-    jc .error
- 
-    ; AX = amount of continuous memory in KB starting from 0.
-    mov [_low_memory], byte ax
-	
-    ret
-
-    .error:
-        ret
-
-;
-;   _get_used_memory -> get used upper memory using int 0x15
-;   TODO: needs verification
-;
-global _get_used_memory
-_get_used_memory:
-    clc
-
-    mov ah, 0x8A
-    int 0x15
-
-    mov [_used_memory], dx
-    ret
-
-    .error:
-        mov ax, 0x0e
-        mov ah, 'E'
-
-        int 0x10
-        ret
 
 ;
 ;   _e820 -> call _do_e820 function from assembly to not get random garbage

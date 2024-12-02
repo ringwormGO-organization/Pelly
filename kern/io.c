@@ -2,7 +2,7 @@
  * @author Andrej Bartulin, Stjepan Bilić Matišić
  * PROJECT: Pelly
  * LICENSE: MIT
- * DESCRIPTION: Main C file for IO
+ * DESCRIPTION: Main C file for IO and GUI events
 */
 
 #include "io.h"
@@ -37,8 +37,10 @@ void keyboard_event(Screen* screen)
 
     Window* current_window = &screen->windows[screen->active_window];
 
+    get_real_cursor_position();
+
     /* Check if close window button is pressed */
-    if (global_cursor.x == current_window->x + 1 && global_cursor.y == current_window->y)
+    if (cursor_x == current_window->x + 1 && cursor_y == current_window->y)
     {
         if (screen->active_window != 0)
         {
@@ -58,21 +60,21 @@ void keyboard_event(Screen* screen)
     /* Perform actions regarding shell window */
     if (screen->active_window == 6)
     {
-        if (global_cursor.y + 2 >= current_window->y + current_window->len_y)
+        if (cursor_y + 2 >= current_window->y + current_window->len_y)
         {
             clear_window(*current_window);
             draw_window(*current_window);
             draw_window_elements(*current_window, screen->active_window);
-            move_cursor(current_window->x + 2, global_cursor.y + 1);
+            move_real_cursor(current_window->x + 2, cursor_y + 1);
         }
 
-        move_cursor(current_window->x + 2, global_cursor.y + 2);
+        move_real_cursor(current_window->x + 2, cursor_y + 2);
 
         /* execute command */
         char parsed_line[60];
         char* command;
 
-        move_cursor(current_window->x + 2, global_cursor.y - 1);
+        move_real_cursor(current_window->x + 2, cursor_y - 1);
         for (int i = 1; i < screen->argument->shell->index + 1; i++)
         {
             parsed_line[i - 1] = screen->argument->shell->line[i];
@@ -91,7 +93,7 @@ void keyboard_event(Screen* screen)
             clear_window(*current_window);
             draw_window(*current_window);
             draw_window_elements(*current_window, screen->active_window);
-            move_cursor(current_window->x + 2, global_cursor.y + 1);
+            move_real_cursor(current_window->x + 2, cursor_y + 1);
         }
 
         else if (strcmp(command, "exit") == 0)
@@ -111,13 +113,13 @@ void keyboard_event(Screen* screen)
         {
             printf("about - something about Pelly");
 
-            move_cursor(current_window->x + 2, global_cursor.y + 1);
+            move_real_cursor(current_window->x + 2, cursor_y + 1);
             printf("clear/cls - clear shell window");
 
-            move_cursor(current_window->x + 2, global_cursor.y + 1);
+            move_real_cursor(current_window->x + 2, cursor_y + 1);
             printf("exit - exit shell window");
 
-            move_cursor(current_window->x + 2, global_cursor.y + 1);
+            move_real_cursor(current_window->x + 2, cursor_y + 1);
             printf("help - get list of available commands");
         }
 
@@ -133,9 +135,11 @@ void keyboard_event(Screen* screen)
 
         screen->argument->shell->index = 0;
 
-        move_cursor(current_window->x + 2, global_cursor.y + 1);
+        move_real_cursor(current_window->x + 2, cursor_y + 1);
         printf(">> ");
-        move_cursor(global_cursor.x + 3, global_cursor.y);
+
+        get_real_cursor_position();
+        move_real_cursor(cursor_x, cursor_y);
 
         return;
     }
@@ -144,12 +148,12 @@ void keyboard_event(Screen* screen)
     {
         Button current_button = current_window->elements.button[j];
 
-        if (global_cursor.x > current_window->x + current_button.x && 
-            global_cursor.x < current_window->x + current_button.x + 
+        if (cursor_x > current_window->x + current_button.x && 
+            cursor_x < current_window->x + current_button.x + 
             current_button.len_x)
         {
-            if (global_cursor.y > current_window->y + current_button.y &&
-                global_cursor.y < current_window->y + current_button.y +
+            if (cursor_y > current_window->y + current_button.y &&
+                cursor_y < current_window->y + current_button.y +
                 current_button.len_y)
             {
                 /* execute a function */
@@ -170,10 +174,10 @@ void keyboard_event(Screen* screen)
                         {
                             screen->argument->calculator->first_number = screen->argument->calculator->first_number * 10 + j;
 
-                            move_cursor(current_window->x + 19, 22);
+                            move_real_cursor(current_window->x + 19, 22);
                             printf("                         ");
 
-                            move_cursor(current_window->x + 19, 22);
+                            move_real_cursor(current_window->x + 19, 22);
                             printf("First number is: %d", screen->argument->calculator->first_number);
                         }
 
@@ -181,10 +185,10 @@ void keyboard_event(Screen* screen)
                         {
                             screen->argument->calculator->second_number = screen->argument->calculator->second_number * 10 + j;
 
-                            move_cursor(current_window->x + 19, 22);
+                            move_real_cursor(current_window->x + 19, 22);
                             printf("                         ");
 
-                            move_cursor(current_window->x + 19, 22);
+                            move_real_cursor(current_window->x + 19, 22);
                             printf("Second number is: %d", screen->argument->calculator->second_number);
                         }
                     }
@@ -240,7 +244,7 @@ void keyboard_event(Screen* screen)
                                 case '/':
                                     if (screen->argument->calculator->second_number == 0)
                                     {
-                                        move_cursor(current_window->x + 2, 22);
+                                        move_real_cursor(current_window->x + 2, 22);
                                         printf("Result is: N/A");
 
                                         print_result = false;
@@ -256,7 +260,7 @@ void keyboard_event(Screen* screen)
 
                             if (print_result == true)
                             {
-                                move_cursor(current_window->x + 2, 22);
+                                move_real_cursor(current_window->x + 2, 22);
                                 printf("Result is: %d", result);
                             }
                         }
@@ -285,9 +289,9 @@ void keyboard_event(Screen* screen)
                     /* Search button */
                     if (j == 0)
                     {
-                        move_cursor(current_window->x + 2, global_cursor.y + 2);
+                        move_real_cursor(current_window->x + 2, cursor_y + 2);
                         printf("FAT: \r\n");
-                        move_cursor(current_window->x + 2, global_cursor.y + 1);
+                        move_real_cursor(current_window->x + 2, cursor_y + 1);
 
                         int i = 0;
                         while (FAT_ReadEntry(&screen->diskA, fd, &entry) && i++ < 5)
@@ -297,19 +301,19 @@ void keyboard_event(Screen* screen)
                                 putc(entry.Name[i]);
 
                             printf("\r\n");
-                            move_cursor(current_window->x + 2, global_cursor.y + 1);
+                            move_real_cursor(current_window->x + 2, cursor_y + 1);
                         }
                         FAT_Close(fd);
 
                         /* -------------------- */
 
                         printf("BBFS v2: \r\n");
-                        move_cursor(current_window->x + 2, global_cursor.y + 1);
+                        move_real_cursor(current_window->x + 2, cursor_y + 1);
 
                         for (int i = 0; i < screen->argument->file_explorer->index; i++)
                         {
                             printf("  %s\r\n", screen->argument->file_explorer->files[i]);
-                            move_cursor(current_window->x + 2, global_cursor.y + 1);
+                            move_real_cursor(current_window->x + 2, cursor_y + 1);
                         }
                     }
 
@@ -358,9 +362,9 @@ void keyboard_event(Screen* screen)
                                 char* tmp = temp;
                                 if (strcmp(tmp, path_str) <= 0)
                                 {
-                                    move_cursor(current_window->x + 2, global_cursor.y + 2);
+                                    move_real_cursor(current_window->x + 2, cursor_y + 2);
                                     printf("File: %s\r\n", screen->argument->file_explorer->files[i]);
-                                    move_cursor(current_window->x + 2, global_cursor.y + 1);
+                                    move_real_cursor(current_window->x + 2, cursor_y + 1);
 
                                     found = true;
                                     break;
@@ -369,9 +373,9 @@ void keyboard_event(Screen* screen)
 
                             if (found == false)
                             {
-                                move_cursor(current_window->x + 2, global_cursor.y + 2);
+                                move_real_cursor(current_window->x + 2, cursor_y + 2);
                                 printf("File (%s) not found!", path_str);
-                                move_cursor(current_window->x + 2, global_cursor.y + 1);
+                                move_real_cursor(current_window->x + 2, cursor_y + 1);
                             }
                         }
 
@@ -424,13 +428,13 @@ void keyboard_event(Screen* screen)
                     
                     uint16_t result = min + screen->argument->random->lcg_seed % (max - min + 1);
 
-                    uint16_t old_x = global_cursor.x;
-                    uint16_t old_y = global_cursor.y;
+                    uint16_t old_x = cursor_x;
+                    uint16_t old_y = cursor_y;
 
-                    move_cursor(current_window->x + 2, global_cursor.y + 3);
+                    move_real_cursor(current_window->x + 2, cursor_y + 3);
                     printf("Random number is: %d!", result);
 
-                    move_cursor(old_x, old_y);
+                    move_real_cursor(old_x, old_y);
                 }
 
                 break;
@@ -441,7 +445,7 @@ void keyboard_event(Screen* screen)
     /* Perform actions regarding notepad window */
     if (screen->active_window == 3 && !dont_write)
     {
-        move_cursor(current_window->x + 2, global_cursor.y + 1);
+        move_real_cursor(current_window->x + 2, cursor_y + 1);
 
         screen->argument->notepad->text[screen->argument->notepad->index] = '\r';
         screen->argument->shell->index++;
@@ -476,19 +480,11 @@ void c_keyboard_loop(Screen* screen)
                 /* Move real, assembly cursor */
                 up_cursor();
 
-                /* Update global cursor */
-                get_cursor_position();
-                move_cursor(cursor_x, cursor_y);
-
                 break;
 
             case 1:
                 /* Move real, assembly cursor */
                 down_cursor();
-
-                /* Update global cursor */
-                get_cursor_position();
-                move_cursor(cursor_x, cursor_y);
 
                 break;
 
@@ -496,39 +492,37 @@ void c_keyboard_loop(Screen* screen)
                 /* Move real, assembly cursor */
                 left_cursor();
 
-                /* Update global cursor */
-                get_cursor_position();
-                move_cursor(cursor_x, cursor_y);
-
                 break;
 
             case 3:
                 /* Move real, assembly cursor */
                 right_cursor();
 
-                /* Update global cursor */
-                get_cursor_position();
-                move_cursor(cursor_x, cursor_y);
-
                 break;
 
             default:
-                /* Print character (disabled) */
-                // printf("%c", ascii_code);
-
-                /* Enter key*/
+                /* Enter key */
                 if (ascii_code == 13)
                 {
                     keyboard_event(screen);
 
+                    /* Print character (disabled) */
+                    // printf("\r\n");
+
                     /* Update global cursor (disabled because we are not printing a character) */
-                    // move_cursor(0, global_cursor.y + 1);
+                    // get_real_cursor_position();
+                    // move_real_cursor(cursor_x, cursor_y);
                 }
 
+                /* Backspace key */
                 else if (ascii_code == 8)
                 {
+                    /* Print character (disabled) */
+                    // printf("\b ");
+
                     /* Update global cursor */
-                    move_cursor(global_cursor.x - 1, global_cursor.y);
+                    // get_real_cursor_position();
+                    // move_real_cursor(cursor_x - 1, cursor_y);
 
                     /* File explorer window */
                     if (screen->active_window == 2)
@@ -551,8 +545,12 @@ void c_keyboard_loop(Screen* screen)
 
                 else
                 {
+                    /* Print character (disabled) */
+                    // printf("%c", ascii_code);
+
                     /* Update global cursor (disabled because we are not printing a character) */
-                    // move_cursor(global_cursor.x + 1, global_cursor.y);
+                    // get_real_cursor_position();
+                    // move_real_cursor(cursor_x, cursor_y);
 
                     /**
                      * If we are in file explorer window, print character.
@@ -561,7 +559,9 @@ void c_keyboard_loop(Screen* screen)
                     if (screen->active_window == 2)
                     {
                         printf("%c", ascii_code);
-                        move_cursor(global_cursor.x + 1, global_cursor.y);
+
+                        get_real_cursor_position();
+                        move_real_cursor(cursor_x, cursor_y);
 
                         if (screen->argument->file_explorer->open_index != OPEN_LINE_SIZE - 1)
                         {
@@ -577,7 +577,9 @@ void c_keyboard_loop(Screen* screen)
                     else if (screen->active_window == 3)
                     {
                         printf("%c", ascii_code);
-                        move_cursor(global_cursor.x + 1, global_cursor.y);
+
+                        get_real_cursor_position();
+                        move_real_cursor(cursor_x, cursor_y);
 
                         if (screen->argument->notepad->index != TEXT_SIZE - 1)
                         {
@@ -593,7 +595,9 @@ void c_keyboard_loop(Screen* screen)
                     else if (screen->active_window == 6)
                     {
                         printf("%c", ascii_code);
-                        move_cursor(global_cursor.x + 1, global_cursor.y);
+
+                        get_real_cursor_position();
+                        move_real_cursor(cursor_x, cursor_y);
 
                         if (screen->argument->shell->index != LINE_SIZE - 1)
                         {

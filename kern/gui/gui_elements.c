@@ -68,10 +68,10 @@ void draw_button(Window window, Button button)
 {
     if (button.background_color != BLUE)
     {
-        move_cursor(window.x + button.x, window.y + button.y);
+        move_real_cursor(window.x + button.x, window.y + button.y);
         for (uint16_t i = 1; i < button.len_y; i++)
         {
-            move_cursor(window.x + button.x, window.y + button.y + i);
+            move_real_cursor(window.x + button.x, window.y + button.y + i);
             for (uint16_t j = 0; j < button.len_x; j++)
             {
                 change_color(format_color(button.background_color, button.background_color), (uint16_t)1);
@@ -84,7 +84,7 @@ void draw_button(Window window, Button button)
     /*          Top border              */
     /* ******************************** */
 
-    move_cursor(window.x + button.x, window.y + button.y);
+    move_real_cursor(window.x + button.x, window.y + button.y);
     
     for (uint16_t i = 0; i < button.len_x; i++)
     {
@@ -97,7 +97,7 @@ void draw_button(Window window, Button button)
 
     for (uint16_t i = 1; i < button.len_y; i++)
     {
-        move_cursor(window.x + (button.x + button.len_x), window.y + (button.y + i));
+        move_real_cursor(window.x + (button.x + button.len_x), window.y + (button.y + i));
         printf("%c", 0xB3);
     }
 
@@ -105,7 +105,7 @@ void draw_button(Window window, Button button)
     /*          Bottom border           */
     /* ******************************** */
 
-    move_cursor(window.x + button.x, window.y + (button.y + button.len_y));
+    move_real_cursor(window.x + button.x, window.y + (button.y + button.len_y));
 
     for (uint16_t i = 0; i < button.len_x; i++)
     {
@@ -116,11 +116,11 @@ void draw_button(Window window, Button button)
     /*          Left border             */
     /* ******************************** */
 
-    move_cursor(window.x + button.x, window.y + button.y);
+    move_real_cursor(window.x + button.x, window.y + button.y);
 
     for (uint16_t i = 1; i < button.len_y; i++)
     {
-        move_cursor((window.x + button.x) - 1, window.y + (button.y + i));
+        move_real_cursor((window.x + button.x) - 1, window.y + (button.y + i));
         printf("%c", 0xB3);
     }
 
@@ -133,7 +133,7 @@ void draw_button(Window window, Button button)
         change_color(format_color(button.background_color, button.foreground_color), (uint16_t)2);
     }
 
-    move_cursor(window.x + (button.x + 1), window.y + (button.y + 1));
+    move_real_cursor(window.x + (button.x + 1), window.y + (button.y + 1));
     printf("%s", button.title);
 }
 
@@ -199,7 +199,7 @@ void draw_context_menu(Window window, ContextMenu context_menu)
     /*          Top border              */
     /* ******************************** */
 
-    move_cursor(window.x + context_menu.x, window.y + context_menu.y);
+    move_real_cursor(window.x + context_menu.x, window.y + context_menu.y);
     
     for (uint16_t i = 0; i < context_menu.len_x; i++)
     {
@@ -212,7 +212,7 @@ void draw_context_menu(Window window, ContextMenu context_menu)
 
     for (uint16_t i = 1; i < context_menu.len_y; i++)
     {
-        move_cursor(window.x + (context_menu.x + context_menu.len_x), window.y + (context_menu.y + i));
+        move_real_cursor(window.x + (context_menu.x + context_menu.len_x), window.y + (context_menu.y + i));
         printf("%c", 0xB3);
     }
 
@@ -220,7 +220,7 @@ void draw_context_menu(Window window, ContextMenu context_menu)
     /*          Bottom border           */
     /* ******************************** */
 
-    move_cursor(window.x + context_menu.x, window.y + (context_menu.y + context_menu.len_y));
+    move_real_cursor(window.x + context_menu.x, window.y + (context_menu.y + context_menu.len_y));
 
     for (uint16_t i = 0; i < context_menu.len_x; i++)
     {
@@ -231,11 +231,11 @@ void draw_context_menu(Window window, ContextMenu context_menu)
     /*          Left border             */
     /* ******************************** */
 
-    move_cursor(window.x + context_menu.x, window.y + context_menu.y);
+    move_real_cursor(window.x + context_menu.x, window.y + context_menu.y);
 
     for (uint16_t i = 1; i < context_menu.len_y; i++)
     {
-        move_cursor((window.x + context_menu.x) - 1, window.y + (context_menu.y + i));
+        move_real_cursor((window.x + context_menu.x) - 1, window.y + (context_menu.y + i));
         printf("%c", 0xB3);
     }
 
@@ -261,14 +261,14 @@ void draw_context_menu(Window window, ContextMenu context_menu)
                 break;
             }
 
-            move_cursor(window.x + context_menu.x, window.y + context_menu.y + ((i + 1) * 3));
+            move_real_cursor(window.x + context_menu.x, window.y + context_menu.y + ((i + 1) * 3));
 
             for (uint16_t i = 0; i < context_menu.len_x; i++)
             {
                 printf("%c", 0xC4);
             }
 
-            move_cursor(window.x + context_menu.x, window.y + context_menu.y + ((i + 1) * 2));
+            move_real_cursor(window.x + context_menu.x, window.y + context_menu.y + ((i + 1) * 2));
             printf("%s", current_context_button->content);
         }
     }

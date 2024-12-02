@@ -3,13 +3,13 @@ gui/gui.c(382): Warning! W303: Parameter 'argument' has been defined, but not re
 gui/gui.c(391): Warning! W303: Parameter 'argument' has been defined, but not referenced
 gui/gui.c(402): Warning! W303: Parameter 'argument' has been defined, but not referenced
 gui/gui.c(422): Warning! W303: Parameter 'argument' has been defined, but not referenced
-gui/gui.c(639): Warning! W118: Label 'keyboard_loop' has been defined but not referenced
-gui/gui.c(638): Warning! W308: The function 'c_keyboard_loop' without prototyped parameters called
-gui/gui.c(638): Note! I2002: 'c_keyboard_loop' defined in: io.h(28)
+gui/gui.c(641): Warning! W118: Label 'keyboard_loop' has been defined but not referenced
+gui/gui.c(640): Warning! W308: The function 'c_keyboard_loop' without prototyped parameters called
+gui/gui.c(640): Note! I2002: 'c_keyboard_loop' defined in: io.h(31)
 gui/argument.h(15): Warning! W202: Symbol 'LCG_MODULUS' has been defined, but not referenced
 gui/argument.h(14): Warning! W202: Symbol 'LCG_INCREMENT' has been defined, but not referenced
 gui/argument.h(13): Warning! W202: Symbol 'LCG_MULTIPLIER' has been defined, but not referenced
-gui/gui_elements/../../libc/../memory/allocator.h(24): Warning! W202: Symbol 'bitmap' has been defined, but not referenced
-gui/gui_elements/../../libc/../memory/allocator.h(23): Warning! W202: Symbol 'free_memory' has been defined, but not referenced
 gui/gui_elements/../../libc/../memory/allocator.h(26): Warning! W202: Symbol 'bitmap_size' has been defined, but not referenced
 gui/gui_elements/../../libc/../memory/allocator.h(25): Warning! W202: Symbol 'bitmap_pages' has been defined, but not referenced
+gui/gui_elements/../../libc/../memory/allocator.h(24): Warning! W202: Symbol 'bitmap' has been defined, but not referenced
+gui/gui_elements/../../libc/../memory/allocator.h(23): Warning! W202: Symbol 'free_memory' has been defined, but not referenced

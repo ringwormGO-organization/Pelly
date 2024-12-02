@@ -170,7 +170,7 @@ void draw_window(Window window)
     /*          Top border              */
     /* ******************************** */
 
-    move_cursor(window.x, window.y);
+    move_real_cursor(window.x, window.y);
     
     for (uint16_t i = 0; i < window.len_x; i++)
     {
@@ -181,7 +181,7 @@ void draw_window(Window window)
     /*          Close window but.       */
     /* ******************************** */
 
-    move_cursor(window.x, window.y);
+    move_real_cursor(window.x, window.y);
     printf(" X%c",0xB3);
 
     /* ******************************** */
@@ -190,7 +190,7 @@ void draw_window(Window window)
 
     for (uint16_t i = 0; i < window.len_y; i++)
     {
-        move_cursor(window.x + window.len_x, window.y + i);
+        move_real_cursor(window.x + window.len_x, window.y + i);
         printf("%c", 0xB3);
     }
 
@@ -198,7 +198,7 @@ void draw_window(Window window)
     /*          Bottom border           */
     /* ******************************** */
 
-    move_cursor(window.x, window.y + window.len_y);
+    move_real_cursor(window.x, window.y + window.len_y);
 
     for (uint16_t i = 0; i < window.len_x + 1; i++)
     {
@@ -209,11 +209,11 @@ void draw_window(Window window)
     /*          Left border             */
     /* ******************************** */
 
-    move_cursor(window.x, window.y);
+    move_real_cursor(window.x, window.y);
 
     for (uint16_t i = 0; i < window.len_y; i++)
     {
-        move_cursor(window.x, window.y + i);
+        move_real_cursor(window.x, window.y + i);
         printf("%c", 0xB3);
     }
 
@@ -223,7 +223,7 @@ void draw_window(Window window)
     /*          Title space             */
     /* ******************************** */
 
-    move_cursor(window.x + 1, window.y + 2);
+    move_real_cursor(window.x + 1, window.y + 2);
     
     for (uint16_t i = 0; i < window.len_x - 1; i++)
     {
@@ -234,7 +234,7 @@ void draw_window(Window window)
     /*          Title                   */
     /* ******************************** */
 
-    move_cursor(window.x + 1, window.y + 1);
+    move_real_cursor(window.x + 1, window.y + 1);
     printf("%s", window.title);
 }
 
@@ -266,7 +266,7 @@ void draw_window_elements(Window window, int window_id)
         }
 
         draw_button(window, current_button);
-        move_cursor(0, 0);
+        move_real_cursor(0, 0);
     }
 
     /*check_context_menu(window, &window.elements.context_menu);
@@ -288,7 +288,7 @@ void clear_window(Window window)
     /*          Top border              */
     /* ******************************** */
 
-    move_cursor(window.x, window.y);
+    move_real_cursor(window.x, window.y);
     
     for (uint16_t i = 0; i < window.len_x; i++)
     {
@@ -299,7 +299,7 @@ void clear_window(Window window)
     /*          Close window but.       */
     /* ******************************** */
 
-    move_cursor(window.x, window.y);
+    move_real_cursor(window.x, window.y);
     printf("   ");
 
     /* ******************************** */
@@ -308,7 +308,7 @@ void clear_window(Window window)
 
     for (uint16_t i = 0; i < window.len_y; i++)
     {
-        move_cursor(window.x + window.len_x, window.y + i);
+        move_real_cursor(window.x + window.len_x, window.y + i);
         printf("%c", 0x20);
     }
 
@@ -316,7 +316,7 @@ void clear_window(Window window)
     /*          Bottom border           */
     /* ******************************** */
 
-    move_cursor(window.x, window.y + window.len_y);
+    move_real_cursor(window.x, window.y + window.len_y);
 
     for (uint16_t i = 0; i < window.len_x + 1; i++)
     {
@@ -327,11 +327,11 @@ void clear_window(Window window)
     /*          Left border             */
     /* ******************************** */
 
-    move_cursor(window.x, window.y);
+    move_real_cursor(window.x, window.y);
 
     for (uint16_t i = 0; i < window.len_y; i++)
     {
-        move_cursor(window.x, window.y + i);
+        move_real_cursor(window.x, window.y + i);
         printf("%c", 0x20);
     }
 
@@ -341,7 +341,7 @@ void clear_window(Window window)
     /*          Title space             */
     /* ******************************** */
 
-    move_cursor(window.x + 1, window.y + 2);
+    move_real_cursor(window.x + 1, window.y + 2);
     
     for (uint16_t i = 0; i < window.len_x - 1; i++)
     {
@@ -352,17 +352,17 @@ void clear_window(Window window)
     /*          Title                   */
     /* ******************************** */
 
-    move_cursor(window.x + 1, window.y + 1);
+    move_real_cursor(window.x + 1, window.y + 1);
 
     for (uint16_t i = 0; i < strlen(window.title); i++)
     {
         printf("%c", 0x20);
     }
 
-    move_cursor(window.x, window.y);
+    move_real_cursor(window.x, window.y);
     for (uint16_t i = 0; i < window.len_y; i++)
     {
-        move_cursor(window.x, window.y + i);
+        move_real_cursor(window.x, window.y + i);
         for (uint16_t j = 0; j < window.len_x; j++)
         {
             printf("%c", 0x20);
@@ -394,7 +394,7 @@ void notepad(Window program_window, Argument* argument)
     draw_window(program_window);
     draw_window_elements(program_window, 3);
 
-    move_cursor(program_window.x + 2, 11);
+    move_real_cursor(program_window.x + 2, 11);
 
     return;
 }
@@ -425,10 +425,12 @@ void shell(Window program_window, Argument* argument)
     draw_window(program_window);
     draw_window_elements(program_window, 6);
 
-    move_cursor(program_window.x + 2, program_window.y + 3);
+    move_real_cursor(program_window.x + 2, program_window.y + 3);
 
     printf(">> ");
-    move_cursor(global_cursor.x + 3, global_cursor.y);
+
+    get_real_cursor_position();    
+    move_real_cursor(cursor_x, cursor_y);
 
     return;
 }
@@ -448,7 +450,7 @@ void shell(Window program_window, Argument* argument)
 void start_gui(DISK diskA)
 {
     clear_screen();
-    move_cursor(0, 0);
+    move_real_cursor(0, 0);
 
     /* -------------------------------- */
 
@@ -543,7 +545,7 @@ void start_gui(DISK diskA)
 
     else
     {
-        move_cursor(0, 0);
+        move_real_cursor(0, 0);
         printf("Error code %d of window %d\r\n", current_window.error, 0);
     }
 
@@ -634,6 +636,6 @@ void start_gui(DISK diskA)
     printf("Now with BBFS, GUI, heap & IVT! %d\r\n", 30);
 
 keyboard_loop:
-    move_cursor(0, 0);
+    move_real_cursor(0, 0);
     c_keyboard_loop(&screen);
 }

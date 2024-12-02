@@ -7,28 +7,36 @@
 
 #include "cursor.h"
 
-Cursor cursor_move_cursor(uint16_t x, uint16_t y)
+Cursor move_virtual_cursor(uint16_t x, uint16_t y)
 {
     Cursor new;
 
     /* Perform checks */
     if (x > 79)
     {
-        new.error = X_BOUNDARY_EXCEEDED;
+        new.x = 0;
+
+        if (y > 24)
+        {
+            new.y = 0;
+        }
+
+        else
+        {
+            new.y++;
+        }
+
         return new;
     }
 
     if (y > 24)
     {
-        new.error = Y_BOUNDARY_EXCEEDED;
+        new.y = 0;
         return new;
     }
-
-    new.error = NO_ERROR;
 
     new.x = x;
     new.y = y;
 
-    move_keyboard(new.x, new.y);
     return new;
 }
