@@ -1,5 +1,0 @@
-io.c(165): Warning! W309: The function without prototyped parameters indirectly called
-gui/gui_elements/../../libc/../memory/allocator.h(26): Warning! W202: Symbol 'bitmap_size' has been defined, but not referenced
-gui/gui_elements/../../libc/../memory/allocator.h(25): Warning! W202: Symbol 'bitmap_pages' has been defined, but not referenced
-gui/gui_elements/../../libc/../memory/allocator.h(24): Warning! W202: Symbol 'bitmap' has been defined, but not referenced
-gui/gui_elements/../../libc/../memory/allocator.h(23): Warning! W202: Symbol 'free_memory' has been defined, but not referenced

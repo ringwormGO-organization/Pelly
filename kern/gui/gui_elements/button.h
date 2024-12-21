@@ -2,7 +2,7 @@
  * @author Andrej Bartulin, Stjepan Bilić Matišić
  * PROJECT: Pelly
  * LICENSE: MIT
- * DESCRIPTION: Header file or button GUI element
+ * DESCRIPTION: Header file for button GUI element
 */
 
 #pragma once

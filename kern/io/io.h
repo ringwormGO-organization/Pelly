@@ -10,6 +10,8 @@
 #include "stdint.h"
 #include "stdio.h"
 
+#include "gui/gui_structures.h"
+
 extern int _cdecl cursor_x;
 extern int _cdecl cursor_y;
 
@@ -27,5 +29,9 @@ void _cdecl clear_screen();
 
 uint16_t format_color(uint16_t background_color, uint16_t foreground_color);
 void _cdecl change_color(uint16_t color, uint16_t count);
+
+void enter_event(Screen* screen);
+void backspace_event(Screen* screen);
+void character_event(Screen* screen, int ascii_code);
 
 void c_keyboard_loop();

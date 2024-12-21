@@ -1,6 +1,0 @@
-libc/string.c(101): Warning! W131: No prototype found for function 'malloc'
-libc/string.c(101): Warning! W102: Type mismatch (warning)
-libc/string.c(101): Note! I2003: source conversion type is 'int'
-libc/string.c(101): Note! I2004: target conversion type is 'char *'
-libc/string.c(101): Warning! W308: The function 'malloc' without prototyped parameters called
-libc/string.c(101): Note! I2002: 'malloc' defined in: libc/string.c(101)

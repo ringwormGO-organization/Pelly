@@ -2,35 +2,19 @@
  * @author Andrej Bartulin, Stjepan Bilić Matišić
  * PROJECT: Pelly
  * LICENSE: MIT
- * DESCRIPTION: Main C file for IO and GUI events
+ * DESCRIPTION: Main C file for GUI events
 */
 
 #include "io.h"
 
 #include "filesystem/fat.h"
-#include "gui/gui.h"
 #include "libc/string.h"
-
-int _cdecl cursor_x;
-int _cdecl cursor_y;
-
-int _cdecl ascii_code;
-
-/**
- * Format color so it can be used properly in `change_color` function
- * @param background_color current background color
- * @param foreground_color foreground_color
-*/
-uint16_t format_color(uint16_t background_color, uint16_t foreground_color)
-{
-    return (background_color * 16) + foreground_color;
-}
 
 /**
  * Check if enter key has been pressed on button
  * @param screen screen containing all windows containing all buttons
 */
-void keyboard_event(Screen* screen)
+void enter_event(Screen* screen)
 {
     bool dont_draw = false; /* we are clicking one of paint's button if true, we are not drawing */
     bool dont_write = false; /* we are clicking save button in notepad if true, do not enter '\r\n' in text variable */
@@ -463,151 +447,88 @@ void keyboard_event(Screen* screen)
 }
 
 /**
- * Main keyboard loop
- * @param screen screen for checking events
+ * Check if backspace keys has been pressed in certain windows
+ * @param screen screen containing all windows containing all buttons
 */
-void c_keyboard_loop(Screen* screen) 
+void backspace_event(Screen* screen)
 {
-    while (1)
+    /* File explorer window */
+    if (screen->active_window == 2)
     {
-        /* Get pressed key from assembly */
-        asm_keyboard_loop();
-        
-        /* Check ASCII code */
-        switch (ascii_code)
+        screen->argument->file_explorer->open_index--;
+    }
+
+    /* Notepad window */
+    else if (screen->active_window == 3)
+    {
+        screen->argument->notepad->index--;
+    }
+
+    /* Shell window */
+    else if (screen->active_window == 6)
+    {
+        screen->argument->shell->index--;
+    }
+}
+
+/**
+ * Check if character keys has been pressed in certain windows
+ * @param screen screen containing all windows containing all buttons
+ * @param ascii_code pressed key
+*/
+void character_event(Screen* screen, int ascii_code)
+{
+    /**
+     * If we are in file explorer window, print character.
+     * Otherwise, character printing is disabled as before. 
+    */
+    if (screen->active_window == 2)
+    {
+        printf("%c", ascii_code);
+
+        get_real_cursor_position();
+        move_real_cursor(cursor_x, cursor_y);
+
+        if (screen->argument->file_explorer->open_index != OPEN_LINE_SIZE - 1)
         {
-            case 0:
-                /* Move real, assembly cursor */
-                up_cursor();
+            screen->argument->file_explorer->open[screen->argument->file_explorer->open_index] = ascii_code;
+            screen->argument->file_explorer->open_index++;
+        }
+    }
 
-                break;
+    /**
+     * If we are in notepad window, print character.
+     * Otherwise, character printing is disabled as before. 
+    */
+    else if (screen->active_window == 3)
+    {
+        printf("%c", ascii_code);
 
-            case 1:
-                /* Move real, assembly cursor */
-                down_cursor();
+        get_real_cursor_position();
+        move_real_cursor(cursor_x, cursor_y);
 
-                break;
+        if (screen->argument->notepad->index != TEXT_SIZE - 1)
+        {
+            screen->argument->notepad->text[screen->argument->notepad->index] = ascii_code;
+            screen->argument->notepad->index++;
+        }
+    }
 
-            case 2:
-                /* Move real, assembly cursor */
-                left_cursor();
+    /**
+     * If we are in shell window, print character.
+     * Otherwise, character printing is disabled as before. 
+    */
+    else if (screen->active_window == 6)
+    {
+        printf("%c", ascii_code);
 
-                break;
+        get_real_cursor_position();
+        move_real_cursor(cursor_x, cursor_y);
 
-            case 3:
-                /* Move real, assembly cursor */
-                right_cursor();
-
-                break;
-
-            default:
-                /* Enter key */
-                if (ascii_code == 13)
-                {
-                    keyboard_event(screen);
-
-                    /* Print character (disabled) */
-                    // printf("\r\n");
-
-                    /* Update global cursor (disabled because we are not printing a character) */
-                    // get_real_cursor_position();
-                    // move_real_cursor(cursor_x, cursor_y);
-                }
-
-                /* Backspace key */
-                else if (ascii_code == 8)
-                {
-                    /* Print character (disabled) */
-                    // printf("\b ");
-
-                    /* Update global cursor */
-                    // get_real_cursor_position();
-                    // move_real_cursor(cursor_x - 1, cursor_y);
-
-                    /* File explorer window */
-                    if (screen->active_window == 2)
-                    {
-                        screen->argument->file_explorer->open_index--;
-                    }
-
-                    /* Notepad window */
-                    else if (screen->active_window == 3)
-                    {
-                        screen->argument->notepad->index--;
-                    }
-
-                    /* Shell window */
-                    else if (screen->active_window == 6)
-                    {
-                        screen->argument->shell->index--;
-                    }
-                }
-
-                else
-                {
-                    /* Print character (disabled) */
-                    // printf("%c", ascii_code);
-
-                    /* Update global cursor (disabled because we are not printing a character) */
-                    // get_real_cursor_position();
-                    // move_real_cursor(cursor_x, cursor_y);
-
-                    /**
-                     * If we are in file explorer window, print character.
-                     * Otherwise, character printing is disabled as before. 
-                    */
-                    if (screen->active_window == 2)
-                    {
-                        printf("%c", ascii_code);
-
-                        get_real_cursor_position();
-                        move_real_cursor(cursor_x, cursor_y);
-
-                        if (screen->argument->file_explorer->open_index != OPEN_LINE_SIZE - 1)
-                        {
-                            screen->argument->file_explorer->open[screen->argument->file_explorer->open_index] = ascii_code;
-                            screen->argument->file_explorer->open_index++;
-                        }
-                    }
-
-                    /**
-                     * If we are in notepad window, print character.
-                     * Otherwise, character printing is disabled as before. 
-                    */
-                    else if (screen->active_window == 3)
-                    {
-                        printf("%c", ascii_code);
-
-                        get_real_cursor_position();
-                        move_real_cursor(cursor_x, cursor_y);
-
-                        if (screen->argument->notepad->index != TEXT_SIZE - 1)
-                        {
-                            screen->argument->notepad->text[screen->argument->notepad->index] = ascii_code;
-                            screen->argument->notepad->index++;
-                        }
-                    }
-
-                    /**
-                     * If we are in shell window, print character.
-                     * Otherwise, character printing is disabled as before. 
-                    */
-                    else if (screen->active_window == 6)
-                    {
-                        printf("%c", ascii_code);
-
-                        get_real_cursor_position();
-                        move_real_cursor(cursor_x, cursor_y);
-
-                        if (screen->argument->shell->index != LINE_SIZE - 1)
-                        {
-                            screen->argument->shell->index++;
-                            screen->argument->shell->line[screen->argument->shell->index] = ascii_code;
-                        }
-                    }
-                }
-
-                break;
+        if (screen->argument->shell->index != LINE_SIZE - 1)
+        {
+            screen->argument->shell->index++;
+            screen->argument->shell->line[screen->argument->shell->index] = ascii_code;
         }
     }
 }

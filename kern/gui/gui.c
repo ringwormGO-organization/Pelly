@@ -7,38 +7,7 @@
 
 #include "gui.h"
 
-// NOTE: use `init` function
-// this is just to speed up development process
-
-void test()
-{
-    putc('e');
-}
-
-Button empty_button = {
-    .error = EMPTY,
-};
-
-ContextMenu context_menu = {
-    .error = NO_ERROR,
-    .x = 9,
-    .y = 9,
-    .len_x = 5,
-    .len_y = 5,
-    .background_color = RED,
-    .foreground_color = WHITE,
-};
-
-ContextButton empty_context_button = {
-    .content = "n/a",
-};
-
-ContextButton context_button = {
-    .content = "one",
-    .action = test,
-};
-
-Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+Window create_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, bool debug)
 {
     Window new;
@@ -76,92 +45,39 @@ Window init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     return new;
 }
 
-void check_window(Screen* screen, int id)
+void check_window(Screen screen, Window* window)
 {
-    Window* current_window = &screen->windows[id];
-
-    if (current_window->error == EMPTY)
+    if (window->error == EMPTY)
     {
         return;
     }
 
-    if (strlen(current_window->title) > 70 || strlen(current_window->title) > (current_window->len_x - 2))
+    if (strlen(window->title) > 70 || strlen(window->title) > (window->len_x - 2))
     {
-        current_window->error = TITLE_BOUNDARY_EXCEEDED;
+        window->error = TITLE_BOUNDARY_EXCEEDED;
     }
 
-    if (current_window->x > screen->len_x - 1)
+    if (window->x > screen.len_x - 1)
     {
-        current_window->error = X_BOUNDARY_EXCEEDED;
+        window->error = X_BOUNDARY_EXCEEDED;
     }
 
-    if (current_window->y > screen->len_y - 1)
+    if (window->y > screen.len_y - 1)
     {
-        current_window->error = Y_BOUNDARY_EXCEEDED;
+        window->error = Y_BOUNDARY_EXCEEDED;
     }
 
-    if (current_window->len_x >= ((screen->len_x - 1) - current_window->x))
+    if (window->len_x >= ((screen.len_x - 1) - window->x))
     {
-        current_window->error = LEN_X_BOUNDARY_EXCEEDED;
+        window->error = LEN_X_BOUNDARY_EXCEEDED;
     }
 
-    if (current_window->len_y >= ((screen->len_y - 1) - current_window->y))
+    if (window->len_y >= ((screen.len_y - 1) - window->y))
     {
-        current_window->error = LEN_Y_BOUNDARY_EXCEEDED;
+        window->error = LEN_Y_BOUNDARY_EXCEEDED;
     }
 
-    /* Check if window interferes with other windows */
-    for (int i = id; i >= 0; i--)
-    {
-        if (id == 0)
-        {
-            /* Window passed checks above */
-            if (current_window->error == NO_CHECK)
-            {
-                current_window->error = NO_ERROR;
-                break;
-            }
-
-            /* Return window with error above */
-            break;
-        }
-
-        /* Window already has an error, we don't need to go deeper */
-        if (current_window->error != NO_CHECK)
-        {
-            break;
-        }
-
-        int previous_window_id = i - 1;
-        Window* previous_window = &screen->windows[previous_window_id];
-
-        if (previous_window->error == NO_ERROR)
-        {
-            if (previous_window->x +  previous_window->len_x < 
-                                        previous_window->x ||
-                previous_window->x >  previous_window->x + 
-                                        previous_window->len_x)
-            {
-                if (previous_window->y +  previous_window->len_y < 
-                                            previous_window->y ||
-                    previous_window->y >  previous_window->y + 
-                                            previous_window->len_y)
-                {
-                    current_window->error = NO_ERROR;
-                }
-
-                else
-                {
-                    current_window->error = Y_IN_WINDOW;
-                }
-            }
-
-            else
-            {
-               current_window->error = X_IN_WINDOW;
-            }
-        }
-    }
+    window->error = NO_ERROR;
 }
 
 void draw_window(Window window)
@@ -247,39 +163,17 @@ void draw_window_elements(Window window, int window_id)
     for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
         Button current_button = window.elements.button[i];
-        if (current_button.error == EMPTY)
-        {
-            if (window.debug)
-            {
-                printf("Empty button! Skipping...\r\n");
-            }
 
-            continue;
-        }
-
-        check_button(&window, i);
-
-        if (window.elements.button[i].error != NO_ERROR)
+        check_button(window, &current_button);
+        if (current_button.error != NO_ERROR)
         {
             printf("Error code %d of button %d, window %d\r\n", current_button.error, i, window_id);
-            continue;
+            return;
         }
 
         draw_button(window, current_button);
         move_real_cursor(0, 0);
     }
-
-    /*check_context_menu(window, &window.elements.context_menu);
-
-    if (window.elements.context_menu.error == NO_ERROR)
-    {
-        draw_context_menu(window, window.elements.context_menu);
-    }
-
-    else
-    {
-        printf("Error code %d of context menu, window %d\r\n", window.elements.context_menu.error, window_id);
-    }*/
 }
 
 void clear_window(Window window)
@@ -452,7 +346,9 @@ void start_gui(DISK diskA)
     clear_screen();
     move_real_cursor(0, 0);
 
-    /* -------------------------------- */
+    /* ---------------------------------------------------- */
+    /*                  Create screen                       */
+    /* ---------------------------------------------------- */
 
     Screen screen;
 
@@ -461,57 +357,152 @@ void start_gui(DISK diskA)
 
     screen.diskA = diskA;
 
-    /* -------------------------------- */
+    /* ---------------------------------------------------- */
+    /*                  Create windows                      */
+    /* ---------------------------------------------------- */
 
-    Window window_manager = init_window(12, 5, 40, 15, BLUE, WHITE, "Window manager", false);
-    screen.windows[0] = window_manager;
+    Window window_manager = {
+        .x = 12,
+        .y = 5,
+        .len_x = 40,
+        .len_y = 15,
+        .background_color = BLUE,
+        .foreground_color = WHITE,
+        .title = "Window manager",
+        .debug = false,
+    };
 
-    Window calculator_window = init_window(12, 3, 40, 20, BLUE, WHITE, "Calculator", false);
-    screen.windows[1] = calculator_window;
+    Window calculator_window = {
+        .x = 12,
+        .y = 3,
+        .len_x = 40,
+        .len_y = 20,
+        .background_color = BLUE,
+        .foreground_color = WHITE,
+        .title = "Calculator",
+        .debug = false,
+    };
 
-    Window file_explorer_window = init_window(12, 1, 40, 23, BLUE, WHITE, "File Explorer", false);
-    screen.windows[2] = file_explorer_window;
+    Window file_explorer_window = {
+        .x = 12,
+        .y = 1,
+        .len_x = 40,
+        .len_y = 23,
+        .background_color = BLUE,
+        .foreground_color = WHITE,
+        .title = "File explorer",
+        .debug = false,
+    };
 
-    Window notepad_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Notepad", false);
-    screen.windows[3] = notepad_window;
+    Window notepad_window = {
+        .x = 12,
+        .y = 5,
+        .len_x = 40,
+        .len_y = 15,
+        .background_color = BLUE,
+        .foreground_color = WHITE,
+        .title = "Notepad",
+        .debug = false,
+    };
 
-    Window paint_window = init_window(5, 5, 55, 17, BLUE, WHITE, "Paint", false);
-    screen.windows[4] = paint_window;
+    Window paint_window = {
+        .x = 5,
+        .y = 5,
+        .len_x = 55,
+        .len_y = 17,
+        .background_color = BLUE,
+        .foreground_color = WHITE,
+        .title = "Paint",
+        .debug = false,
+    };
 
-    Window random_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Random", false);
-    screen.windows[5] = random_window;
+    Window random_window = {
+        .x = 12,
+        .y = 5,
+        .len_x = 40,
+        .len_y = 15,
+        .background_color = BLUE,
+        .foreground_color = WHITE,
+        .title = "Random",
+        .debug = false,
+    };
 
-    Window shell_window = init_window(4, 5, 64, 15, BLUE, WHITE, "Shell", false);
-    screen.windows[6] = shell_window;
+    Window shell_window = {
+        .x = 4,
+        .y = 5,
+        .len_x = 64,
+        .len_y = 15,
+        .background_color = BLUE,
+        .foreground_color = WHITE,
+        .title = "Shell",
+        .debug = false,
+    };
 
-    /* Window web_browser_window = init_window(12, 5, 40, 15, BLUE, WHITE, "Web browser", false);
-    screen.windows[6] = web_browser_window; */
+    Window web_browser_window = {
+        .x = 12,
+        .y = 5,
+        .len_x = 40,
+        .len_y = 15,
+        .background_color = BLUE,
+        .foreground_color = WHITE,
+        .title = "Web browser",
+        .debug = false,
+    };
+
+    /* ---------------------------------------------------- */
+    /*                  Create buttons                      */
+    /* ---------------------------------------------------- */
+
+    char* programs_names[6] = { "Calc", "Explorer", "Notepad", 
+                                "Paint", "Random", "Shell"};
+
+    void (*p[6]) (Window, Argument*) = {  calculator, file_explorer, notepad,
+                            paint, random, shell};
+
+    for (int i = 0; i < 6; i++)
+    {
+        const int button_per_row = 3;
+
+        int row = i / button_per_row;
+        int col = i % button_per_row;
+
+        const int margin_x = 2;
+        const int margin_y = 1;
+
+        const int width = 10;
+        const int height = 2;
+    
+        Button program_button = create_button(
+            window_manager.x + margin_x + (width + margin_x) * col - 10,
+            window_manager.y + margin_y + (height + margin_y) * row,
+            width, height, BLUE, WHITE, programs_names[i], p[i]);
+        
+        window_manager.elements.button[i] = program_button;
+    }
 
     /* ------------ */
-
-    /* Digits 0-9 buttons */
 
     char* digits[10] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
     for (int i = 0; i < 10; i++) 
     {
-        screen.windows[1].elements.button[i] = init_button(2 + (i % 3) * 9, 3 + (i / 3) * 3, 6, 2, BLUE, WHITE, digits[i], NULL);
+        calculator_window.elements.button[i] = create_button(2 + (i % 3) * 9, 3 + (i / 3) * 3, 6, 2, BLUE, WHITE, digits[i], NULL);
     }
     
-    screen.windows[1].elements.button[10] = init_button(28, 3, 6, 2, BLUE, WHITE, "+", NULL);
-    screen.windows[1].elements.button[11] = init_button(28, 6, 6, 2, BLUE, WHITE, "-", NULL);
-    screen.windows[1].elements.button[12] = init_button(28, 9, 6, 2, BLUE, WHITE, "*", NULL);
-    screen.windows[1].elements.button[13] = init_button(28, 12, 6, 2, BLUE, WHITE, "/", NULL);
-    screen.windows[1].elements.button[14] = init_button(2, 15, 17, 2, BLUE, WHITE, "Enter", NULL);
-    screen.windows[1].elements.button[15] = init_button(22, 15, 17, 2, BLUE, WHITE, "Reset", NULL);
+    calculator_window.elements.button[10] = create_button(28, 3, 6, 2, BLUE, WHITE, "+", NULL);
+    calculator_window.elements.button[11] = create_button(28, 6, 6, 2, BLUE, WHITE, "-", NULL);
+    calculator_window.elements.button[12] = create_button(28, 9, 6, 2, BLUE, WHITE, "*", NULL);
+    calculator_window.elements.button[13] = create_button(28, 12, 6, 2, BLUE, WHITE, "/", NULL);
+    calculator_window.elements.button[14] = create_button(2, 15, 17, 2, BLUE, WHITE, "Enter", NULL);
+    calculator_window.elements.button[15] = create_button(22, 15, 17, 2, BLUE, WHITE, "Reset", NULL);
 
     /* ------------ */
 
-    screen.windows[2].elements.button[0] = init_button(2, 3, 8, 2, BLUE, WHITE, "Search", NULL);
-    screen.windows[2].elements.button[1] = init_button(12, 3, 6, 2, BLUE, WHITE, "Open", NULL);
+    file_explorer_window.elements.button[0] = create_button(2, 3, 8, 2, BLUE, WHITE, "Search", NULL);
+    file_explorer_window.elements.button[1] = create_button(12, 3, 6, 2, BLUE, WHITE, "Open", NULL);
 
     /* ------------ */
 
-    screen.windows[3].elements.button[0] = init_button(2, 3, screen.windows[3].len_x - 4, 2, BLUE, WHITE, "Save", NULL);
+    notepad_window.elements.button[0] = create_button(2, 3, screen.windows[3].len_x - 4, 2, BLUE, WHITE, "Save", NULL);
 
     /* ------------ */
 
@@ -520,36 +511,22 @@ void start_gui(DISK diskA)
         uint16_t bg_colors[9] = {RED, YELLOW, GREEN, CYAN, BLACK, WHITE, LGRAY, BROWN, MAGENTA};
         uint16_t fg_colors[9] = {WHITE, BLACK, WHITE, WHITE, WHITE, BLACK, WHITE, WHITE, WHITE};
 
-        screen.windows[4].elements.button[i] = init_button(i * 5 + 2, 3, 3, 2, bg_colors[i], fg_colors[i], "1", NULL);
+        paint_window.elements.button[i] = create_button(i * 5 + 2, 3, 3, 2, bg_colors[i], fg_colors[i], "1", NULL);
     }
 
     /* ------------ */
 
-    screen.windows[5].elements.button[0] = init_button(2, 3, 10, 2, BLUE, WHITE, "Generate", NULL);
+    random_window.elements.button[0] = create_button(2, 3, 10, 2, BLUE, WHITE, "Generate", NULL);
 
     /* ------------ */
 
-    /* screen.windows[6].elements.button[0] = init_button(2, 3, 9, 2, BLUE, WHITE, "Execute", NULL); */
-    /* screen.windows[6].elements.button[0] = init_button(2, 3, 8, 2, BLUE, WHITE, "Search", NULL); */
+    web_browser_window.elements.button[0] = create_button(2, 3, 9, 2, BLUE, WHITE, "Execute", NULL);
+    web_browser_window.elements.button[1] = create_button(2, 3, 8, 2, BLUE, WHITE, "Search", NULL);
 
-    /* -------------------------------- */
 
-    check_window(&screen, 0);
-    
-    Window current_window = screen.windows[0];
-    if (current_window.error == NO_ERROR)
-    {
-        draw_window(current_window);
-        screen.active_window = 0;
-    }
-
-    else
-    {
-        move_real_cursor(0, 0);
-        printf("Error code %d of window %d\r\n", current_window.error, 0);
-    }
-
-    /* -------------------------------- */
+    /* ---------------------------------------------------- */
+    /*                  Create arguments                    */
+    /* ---------------------------------------------------- */
 
     Calculator calculator_struct;
 
@@ -597,35 +574,33 @@ void start_gui(DISK diskA)
 
     screen.argument = &argument;
 
-    char* programs_names[6] = { "Calc", "Explorer", "Notepad", 
-                                "Paint", "Random", "Shell"};
+    /* ---------------------------------------------------- */
+    /*                  Update windows                      */
+    /* ---------------------------------------------------- */
 
-    void (*p[6]) (Window, Argument*) = {  calculator, file_explorer, notepad,
-                            paint, random, shell};
+    screen.windows[0] = window_manager;
+    screen.windows[1] = calculator_window;
+    screen.windows[2] = file_explorer_window;
+    screen.windows[3] = notepad_window;
+    screen.windows[4] = paint_window;
+    screen.windows[5] = random_window;
 
-    for (int i = 0; i < 6; i++)
+    /* ---------------------------------------------------- */
+    /*                  Draw main window                    */
+    /* ---------------------------------------------------- */
+
+    Window current_window = screen.windows[0];
+    if (current_window.error == NO_ERROR)
     {
-        const int button_per_row = 3;
-
-        int row = i / button_per_row;
-        int col = i % button_per_row;
-
-        const int margin_x = 2;
-        const int margin_y = 1;
-
-        const int width = 10;
-        const int height = 2;
-    
-        Button program_button = init_button(
-            window_manager.x + margin_x + (width + margin_x) * col - 10,
-            window_manager.y + margin_y + (height + margin_y) * row,
-            width, height, BLUE, WHITE, programs_names[i], p[i]);
-        
-        window_manager.elements.button[i] = program_button;
-        screen.windows[0] = window_manager;
+        draw_window(current_window);
+        screen.active_window = 0;
     }
 
-    /* -------------------------------- */
+    else
+    {
+        move_real_cursor(0, 0);
+        printf("Error code %d of window %d\r\n", current_window.error, 0);
+    }
 
     draw_window_elements(screen.windows[0], 0);
 
