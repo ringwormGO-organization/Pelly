@@ -18,9 +18,11 @@ _e820:
     push bp             ; save old call frame
     mov bp, sp          ; initialize new call frame
 
+	; offset
 	mov di, [bp + 4]
-    mov ax, [bp + 6]
 
+	; segment
+    mov ax, [bp + 6]
 	mov es, ax
 
 	pusha
