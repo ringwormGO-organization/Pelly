@@ -45,6 +45,14 @@ Window create_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     return new;
 }
 
+void initialize_buttons(Window* window)
+{
+    for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
+    {
+        window->elements.button[i].error = EMPTY;
+    }
+}
+
 void check_window(Screen screen, Window* window)
 {
     if (window->error == EMPTY)
@@ -167,8 +175,12 @@ void draw_window_elements(Window window, int window_id)
         check_button(window, &current_button);
         if (current_button.error != NO_ERROR)
         {
-            printf("Error code %d of button %d, window %d\r\n", current_button.error, i, window_id);
-            return;
+            if (current_button.error != EMPTY)
+            {
+                printf("Error code %d of button %d, window %d\r\n", current_button.error, i, window_id);
+            }
+
+            continue;
         }
 
         draw_button(window, current_button);
@@ -371,6 +383,7 @@ void start_gui(DISK diskA)
         .title = "Window manager",
         .debug = false,
     };
+    initialize_buttons(&window_manager);
 
     Window calculator_window = {
         .x = 12,
@@ -382,6 +395,7 @@ void start_gui(DISK diskA)
         .title = "Calculator",
         .debug = false,
     };
+    initialize_buttons(&calculator_window);
 
     Window file_explorer_window = {
         .x = 12,
@@ -393,6 +407,7 @@ void start_gui(DISK diskA)
         .title = "File explorer",
         .debug = false,
     };
+    initialize_buttons(&file_explorer_window);
 
     Window notepad_window = {
         .x = 12,
@@ -404,6 +419,7 @@ void start_gui(DISK diskA)
         .title = "Notepad",
         .debug = false,
     };
+    initialize_buttons(&notepad_window);
 
     Window paint_window = {
         .x = 5,
@@ -415,6 +431,7 @@ void start_gui(DISK diskA)
         .title = "Paint",
         .debug = false,
     };
+    initialize_buttons(&paint_window);
 
     Window random_window = {
         .x = 12,
@@ -426,6 +443,7 @@ void start_gui(DISK diskA)
         .title = "Random",
         .debug = false,
     };
+    initialize_buttons(&random_window);
 
     Window shell_window = {
         .x = 4,
@@ -437,6 +455,7 @@ void start_gui(DISK diskA)
         .title = "Shell",
         .debug = false,
     };
+    initialize_buttons(&shell_window);
 
     Window web_browser_window = {
         .x = 12,
@@ -448,6 +467,7 @@ void start_gui(DISK diskA)
         .title = "Web browser",
         .debug = false,
     };
+    initialize_buttons(&web_browser_window);
 
     /* ---------------------------------------------------- */
     /*                  Create buttons                      */
@@ -502,7 +522,7 @@ void start_gui(DISK diskA)
 
     /* ------------ */
 
-    notepad_window.elements.button[0] = create_button(2, 3, screen.windows[3].len_x - 4, 2, BLUE, WHITE, "Save", NULL);
+    notepad_window.elements.button[0] = create_button(2, 3, notepad_window.len_x - 4, 2, BLUE, WHITE, "Save", NULL);
 
     /* ------------ */
 

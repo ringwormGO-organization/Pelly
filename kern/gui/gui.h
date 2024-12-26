@@ -59,6 +59,12 @@ Window create_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
                     uint16_t background_color, uint16_t foreground_color, char* title, bool debug);
 
 /**
+ * Initializes buttons in a window by assigning them error value `EMPTY`
+ * @param window window where buttons will be initialized
+ */
+void initialize_buttons(Window* window);
+
+/**
  * Check can a window be drawn
  * @param screen screen where window will be checked
  * @param window window to be checked

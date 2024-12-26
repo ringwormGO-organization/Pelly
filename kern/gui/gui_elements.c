@@ -33,6 +33,11 @@ void check_button(Window window, Button* button)
     uint16_t max_x = button->x + button->len_x;
     uint16_t max_y = button->y + button->len_y;
 
+    if (button->error == EMPTY)
+    {
+        return;
+    }
+
     if (strlen(button->title) > max_x - 2)
     {
         button->error = TITLE_BOUNDARY_EXCEEDED;
