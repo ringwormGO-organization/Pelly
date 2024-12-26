@@ -88,15 +88,15 @@ void check_window(Screen screen, Window* window)
     window->error = NO_ERROR;
 }
 
-void draw_window(Window window)
+void draw_window(Window* window)
 {
     /* ******************************** */
     /*          Top border              */
     /* ******************************** */
 
-    move_real_cursor(window.x, window.y);
+    move_real_cursor(window->x, window->y);
     
-    for (uint16_t i = 0; i < window.len_x; i++)
+    for (uint16_t i = 0; i < window->len_x; i++)
     {
         printf("%c", 0xC4);
     }
@@ -105,16 +105,16 @@ void draw_window(Window window)
     /*          Close window but.       */
     /* ******************************** */
 
-    move_real_cursor(window.x, window.y);
+    move_real_cursor(window->x, window->y);
     printf(" X%c",0xB3);
 
     /* ******************************** */
     /*          Right border            */
     /* ******************************** */
 
-    for (uint16_t i = 0; i < window.len_y; i++)
+    for (uint16_t i = 0; i < window->len_y; i++)
     {
-        move_real_cursor(window.x + window.len_x, window.y + i);
+        move_real_cursor(window->x + window->len_x, window->y + i);
         printf("%c", 0xB3);
     }
 
@@ -122,9 +122,9 @@ void draw_window(Window window)
     /*          Bottom border           */
     /* ******************************** */
 
-    move_real_cursor(window.x, window.y + window.len_y);
+    move_real_cursor(window->x, window->y + window->len_y);
 
-    for (uint16_t i = 0; i < window.len_x + 1; i++)
+    for (uint16_t i = 0; i < window->len_x + 1; i++)
     {
         printf("%c", 0xC4);
     }
@@ -133,11 +133,11 @@ void draw_window(Window window)
     /*          Left border             */
     /* ******************************** */
 
-    move_real_cursor(window.x, window.y);
+    move_real_cursor(window->x, window->y);
 
-    for (uint16_t i = 0; i < window.len_y; i++)
+    for (uint16_t i = 0; i < window->len_y; i++)
     {
-        move_real_cursor(window.x, window.y + i);
+        move_real_cursor(window->x, window->y + i);
         printf("%c", 0xB3);
     }
 
@@ -147,9 +147,9 @@ void draw_window(Window window)
     /*          Title space             */
     /* ******************************** */
 
-    move_real_cursor(window.x + 1, window.y + 2);
+    move_real_cursor(window->x + 1, window->y + 2);
     
-    for (uint16_t i = 0; i < window.len_x - 1; i++)
+    for (uint16_t i = 0; i < window->len_x - 1; i++)
     {
         printf("%c", 0xC4);
     }
@@ -158,11 +158,11 @@ void draw_window(Window window)
     /*          Title                   */
     /* ******************************** */
 
-    move_real_cursor(window.x + 1, window.y + 1);
-    printf("%s", window.title);
+    move_real_cursor(window->x + 1, window->y + 1);
+    printf("%s", window->title);
 }
 
-void draw_window_elements(Window window, int window_id)
+void draw_window_elements(Window* window, int window_id)
 {
     /* ******************************** */
     /*          Buttons                 */
@@ -170,7 +170,7 @@ void draw_window_elements(Window window, int window_id)
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
-        Button current_button = window.elements.button[i];
+        Button current_button = window->elements.button[i];
 
         check_button(window, &current_button);
         if (current_button.error != NO_ERROR)
@@ -188,15 +188,15 @@ void draw_window_elements(Window window, int window_id)
     }
 }
 
-void clear_window(Window window)
+void clear_window(Window* window)
 {   
     /* ******************************** */
     /*          Top border              */
     /* ******************************** */
 
-    move_real_cursor(window.x, window.y);
+    move_real_cursor(window->x, window->y);
     
-    for (uint16_t i = 0; i < window.len_x; i++)
+    for (uint16_t i = 0; i < window->len_x; i++)
     {
         printf("%c", 0x20);
     }
@@ -205,16 +205,16 @@ void clear_window(Window window)
     /*          Close window but.       */
     /* ******************************** */
 
-    move_real_cursor(window.x, window.y);
+    move_real_cursor(window->x, window->y);
     printf("   ");
 
     /* ******************************** */
     /*          Right border            */
     /* ******************************** */
 
-    for (uint16_t i = 0; i < window.len_y; i++)
+    for (uint16_t i = 0; i < window->len_y; i++)
     {
-        move_real_cursor(window.x + window.len_x, window.y + i);
+        move_real_cursor(window->x + window->len_x, window->y + i);
         printf("%c", 0x20);
     }
 
@@ -222,9 +222,9 @@ void clear_window(Window window)
     /*          Bottom border           */
     /* ******************************** */
 
-    move_real_cursor(window.x, window.y + window.len_y);
+    move_real_cursor(window->x, window->y + window->len_y);
 
-    for (uint16_t i = 0; i < window.len_x + 1; i++)
+    for (uint16_t i = 0; i < window->len_x + 1; i++)
     {
         printf("%c", 0x20);
     }
@@ -233,11 +233,11 @@ void clear_window(Window window)
     /*          Left border             */
     /* ******************************** */
 
-    move_real_cursor(window.x, window.y);
+    move_real_cursor(window->x, window->y);
 
-    for (uint16_t i = 0; i < window.len_y; i++)
+    for (uint16_t i = 0; i < window->len_y; i++)
     {
-        move_real_cursor(window.x, window.y + i);
+        move_real_cursor(window->x, window->y + i);
         printf("%c", 0x20);
     }
 
@@ -247,9 +247,9 @@ void clear_window(Window window)
     /*          Title space             */
     /* ******************************** */
 
-    move_real_cursor(window.x + 1, window.y + 2);
+    move_real_cursor(window->x + 1, window->y + 2);
     
-    for (uint16_t i = 0; i < window.len_x - 1; i++)
+    for (uint16_t i = 0; i < window->len_x - 1; i++)
     {
         printf("%c", 0x20);
     }
@@ -258,25 +258,25 @@ void clear_window(Window window)
     /*          Title                   */
     /* ******************************** */
 
-    move_real_cursor(window.x + 1, window.y + 1);
+    move_real_cursor(window->x + 1, window->y + 1);
 
-    for (uint16_t i = 0; i < strlen(window.title); i++)
+    for (uint16_t i = 0; i < strlen(window->title); i++)
     {
         printf("%c", 0x20);
     }
 
-    move_real_cursor(window.x, window.y);
-    for (uint16_t i = 0; i < window.len_y; i++)
+    move_real_cursor(window->x, window->y);
+    for (uint16_t i = 0; i < window->len_y; i++)
     {
-        move_real_cursor(window.x, window.y + i);
-        for (uint16_t j = 0; j < window.len_x; j++)
+        move_real_cursor(window->x, window->y + i);
+        for (uint16_t j = 0; j < window->len_x; j++)
         {
             printf("%c", 0x20);
         }   
     }
 }
 
-void calculator(Window program_window, Argument* argument)
+void calculator(Window* program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -285,7 +285,7 @@ void calculator(Window program_window, Argument* argument)
     return;
 }
 
-void file_explorer(Window program_window, Argument* argument)
+void file_explorer(Window* program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -294,18 +294,18 @@ void file_explorer(Window program_window, Argument* argument)
     return;
 }
 
-void notepad(Window program_window, Argument* argument)
+void notepad(Window* program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
     draw_window_elements(program_window, 3);
 
-    move_real_cursor(program_window.x + 2, 11);
+    move_real_cursor(program_window->x + 2, 11);
 
     return;
 }
 
-void paint(Window program_window, Argument* argument)
+void paint(Window* program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -314,7 +314,7 @@ void paint(Window program_window, Argument* argument)
     return;
 }
 
-void random(Window program_window, Argument* argument)
+void random(Window* program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -325,13 +325,13 @@ void random(Window program_window, Argument* argument)
     return;
 }
 
-void shell(Window program_window, Argument* argument)
+void shell(Window* program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
     draw_window_elements(program_window, 6);
 
-    move_real_cursor(program_window.x + 2, program_window.y + 3);
+    move_real_cursor(program_window->x + 2, program_window->y + 3);
 
     printf(">> ");
 
@@ -341,7 +341,7 @@ void shell(Window program_window, Argument* argument)
     return;
 }
 
-/* void web_browser(Window program_window, Argument* argument)
+/* void web_browser(Window* program_window, Argument* argument)
 {
     clear_screen();
     draw_window(program_window);
@@ -476,7 +476,7 @@ void start_gui(DISK diskA)
     char* programs_names[6] = { "Calc", "Explorer", "Notepad", 
                                 "Paint", "Random", "Shell"};
 
-    void (*p[6]) (Window, Argument*) = {  calculator, file_explorer, notepad,
+    void (*p[6]) (Window*, Argument*) = {  calculator, file_explorer, notepad,
                             paint, random, shell};
 
     for (int i = 0; i < 6; i++)
@@ -598,28 +598,28 @@ void start_gui(DISK diskA)
     /*                  Update windows                      */
     /* ---------------------------------------------------- */
 
-    screen.windows[0] = window_manager;
-    screen.windows[1] = calculator_window;
-    screen.windows[2] = file_explorer_window;
-    screen.windows[3] = notepad_window;
-    screen.windows[4] = paint_window;
-    screen.windows[5] = random_window;
+    screen.windows[0] = &window_manager;
+    screen.windows[1] = &calculator_window;
+    screen.windows[2] = &file_explorer_window;
+    screen.windows[3] = &notepad_window;
+    screen.windows[4] = &paint_window;
+    screen.windows[5] = &random_window;
+    screen.windows[6] = &shell_window;
 
     /* ---------------------------------------------------- */
     /*                  Draw main window                    */
     /* ---------------------------------------------------- */
 
-    Window current_window = screen.windows[0];
-    if (current_window.error == NO_ERROR)
+    if (screen.windows[0]->error == NO_ERROR)
     {
-        draw_window(current_window);
+        draw_window(screen.windows[0]);
         screen.active_window = 0;
     }
 
     else
     {
         move_real_cursor(0, 0);
-        printf("Error code %d of window %d\r\n", current_window.error, 0);
+        printf("Error code %d of window %d\r\n", screen.windows[0]->error, 0);
     }
 
     draw_window_elements(screen.windows[0], 0);

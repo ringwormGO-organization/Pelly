@@ -63,7 +63,7 @@ typedef struct screen_T
     uint16_t len_x;
     uint16_t len_y;
 
-    Window windows[7];
+    Window* windows[7];
     int active_window;
 
     Argument* argument;

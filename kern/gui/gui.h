@@ -33,14 +33,14 @@ Button create_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
  * @param window window where button will be checked
  * @param button button to be checked
 */
-void check_button(Window window, Button* button);
+void check_button(Window* window, Button* button);
 
 /**
  * Draw a button
  * @param window window where button will be drawn
  * @param button button which will be drawn
 */
-void draw_button(Window window, Button button);
+void draw_button(Window* window, Button button);
 
 /* ------------------------------------------------------------------------- */
 
@@ -75,20 +75,20 @@ void check_window(Screen screen, Window* window);
  * Draw a window
  * @param window window to be drawn
 */
-void draw_window(Window window);
+void draw_window(Window* window);
 
 /**
  * Draw window elements (buttons, context menus, ...)
  * @param window window where elements will be drawn
  * @param window_id window's id in `Screen` type
 */
-void draw_window_elements(Window window, int window_id);
+void draw_window_elements(Window* window, int window_id);
 
 /**
  * Clear a given window
  * @param window window to be cleaned
 */
-void clear_window(Window window);
+void clear_window(Window* window);
 
 /* ------------------------------------------------------------------------- */
 

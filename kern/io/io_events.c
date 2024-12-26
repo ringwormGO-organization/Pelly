@@ -19,7 +19,10 @@ void enter_event(Screen* screen)
     bool dont_draw = false; /* we are clicking one of paint's button if true, we are not drawing */
     bool dont_write = false; /* we are clicking save button in notepad if true, do not enter '\r\n' in text variable */
 
-    Window* current_window = &screen->windows[screen->active_window];
+    Window current_window_instance;
+    
+    Window* current_window = &current_window_instance;
+    *current_window = *screen->windows[screen->active_window];
 
     get_real_cursor_position();
 

@@ -28,7 +28,7 @@ Button create_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y,
     return new;
 }
 
-void check_button(Window window, Button* button)
+void check_button(Window* window, Button* button)
 {
     uint16_t max_x = button->x + button->len_x;
     uint16_t max_y = button->y + button->len_y;
@@ -43,22 +43,22 @@ void check_button(Window window, Button* button)
         button->error = TITLE_BOUNDARY_EXCEEDED;
     }
 
-    if (button->x > (window.x + window.len_x) - 1)
+    if (button->x > (window->x + window->len_x) - 1)
     {
         button->error = X_BOUNDARY_EXCEEDED;
     }
 
-    if (button->y > (window.x + window.len_x) - 1)
+    if (button->y > (window->x + window->len_x) - 1)
     {
         button->error = Y_BOUNDARY_EXCEEDED;
     }
 
-    if (max_x >= (window.x + window.len_x) - 1)
+    if (max_x >= (window->x + window->len_x) - 1)
     {
         button->error = LEN_X_BOUNDARY_EXCEEDED;
     }
 
-    if (max_y >= (window.y + window.len_y) - 1)
+    if (max_y >= (window->y + window->len_y) - 1)
     {
         button->error = LEN_Y_BOUNDARY_EXCEEDED;
     }
@@ -66,14 +66,14 @@ void check_button(Window window, Button* button)
     button->error = NO_ERROR;
 }
 
-void draw_button(Window window, Button button)
+void draw_button(Window* window, Button button)
 {
     if (button.background_color != BLUE)
     {
-        move_real_cursor(window.x + button.x, window.y + button.y);
+        move_real_cursor(window->x + button.x, window->y + button.y);
         for (uint16_t i = 1; i < button.len_y; i++)
         {
-            move_real_cursor(window.x + button.x, window.y + button.y + i);
+            move_real_cursor(window->x + button.x, window->y + button.y + i);
             for (uint16_t j = 0; j < button.len_x; j++)
             {
                 change_color(format_color(button.background_color, button.background_color), (uint16_t)1);
@@ -86,7 +86,7 @@ void draw_button(Window window, Button button)
     /*          Top border              */
     /* ******************************** */
 
-    move_real_cursor(window.x + button.x, window.y + button.y);
+    move_real_cursor(window->x + button.x, window->y + button.y);
     
     for (uint16_t i = 0; i < button.len_x; i++)
     {
@@ -99,7 +99,7 @@ void draw_button(Window window, Button button)
 
     for (uint16_t i = 1; i < button.len_y; i++)
     {
-        move_real_cursor(window.x + (button.x + button.len_x), window.y + (button.y + i));
+        move_real_cursor(window->x + (button.x + button.len_x), window->y + (button.y + i));
         printf("%c", 0xB3);
     }
 
@@ -107,7 +107,7 @@ void draw_button(Window window, Button button)
     /*          Bottom border           */
     /* ******************************** */
 
-    move_real_cursor(window.x + button.x, window.y + (button.y + button.len_y));
+    move_real_cursor(window->x + button.x, window->y + (button.y + button.len_y));
 
     for (uint16_t i = 0; i < button.len_x; i++)
     {
@@ -118,11 +118,11 @@ void draw_button(Window window, Button button)
     /*          Left border             */
     /* ******************************** */
 
-    move_real_cursor(window.x + button.x, window.y + button.y);
+    move_real_cursor(window->x + button.x, window->y + button.y);
 
     for (uint16_t i = 1; i < button.len_y; i++)
     {
-        move_real_cursor((window.x + button.x) - 1, window.y + (button.y + i));
+        move_real_cursor((window->x + button.x) - 1, window->y + (button.y + i));
         printf("%c", 0xB3);
     }
 
@@ -135,7 +135,6 @@ void draw_button(Window window, Button button)
         change_color(format_color(button.background_color, button.foreground_color), (uint16_t)2);
     }
 
-    move_real_cursor(window.x + (button.x + 1), window.y + (button.y + 1));
+    move_real_cursor(window->x + (button.x + 1), window->y + (button.y + 1));
     printf("%s", button.title);
 }
-
