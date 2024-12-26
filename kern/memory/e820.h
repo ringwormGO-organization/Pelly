@@ -5,8 +5,6 @@
  * DESCRIPTION: Main header file for e820 memory map
 */
 
-/* This file is subject to Paradox's license */
-
 #pragma once
 
 #include "stdint.h"

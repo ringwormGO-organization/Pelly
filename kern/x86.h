@@ -19,7 +19,7 @@ bool _cdecl x86_Disk_Write(uint8_t drive,
                            uint16_t cylinder,
                            uint8_t sector,
                            uint16_t head,
-                           void far* offset);
+                           void far* data);
 
 bool _cdecl x86_Disk_GetDriveParams(uint8_t drive,
                                     uint8_t* driveTypeOut,
