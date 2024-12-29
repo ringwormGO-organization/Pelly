@@ -2,8 +2,10 @@
  * @author Kevin Alavik (https://github.com/KevinAlavik), https://github.com/roidsos/h0r.net/blob/rewrite/src/core/Memory/Heap.c
  * PROJECT: Pelly
  * LICENSE: MIT
- * DESCRIPTION: Main header file for cursor
+ * DESCRIPTION: Main C file for heap
 */
+
+/* This file is subject to Paradox's license */
 
 #include "heap.h"
 

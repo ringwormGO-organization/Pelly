@@ -7,75 +7,15 @@
 
 #pragma once
 
-#include "../io.h"
+#include "../io/io.h"
 #include "../memory/memory.h"
 #include "../stdio.h"
 #include "../stdint.h"
 
-#include "../libc/vector.h"
-
-#include "cursor.h"
-#include "error.h"
-
-#include "gui_elements/button.h"
-#include "gui_elements/context_menu.h"
-
-#define BLACK   0
-#define BLUE    1
-#define GREEN   2
-#define CYAN    3
-#define RED     4
-#define MAGENTA 5
-#define BROWN   6
-#define LGRAY   7
-#define DGRAY   8
-#define LBLUE   9
-#define LGREN   10
-#define LCYAN   11
-#define LRED    12
-#define LMAG    13
-#define YELLOW  14
-#define WHITE   15
-
-/* ------------------------------------------------------------------------- */
-
-typedef struct elements_T
-{
-    vector_t button;
-    struct context_menu_T context_menu;
-} Elements;
-
-typedef struct window_T
-{
-    bool debug;
-
-    Error error;
-    Elements elements;
-
-    uint16_t x;
-    uint16_t y;
-
-    uint16_t len_x;
-    uint16_t len_y;
-
-    uint16_t background_color;
-    uint16_t foreground_color;
-
-    char *title;
-} Window;
-
-typedef struct screen_T
-{
-    uint16_t len_x;
-    uint16_t len_y;
-
-    vector_t windows;
-} Screen;
-
-/* ------------------------------------------------------------------------- */
+#include "gui_structures.h"
 
 /**
- * Initialize a button
+ * Create a button
  * @param x starting position (x)
  * @param y starting position (y)
  * @param len_x width of a button
@@ -85,58 +25,27 @@ typedef struct screen_T
  * @param title title of a button
  * @param action function that will get executed when button is pressed
 */
-Button* init_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+Button create_button(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, void (*action)());
 
 /**
- * Check if button can be drawn
- * @param window window where checks will be performed
- * @param id button's position in window's elements list 
+ * Check can a button be drawn
+ * @param window window where button will be checked
+ * @param button button to be checked
 */
-void check_button(Window* window, int id);
+void check_button(Window* window, Button* button);
 
 /**
  * Draw a button
  * @param window window where button will be drawn
  * @param button button which will be drawn
 */
-void draw_button(Window window, Button button);
-
-/* ------------------------------------*/
-
-/**
- * Initialize a context menu
- * @param window window element where button will be drawn
- * @param x starting position (x)
- * @param y starting position (y)
- * @param len_x width
- * @param len_y height
- * @param background_color background color
- * @param foreground_color foreground color
- * @param context_buttons context menu elements in form of buttons
-*/
-ContextMenu init_context_menu(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
-                    uint16_t background_color, uint16_t foreground_color, vector_t context_buttons);
-
-/**
- * Check if context menu can be drawn
- * @param window window where checks will be performed
- * @param context_menu context menu to be checked
-*/
-void check_context_menu(Window window, ContextMenu* context_menu);
-
-/**
- * Draw a context menu
- * @param window window where button will be drawn
- * @param button button which will be drawn
-*/
-void draw_context_menu(Window window, ContextMenu context_menu);
+void draw_button(Window* window, Button button);
 
 /* ------------------------------------------------------------------------- */
 
 /**
  * Initialize a window
- * @param window window element where button will be drawn
  * @param x starting position (x)
  * @param y starting position (y)
  * @param len_x width of the a window
@@ -146,38 +55,45 @@ void draw_context_menu(Window window, ContextMenu context_menu);
  * @param title title of a window
  * @param debug debug mode?
 */
-Window* init_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
+Window create_window(uint16_t x, uint16_t y, uint16_t len_x, uint16_t len_y, 
                     uint16_t background_color, uint16_t foreground_color, char* title, bool debug);
 
 /**
- * Check if window can be drawn
+ * Initializes buttons in a window by assigning them error value `EMPTY`
+ * @param window window where buttons will be initialized
+ */
+void initialize_buttons(Window* window);
+
+/**
+ * Check can a window be drawn
+ * @param screen screen where window will be checked
  * @param window window to be checked
- * @param id window's position in `Screen` type
 */
-void check_window(Screen* screen, int id);
+void check_window(Screen screen, Window* window);
 
 /**
  * Draw a window
  * @param window window to be drawn
 */
-void draw_window(Window window);
+void draw_window(Window* window);
 
 /**
  * Draw window elements (buttons, context menus, ...)
  * @param window window where elements will be drawn
  * @param window_id window's id in `Screen` type
 */
-void draw_window_elements(Window window, int window_id);
+void draw_window_elements(Window* window, int window_id);
 
 /**
  * Clear a given window
  * @param window window to be cleaned
 */
-void clear_window(Window window);
+void clear_window(Window* window);
 
 /* ------------------------------------------------------------------------- */
 
 /**
  * Entry point for GUI
+ * @param diskA diskA (FAT disk)
 */
-void start_gui();
+void start_gui(DISK diskA);

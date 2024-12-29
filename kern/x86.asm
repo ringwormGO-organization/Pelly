@@ -238,7 +238,7 @@ _x86_Disk_Read:
 ;                             uint16_t      cylinder    (ch),
 ;                             uint8_t       sector      (cl) (data loc.)
 ;                             uint16_t      head        (dh),
-;                             void far *    data        (bx (segment), es(offset)))
+;                             void far *    data        (es (segment), bx (offset)))
 ;
 global _x86_Disk_Write
 _x86_Disk_Write:
@@ -264,15 +264,15 @@ _x86_Disk_Write:
     mov cl, [bp + 10]       ;   what sector?
     mov dh, [bp + 12]       ;   head
 
-    ;   segment : offset
-    ;   0000:0000
-    ;    bx : es
+    ; segment : offset
+    ; es : bx
+    ; es and bx values are in reverse due to little endianness
 
-    ; offset
+    ; segment
     mov bx, [bp + 16]
     mov es, bx
 
-    ; segment
+    ; offset
     xor bx, bx
     mov bx, [bp + 14]
 

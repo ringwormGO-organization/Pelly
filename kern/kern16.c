@@ -1,7 +1,7 @@
 
 #include "stdint.h"
 #include "stdio.h"
-#include "io.h"
+#include "io/io.h"
 #include "filesystem/disk.h"
 #include "filesystem/fat.h"
 #include "filesystem/bbfs.h"
@@ -19,11 +19,11 @@ void _cdecl kstart_(uint16_t bootDrive)
 {
     clear_screen();
 
-    global_cursor.x = 0;
-    global_cursor.y = 0;
+    cursor_x = 0;
+    cursor_y = 0;
 
-    printf("===> Pelly Operating System - 0.2.1\r\n");
-    printf("Now with keyboard cursor! %d\r\n", 30);
+    printf("===> Pelly Operating System - 1.0.0\r\n");
+    printf("Now with BBFS, GUI, heap & IVT! %d\r\n", 30);
 
     DISK disk;
     if (!DISK_Initialize(&disk, bootDrive))
@@ -73,67 +73,55 @@ void _cdecl kstart_(uint16_t bootDrive)
     }
     FAT_Close(fd);
 
+    /* -------------------------------- */
+
     BBFS_v2_params test_disk;
-    bbfs_get_disk_params(test_disk.disk_label, 
+    bbfs_v2_get_disk_params(test_disk.disk_label, 
                          test_disk.block_size,
                          test_disk.file_system_id,
-                         0);
+                         1);
 
-    /* clear_screen();
+    char test_buffer[10];
+    char test_buffer2[10];
 
-    char test_buffer[512];
-    char test_buffer2[512];
-
-    for (uint16_t x = 0; x < 512; x++) {
-        test_buffer[x] = 'A';
+    for (uint16_t x = 0; x < 10; x++) {
+        test_buffer[x] = 'B';
     }
 
-    for (uint16_t x = 0; x < 123; x++) {
-        test_buffer[x*2] = 'B';
+    for (uint16_t x = 0; x < 10; x++) {
+        test_buffer[x*2] = 'A';
     }
 
-    for (uint16_t x = 0; x < 512; x++) {
-        putc(test_buffer[x]);
+    bbfs_v2_write_block(test_buffer2, test_buffer, 10);
+
+    printf("BBFS v2: \r\n");
+    for (uint16_t x = 0; x < 10; x++) {
+        putc(test_buffer2[x]);
     }
+    printf("\r\n");
 
-    bbfs_write_block(44032, test_buffer, 512);
-    bbfs_read_block(44032, test_buffer2, 512); */
-
-/*
-    char buffer_b[512];
-
-    /* char buffer_b[512];
-
-    for (int x = 0; x < 512; x++) {
-        buffer_b[x] = 'a';
-    }
-*/
-
-
-    //x86_Disk_Write(1, 1, 0, 1, 0, buffer_b);
+    /* -------------------------------- */
 
     char test_file_name[] = "HELLO WORLD";
     char test_file_exst[] = "TXT";
     char test_data[] = "THIS IS JUST SOME RANDOM JUNK THAT WILL BE WRITTEN TO THE DISK AS [HELLO  WORLD.TXT]";
 
     bbfs_v3_write_file(test_file_name, test_file_exst, test_data, 1);
-    
-    char test_out_file[512];
 
+    /* char test_out_file[512];
     bbfs_v3_read_file(1, test_out_file);
 
-    get_low_memory();
-    get_used_memory();
+    int test_id = bbfs_v3_search_for_file(test_file_name);
+    printf("FILE ID: %d\r\n", test_id); */
 
-    printf("Free lower memory: %d\r\n", low_memory);
-    printf("Used memory: %d\r\n", used_memory);
+    /* -------------------------------- */
 
     detect_memory();
 
     init_pmm();
     init_malloc();
 
-    start_gui();
+    start_gui(disk);
 
 end:
     for (;;);

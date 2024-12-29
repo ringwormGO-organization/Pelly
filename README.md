@@ -1,9 +1,11 @@
 
-## Pelly
+# Pelly
 
 16 bit operating system
 
 Named after [river Pelly](https://www.google.com/maps/place/Pelly+River/@62.294708,-134.7159487,8z/data=!3m1!4b1!4m5!3m4!1s0x5150567ab729172f:0x2429c8233184845e!8m2!3d62.285926!4d-133.6080992) near [Pelly Crossing](https://www.google.com/maps/place/Pelly+Crossing,+YT,+Canada/@62.8257353,-136.5785531,14.33z/data=!4m5!3m4!1s0x514e2eec14cd51e1:0x3a02c1697ff0e317!8m2!3d62.817979!4d-136.568795)
+
+[v1.0.0](https://github.com/ringwormGO-organization/Pelly/releases/tag/v1.0.0)
 
 ## Compile Pelly
 
@@ -25,12 +27,21 @@ _Recommend to install desktop version of Qemu because it does not require to use
 
 - [X] Bootloader
   - [X] FAT12
-- [ ] Kernel
+- [x] Kernel
   - [X] PS/2 keyboard (BIOS Int. 16h)
   - [ ] PS/2 mouse
-  - [ ] GUI
-    - [ ] Basic windows
-    - [ ] Taskbar
+  - [X] Custom interrupts
+  - [X] File systems
+    - [X] FAT12
+    - [X] BBFS
+  - [X] Memory
+    - [X] Get E820 memory map
+    - [X] Allocator
+    - [X] Heap
+  - [X] GUI
+    - [X] Basic windows
+    - [X] GUI elements
+    - [X] Applications
     - [ ] Rounded windows (optional feature)
 
 
